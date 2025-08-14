@@ -1,0 +1,1265 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Inter', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background: url('../camping-bg.jpg') no-repeat center center fixed;
+    background-size: cover;
+    min-height: 100vh;
+    color: #2c3e50;
+    overflow-x: hidden;
+    position: relative;
+}
+
+body::before {
+    content: '';
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(135deg, rgba(102, 126, 234, 0.15), rgba(118, 75, 162, 0.1), rgba(240, 147, 251, 0.1));
+    backdrop-filter: blur(8px); /* Reduced from 12px for better performance */
+    z-index: -1;
+}
+
+.header {
+    text-align: center;
+    padding: 1.5rem;
+    background: linear-gradient(135deg, rgba(255,255,255,0.9), rgba(255,255,255,0.7));
+    backdrop-filter: blur(15px); /* Reduced from 25px for better performance */
+    border-radius: 0 0 25px 25px;
+    box-shadow: 0 8px 32px rgba(0,0,0,0.15), 0 0 0 1px rgba(255,255,255,0.2);
+    margin-bottom: 2rem;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    border: 1px solid rgba(255,255,255,0.3);
+}
+
+.header-top-signup {
+    width: 100%;
+    display: flex;
+    justify-content: flex-end;
+    margin-bottom: 0.5rem;
+}
+
+.signup-btn-top {
+    background: linear-gradient(135deg, #667eea, #764ba2);
+    color: #fff;
+    padding: 6px 12px; /* Reduced padding to make button smaller */
+    border-radius: 12px;
+    font-size: 11px; /* Smaller font size */
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    gap: 4px; /* Reduced gap */
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
+    border: 1px solid rgba(255,255,255,0.2);
+    min-width: 80px; /* Smaller minimum width */
+    max-width: 100px; /* Maximum width */
+}
+
+.signup-btn-top:hover {
+    background: linear-gradient(135deg, #5a6fd8, #6a4190);
+    transform: translateY(-2px) scale(1.02);
+    box-shadow: 0 6px 20px rgba(102, 126, 234, 0.4);
+}
+
+.header-top {
+    display: flex;
+    justify-content: center; 
+    align-items: center;
+    position: relative;
+    padding: 1rem;
+    flex-wrap: nowrap;
+}
+
+.club-title {
+    font-size: 2.5rem;
+    font-weight: 700;
+    text-align: center;
+    color: #000000;
+    margin: 0 auto;
+    max-width: 60%;
+    white-space: normal; /* Changed from nowrap to normal to allow line breaks */
+    overflow: visible; /* Changed from hidden to visible */
+    text-overflow: unset; /* Removed ellipsis */
+    line-height: 1.2; /* Added line height for better spacing */
+    word-wrap: break-word; /* Added word wrapping */
+}
+
+.club-logo {
+    position: absolute;
+    left: 20px;
+    top: 10px;
+    width: 120px; /* Increased from 80px */
+    height: 120px; /* Increased from 80px */
+    border-radius: 50%;
+    object-fit: cover;
+    border: 3px solid rgba(255,255,255,0.3);
+    box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+    transition: transform 0.3s ease;
+}
+
+.club-logo:hover {
+    transform: scale(1.05);
+}
+
+.club-tagline-left {
+    font-size: 1rem;
+    color: #667eea;
+    font-weight: 500;
+    margin: 0.5rem 0;
+    text-align: center;
+}
+
+.nav-buttons {
+    display: flex;
+    justify-content: center;
+    gap: 0.8rem;
+    margin-top: 1rem;
+    flex-wrap: wrap;
+    flex-direction: row; /* Force horizontal layout */
+}
+
+.nav-btn {
+    background: linear-gradient(135deg, #667eea, #764ba2);
+    color: #fff;
+    border: none;
+    padding: 0.6rem 1rem; /* Reduced padding */
+    border-radius: 12px;
+    font-size: 0.85rem; /* Smaller font */
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
+    border: 1px solid rgba(255,255,255,0.2);
+    min-width: 100px; /* Smaller minimum width */
+    max-width: 150px; /* Maximum width */
+    white-space: nowrap; /* Prevent text wrapping */
+}
+
+.nav-btn:hover {
+    background: linear-gradient(135deg, #5a6fd8, #6a4190);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(102, 126, 234, 0.4);
+}
+
+.main-content {
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    padding: 0 2rem;
+    margin-bottom: 2rem;
+    max-width: 1200px; /* Limit maximum width */
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.chatbot-container {
+    width: 100%;
+    max-width: 800px;
+    background: transparent; /* Ensure no background color */
+}
+
+.chatbot-box {
+    background: rgba(255,255,255,0.95);
+    border-radius: 20px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+    overflow: hidden;
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255,255,255,0.3);
+    margin: 0 auto; /* Center the box */
+}
+
+.chatbot-title {
+    background: linear-gradient(135deg, #667eea, #764ba2);
+    color: #fff;
+    padding: 1.5rem;
+    font-size: 1.2rem;
+    font-weight: 600;
+    text-align: center;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+}
+
+.search-container {
+    display: flex;
+    padding: 1.5rem;
+    gap: 1rem;
+    border-bottom: 1px solid rgba(0,0,0,0.1);
+}
+
+.search-input {
+    flex: 1;
+    padding: 1rem;
+    border: 2px solid #e0e0e0;
+    border-radius: 12px;
+    font-size: 1rem;
+    transition: border-color 0.3s ease;
+    background: #fff;
+}
+
+.search-input:focus {
+    outline: none;
+    border-color: #667eea;
+    box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+}
+
+.send-btn {
+    background: linear-gradient(135deg, #667eea, #764ba2);
+    color: #fff;
+    border: none;
+    padding: 1rem 1.5rem;
+    border-radius: 12px;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
+}
+
+.send-btn:hover {
+    background: linear-gradient(135deg, #5a6fd8, #6a4190);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(102, 126, 234, 0.4);
+}
+
+.chatbox {
+    max-height: 470px; /* Increased from 500px to 800px for much taller chat box */
+    min-height: 370px; /* Added minimum height to ensure consistent tall appearance */
+    overflow-y: auto;
+    padding: 1.5rem;
+    background: #f8f9fa;
+}
+
+.message {
+    margin-bottom: 1rem;
+    padding: 1rem;
+    border-radius: 12px;
+    max-width: 80%;
+    word-wrap: break-word;
+    animation: messageSlideIn 0.3s ease-out; /* Reduced animation duration */
+}
+
+@keyframes messageSlideIn {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.message.user {
+    background: linear-gradient(135deg, #667eea, #764ba2);
+    color: #fff;
+    margin-left: auto;
+    text-align: right;
+}
+
+.message.bot {
+    background: #fff;
+    color: #333;
+    border: 1px solid #e0e0e0;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+}
+
+.message.error-message {
+    background: #fff5f5;
+    color: #e53e3e;
+    border: 1px solid #fed7d7;
+}
+
+.typing-indicator {
+    background: #fff !important;
+    border: 1px solid #e0e0e0;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+}
+
+.typing-dots {
+    display: flex;
+    gap: 0.5rem;
+    justify-content: center;
+}
+
+.typing-dots i {
+    color: #667eea;
+    animation: typingBounce 1.2s infinite ease-in-out;
+}
+
+.typing-dots i:nth-child(2) {
+    animation-delay: 0.2s;
+}
+
+.typing-dots i:nth-child(3) {
+    animation-delay: 0.4s;
+}
+
+@keyframes typingBounce {
+    0%, 60%, 100% {
+        transform: translateY(0);
+    }
+    30% {
+        transform: translateY(-10px);
+    }
+}
+
+.customer-details-card {
+    background: #f8f9fa;
+    border-radius: 12px;
+    padding: 1rem;
+    margin-bottom: 1rem;
+    border: 1px solid #e0e0e0;
+}
+
+.customer-avatar {
+    text-align: center;
+    margin-bottom: 0.5rem;
+}
+
+.customer-avatar i {
+    font-size: 2rem;
+    color: #667eea;
+}
+
+.customer-name {
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: #2c3e50;
+    text-align: center;
+    margin-bottom: 0.5rem;
+}
+
+.customer-car {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    color: #666;
+}
+
+.customer-car i {
+    color: #667eea;
+}
+
+.car-number {
+    font-weight: 600;
+    color: #2c3e50;
+}
+
+.action-buttons {
+    display: flex;
+    gap: 1rem;
+    margin-bottom: 1rem;
+    flex-wrap: wrap;
+}
+
+.action-btn {
+    background: linear-gradient(135deg, #667eea, #764ba2);
+    color: #fff;
+    border: none;
+    padding: 0.8rem 1rem;
+    border-radius: 8px;
+    font-size: 0.9rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 2px 8px rgba(102, 126, 234, 0.3);
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    justify-content: center;
+    min-width: 120px;
+}
+
+.action-btn:hover {
+    background: linear-gradient(135deg, #5a6fd8, #6a4190);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
+}
+
+.chat-btn {
+    background: linear-gradient(135deg, #28a745, #20c997);
+}
+
+.chat-btn:hover {
+    background: linear-gradient(135deg, #218838, #1ea085);
+}
+
+.call-btn {
+    background: linear-gradient(135deg, #007bff, #0056b3);
+}
+
+.call-btn:hover {
+    background: linear-gradient(135deg, #0056b3, #004085);
+}
+
+.whatsapp-btn {
+    background: linear-gradient(135deg, #25d366, #128c7e);
+}
+
+.whatsapp-btn:hover {
+    background: linear-gradient(135deg, #128c7e, #075e54);
+}
+
+.message-time {
+        font-size: 0.8rem;
+    color: #999;
+    text-align: right;
+    margin-top: 0.5rem;
+}
+
+.message.user .message-time {
+    color: rgba(255,255,255,0.8);
+}
+
+.private-chat-window {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 90%;
+    max-width: 500px;
+    max-height: 80vh;
+    background: #fff;
+    border-radius: 20px;
+    box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+    z-index: 1000;
+    display: flex;
+    flex-direction: column;
+    animation: chatWindowSlideIn 0.3s ease-out;
+}
+
+@keyframes chatWindowSlideIn {
+    from {
+        opacity: 0;
+        transform: translate(-50%, -50%) scale(0.9);
+    }
+    to {
+        opacity: 1;
+        transform: translate(-50%, -50%) scale(1);
+    }
+}
+
+.chat-window-header {
+    background: linear-gradient(135deg, #667eea, #764ba2);
+    color: #fff;
+    padding: 1rem 1.5rem;
+    border-radius: 20px 20px 0 0;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.chat-header-info {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-weight: 600;
+}
+
+.close-chat-btn {
+    background: none;
+    border: none;
+    color: #fff;
+    font-size: 1.2rem;
+    cursor: pointer;
+    padding: 0.5rem;
+    border-radius: 50%;
+    transition: background-color 0.3s ease;
+}
+
+.close-chat-btn:hover {
+    background: rgba(255,255,255,0.2);
+}
+
+.chat-window-body {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    padding: 1.5rem;
+    overflow: hidden;
+}
+
+.customer-info-section {
+    background: #f8f9fa;
+    border-radius: 12px;
+    padding: 1rem;
+    margin-bottom: 1rem;
+    border: 1px solid #e0e0e0;
+}
+
+.info-header {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-weight: 600;
+    color: #2c3e50;
+    margin-bottom: 0.5rem;
+}
+
+.info-content {
+    margin-bottom: 1rem;
+}
+
+.info-item {
+    color: #666;
+}
+
+.whatsapp-notification-section {
+    background: #d4edda;
+    border: 1px solid #c3e6cb;
+    border-radius: 8px;
+    padding: 0.5rem;
+}
+
+.notification-status {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    color: #155724;
+    font-size: 0.9rem;
+}
+
+.private-chat-messages {
+    flex: 1;
+    overflow-y: auto;
+    margin-bottom: 1rem;
+    padding: 1rem;
+    background: #f8f9fa;
+    border-radius: 12px;
+    border: 1px solid #e0e0e0;
+}
+
+.private-message {
+    margin-bottom: 1rem;
+    padding: 0.8rem;
+    border-radius: 8px;
+    max-width: 80%;
+    word-wrap: break-word;
+}
+
+.user-private-message {
+    background: linear-gradient(135deg, #667eea, #764ba2);
+    color: #fff;
+    margin-left: auto;
+    text-align: right;
+}
+
+.bot-private-message {
+    background: #fff;
+    color: #333;
+    border: 1px solid #e0e0e0;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.1);
+}
+
+.message-content {
+    display: flex;
+    flex-direction: column;
+    gap: 0.3rem;
+}
+
+.message-text {
+    font-size: 0.9rem;
+}
+
+.message-time {
+    font-size: 0.7rem;
+    opacity: 0.8;
+}
+
+.chat-input-area {
+    display: flex;
+    gap: 0.5rem;
+    align-items: center;
+}
+
+.private-message-input {
+    flex: 1;
+    padding: 0.8rem;
+    border: 2px solid #e0e0e0;
+    border-radius: 8px;
+    font-size: 0.9rem;
+    transition: border-color 0.3s ease;
+}
+
+.private-message-input:focus {
+    outline: none;
+    border-color: #667eea;
+    box-shadow: 0 0 0 2px rgba(102, 126, 234, 0.1);
+}
+
+.send-private-btn {
+    background: linear-gradient(135deg, #667eea, #764ba2);
+    color: #fff;
+    border: none;
+    padding: 0.8rem 1rem;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.send-private-btn:hover {
+    background: linear-gradient(135deg, #5a6fd8, #6a4190);
+    transform: translateY(-1px);
+}
+
+.notification-toast {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    background: #fff;
+    border-radius: 8px;
+    padding: 1rem 1.5rem;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.15);
+    z-index: 1001;
+    max-width: 300px;
+    animation: notificationSlideIn 0.3s ease-out;
+}
+
+@keyframes notificationSlideIn {
+    from {
+        opacity: 0;
+        transform: translateX(100%);
+    }
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+    }
+    
+    .notification-content {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.notification-toast.success {
+    border-left: 4px solid #28a745;
+}
+
+.notification-toast.error {
+    border-left: 4px solid #dc3545;
+}
+
+.notification-toast.info {
+    border-left: 4px solid #17a2b8;
+}
+
+.dashboard-footer {
+    background: rgba(255,255,255,0.9);
+    backdrop-filter: blur(10px);
+    border-radius: 25px 25px 0 0;
+    padding: 1rem 2rem 1rem 2rem; /* Reduced padding to eliminate extra space */
+    margin-top: 2rem;
+    border-top: 1px solid rgba(255,255,255,0.3);
+    position: relative;
+    margin-bottom: 0;
+    display: flex; /* Added flexbox for better layout control */
+    flex-direction: column; /* Stack elements vertically */
+    align-items: center; /* Center align all content */
+    gap: 0.5rem; /* Reduced gap to eliminate unnecessary space */
+    min-height: fit-content; /* Ensure footer only takes needed height */
+}
+
+.footer-contact-info {
+    position: relative; /* Changed from absolute to relative */
+    left: auto; /* Remove absolute positioning */
+    top: auto;
+    transform: none; /* Remove transform */
+    text-align: center; /* Center align text */
+    color: #2c3e50;
+    font-size: 0.9rem;
+    line-height: 1.4; /* Reduced line height */
+    background: rgba(255, 255, 255, 0.95); /* More opaque white */
+    padding: 1rem; /* Reduced padding */
+    border-radius: 20px;
+    border: 1px solid rgba(102, 126, 234, 0.2);
+    box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+    backdrop-filter: blur(10px);
+    transition: all 0.3s ease;
+    max-width: 280px;
+    width: 100%; /* Full width within container */
+    margin: 0 auto; /* Center horizontally */
+}
+
+.footer-contact-info:hover {
+    transform: scale(1.02); /* Simplified hover effect */
+    box-shadow: 0 15px 35px rgba(0,0,0,0.15);
+    border-color: rgba(102, 126, 234, 0.4);
+}
+
+.contact-item {
+    display: flex;
+    align-items: center;
+    justify-content: center; /* Center align items */
+    gap: 0.8rem;
+    margin: 0.3rem 0; /* Reduced margins to eliminate extra space */
+    transition: all 0.3s ease;
+    padding: 0.3rem; /* Reduced padding */
+    border-radius: 10px;
+    position: relative;
+    overflow: hidden;
+}
+
+.contact-item::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 0;
+    height: 100%;
+    background: linear-gradient(90deg, rgba(102, 126, 234, 0.1), transparent);
+    transition: width 0.3s ease;
+}
+
+.contact-item:hover::before {
+        width: 100%;
+    }
+    
+.contact-item:hover {
+    transform: translateX(8px);
+    color: #667eea;
+    background: rgba(102, 126, 234, 0.05);
+}
+
+.contact-item i {
+    color: #667eea;
+    font-size: 1.2rem;
+    width: 25px;
+    transition: all 0.3s ease;
+}
+
+.contact-item:hover i {
+    transform: scale(1.2);
+    color: #764ba2;
+}
+
+.contact-phone {
+    color: #667eea;
+    font-weight: 600;
+    transition: all 0.3s ease;
+}
+
+.contact-phone:hover {
+    color: #764ba2;
+}
+
+.contact-email {
+    color: #e74c3c;
+    font-weight: 600;
+    transition: all 0.3s ease;
+}
+
+.contact-email:hover {
+    color: #c0392b;
+}
+
+.footer-content {
+    text-align: center;
+    margin: 0; /* Remove all margins */
+    padding: 0; /* Remove all padding */
+    width: 100%; /* Full width */
+    display: flex; /* Use flexbox */
+    flex-direction: column; /* Stack vertically */
+    align-items: center; /* Center align */
+    gap: 0.5rem; /* Reduced gap to eliminate unnecessary space */
+}
+
+.footer-title {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: #2c3e50;
+    margin: 0; /* Remove margin */
+    padding: 0; /* Remove padding */
+    white-space: normal; /* Allow line breaks */
+    overflow: visible; /* Show all text */
+    text-overflow: unset; /* Remove ellipsis */
+    max-width: 100%;
+    text-align: center;
+    line-height: 1.1; /* Reduced line height */
+}
+
+.footer-buttons {
+    display: flex;
+    justify-content: center;
+    align-items: center; /* Center align buttons */
+    gap: 0.6rem; /* Reduced gap */
+    flex-wrap: wrap;
+    flex-direction: row;
+    margin: 0; /* Remove margin */
+    padding: 0; /* Remove padding */
+    width: 100%; /* Full width */
+}
+
+.footer-buttons .nav-btn {
+    padding: 0.5rem 0.8rem;
+    font-size: 0.8rem;
+    min-width: 90px;
+    max-width: 130px;
+    margin: 0; /* Remove margin */
+}
+
+/* Responsive Design */
+@media (max-width: 1024px) {
+    .club-title {
+        font-size: 2rem; /* Smaller font for tablets */
+        margin-left: 140px;
+        margin-right: 5rem;
+        text-align: left;
+        white-space: normal; /* Allow line breaks */
+        overflow: visible;
+        text-overflow: unset;
+        max-width: calc(100% - 200px);
+        line-height: 1.1;
+    }
+    
+    .club-logo {
+        width: 110px;
+        height: 110px;
+        left: 15px;
+        top: 15px;
+    }
+    
+    .signup-btn-top {
+        padding: 5px 10px;
+        font-size: 10px;
+        min-width: 70px;
+        max-width: 90px;
+    }
+    
+    .main-content {
+        padding: 0 1.5rem;
+        max-width: 1000px;
+    }
+    
+    .nav-buttons {
+        gap: 0.6rem;
+    }
+    
+    .nav-btn {
+        padding: 0.5rem 0.8rem;
+        font-size: 0.8rem;
+        min-width: 90px;
+        max-width: 120px;
+    }
+    
+    .footer-contact-info {
+        left: auto;
+        max-width: 250px;
+        padding: 0.8rem; /* Reduced padding */
+        margin: 0 auto; /* Center horizontally */
+    }
+    
+    .footer-buttons {
+        gap: 0.5rem; /* Reduced gap */
+        justify-content: center;
+        align-items: center;
+    }
+    
+    .footer-buttons .nav-btn {
+        padding: 0.4rem 0.7rem;
+        font-size: 0.75rem;
+        min-width: 80px;
+        max-width: 110px;
+        margin: 0;
+    }
+    
+    .footer-title {
+        font-size: 1.4rem;
+        white-space: normal;
+        overflow: visible;
+        text-overflow: unset;
+        margin: 0;
+        line-height: 1.1; /* Reduced line height */
+    }
+    
+    .dashboard-footer {
+        padding: 0.8rem 1.5rem 0.6rem 1.5rem; /* Reduced padding */
+        gap: 0.4rem; /* Reduced gap */
+    }
+}
+
+@media (max-width: 768px) {
+    .header {
+        padding: 1rem;
+        margin-bottom: 1rem;
+    }
+    
+    .club-title {
+        font-size: 1.6rem; /* Much smaller font for mobile */
+        margin-left: 120px;
+        margin-right: 4rem;
+        text-align: left;
+        white-space: normal; /* Allow line breaks */
+        overflow: visible;
+        text-overflow: unset;
+        max-width: calc(100% - 160px);
+        line-height: 1.1;
+        /* Force 2 lines on mobile */
+        display: -webkit-box;
+        -webkit-line-clamp: 2;
+        -webkit-box-orient: vertical;
+    }
+    
+    .club-logo {
+        left: 10px;
+        top: 10px;
+        width: 100px;
+        height: 100px;
+    }
+    
+    .signup-btn-top {
+        padding: 4px 8px;
+        font-size: 9px;
+        min-width: 60px;
+        max-width: 80px;
+    }
+    
+    .main-content {
+        padding: 0 1rem;
+        max-width: 100%;
+    }
+    
+    .chatbot-container {
+        max-width: 100%;
+        padding: 0 0.5rem;
+    }
+    
+    .nav-buttons {
+        gap: 0.5rem;
+        justify-content: center;
+        flex-wrap: wrap;
+    }
+    
+    .nav-btn {
+        padding: 0.4rem 0.7rem;
+        font-size: 0.75rem;
+        min-width: 80px;
+        max-width: 110px;
+    }
+    
+    .chatbot-box {
+        border-radius: 15px;
+        margin: 0 0.5rem;
+    }
+    
+.search-container {
+        padding: 1rem;
+        flex-direction: row;
+        gap: 1rem;
+    }
+    
+    .send-btn {
+        width: auto;
+        min-width: 100px;
+    }
+    
+    .action-buttons {
+        flex-direction: row;
+        flex-wrap: wrap;
+        gap: 0.6rem;
+        justify-content: center;
+    }
+    
+    .action-btn {
+        width: auto;
+        min-width: 120px;
+        flex: 0 1 auto;
+    }
+    
+    .private-chat-window {
+        width: 95%;
+        max-height: 90vh;
+    }
+    
+    .chat-window-body {
+        padding: 1rem;
+    }
+    
+    .footer-contact-info {
+        position: relative;
+        left: 0; /* Position to left side */
+        top: auto;
+        transform: none;
+        text-align: left; /* Left align text for mobile */
+        margin: 0; /* Remove auto margin */
+        max-width: 100%;
+        background: rgba(255, 255, 255, 0.95); /* More opaque white */
+        padding: 0.8rem; /* Reduced padding */
+        align-self: flex-start; /* Align to start (left) of flex container */
+    }
+    
+    .footer-content {
+        margin: 0;
+        padding: 0;
+        gap: 0.4rem; /* Reduced gap */
+    }
+
+    .footer-buttons {
+        gap: 0.4rem; /* Reduced gap */
+        justify-content: center;
+        align-items: center;
+        margin: 0;
+        padding: 0;
+    }
+
+    .footer-buttons .nav-btn {
+        padding: 0.35rem 0.6rem;
+        font-size: 0.7rem;
+        min-width: 70px;
+        max-width: 100px;
+        margin: 0;
+    }
+    
+    .footer-title {
+        font-size: 1.3rem;
+        white-space: normal;
+        overflow: visible;
+        text-overflow: unset;
+        max-width: 100%;
+        margin: 0;
+        line-height: 1.1; /* Reduced line height */
+    }
+    
+    .dashboard-footer {
+        padding: 0.8rem 1rem 0.5rem 1rem; /* Reduced padding */
+        gap: 0.4rem; /* Reduced gap */
+    }
+}
+
+@media (max-width: 480px) {
+    .club-title {
+        font-size: 1.4rem; /* Even smaller font for small mobile */
+        margin-left: 90px;
+        margin-right: 3rem;
+        white-space: normal; /* Allow line breaks */
+        overflow: visible;
+        text-overflow: unset;
+        max-width: calc(100% - 120px);
+        line-height: 1.1;
+        /* Force 2 lines on mobile */
+        display: -webkit-box;
+        -webkit-line-clamp: 2;
+        -webkit-box-orient: vertical;
+    }
+    
+    .club-logo {
+        left: 5px;
+        top: 10px;
+        width: 80px;
+        height: 80px;
+    }
+    
+    .signup-btn-top {
+        padding: 3px 6px;
+        font-size: 8px;
+        min-width: 50px;
+        max-width: 70px;
+    }
+    
+    .main-content {
+        padding: 0 0.5rem;
+    }
+    
+    .chatbot-container {
+        padding: 0 0.25rem;
+    }
+    
+    .chatbot-box {
+        margin: 0 0.25rem;
+    }
+    
+    .nav-buttons {
+        gap: 0.4rem;
+        justify-content: center;
+        flex-wrap: wrap;
+    }
+    
+    .nav-btn {
+        padding: 0.35rem 0.6rem;
+        font-size: 0.7rem;
+        min-width: 70px;
+        max-width: 90px;
+    }
+    
+    .search-container {
+        flex-direction: row;
+        gap: 0.8rem;
+    }
+    
+    .send-btn {
+        width: auto;
+        min-width: 80px;
+        padding: 0.8rem 1rem;
+    }
+    
+    .action-buttons {
+        flex-direction: row;
+        flex-wrap: wrap;
+        gap: 0.4rem;
+    justify-content: center;
+}
+
+    .action-btn {
+        width: auto;
+        min-width: 100px;
+        flex: 0 1 auto;
+    }
+    
+    .chatbox {
+        max-height: 400px;
+    }
+    
+    .message {
+        max-width: 90%;
+    }
+    
+    .footer-contact-info {
+        padding: 0.6rem; /* Reduced padding */
+        margin: 0; /* Remove auto margin */
+        font-size: 0.8rem;
+        left: 0; /* Ensure left positioning */
+        align-self: flex-start; /* Align to start (left) of flex container */
+    }
+    
+    .contact-item {
+        margin: 0.2rem 0; /* Reduced margins */
+        padding: 0.2rem; /* Reduced padding */
+    }
+    
+    .footer-content {
+        gap: 0.3rem; /* Reduced gap */
+    }
+    
+    .footer-buttons {
+        gap: 0.3rem; /* Reduced gap */
+        justify-content: center;
+        align-items: center;
+        margin: 0;
+        padding: 0;
+    }
+
+    .footer-buttons .nav-btn {
+        padding: 0.3rem 0.5rem;
+        font-size: 0.65rem;
+        min-width: 60px;
+        max-width: 80px;
+        margin: 0;
+    }
+    
+    .footer-title {
+        font-size: 1.2rem;
+        white-space: normal;
+        overflow: visible;
+        text-overflow: unset;
+        max-width: 100%;
+        margin: 0;
+        line-height: 1.1; /* Reduced line height */
+    }
+    
+    .dashboard-footer {
+        padding: 0.6rem 0.8rem 0.4rem 0.8rem; /* Reduced padding */
+        gap: 0.3rem; /* Reduced gap */
+    }
+}
+
+/* Extra small devices (phones, 320px and down) */
+@media (max-width: 320px) {
+    .club-title {
+        font-size: 1.2rem; /* Smallest font for very small mobile */
+        margin-left: 75px;
+        margin-right: 2.5rem;
+        white-space: normal; /* Allow line breaks */
+        overflow: visible;
+        text-overflow: unset;
+        max-width: calc(100% - 100px);
+        line-height: 1.1;
+        /* Force 2 lines on mobile */
+        display: -webkit-box;
+        -webkit-line-clamp: 2;
+        -webkit-box-orient: vertical;
+    }
+    
+    .club-logo {
+        width: 70px;
+        height: 70px;
+        left: 3px;
+        top: 8px;
+    }
+    
+    .signup-btn-top {
+        padding: 2px 5px;
+        font-size: 7px;
+        min-width: 45px;
+        max-width: 60px;
+    }
+    
+    .main-content {
+        padding: 0 0.25rem;
+    }
+    
+    .chatbot-container {
+        padding: 0 0.1rem;
+    }
+    
+    .chatbot-box {
+        margin: 0 0.1rem;
+    }
+    
+    .nav-buttons {
+        gap: 0.3rem;
+    }
+    
+    .nav-btn {
+        padding: 0.3rem 0.5rem;
+        font-size: 0.65rem;
+        min-width: 60px;
+        max-width: 80px;
+    }
+    
+    .search-container {
+        padding: 0.8rem;
+    }
+    
+    .search-input {
+        padding: 0.8rem;
+        font-size: 0.9rem;
+    }
+    
+    .send-btn {
+        padding: 0.8rem 1rem;
+        font-size: 0.9rem;
+    }
+    
+    .footer-buttons .nav-btn {
+        padding: 0.25rem 0.4rem;
+        font-size: 0.6rem;
+        min-width: 50px;
+        max-width: 70px;
+    }
+    
+    .footer-title {
+        font-size: 1.1rem;
+        white-space: normal;
+        overflow: visible;
+        text-overflow: unset;
+        max-width: 100%;
+        margin: 0;
+        line-height: 1.1; /* Reduced line height */
+    }
+    
+    .dashboard-footer {
+        padding: 0.5rem 0.6rem 0.3rem 0.6rem; /* Reduced padding */
+        gap: 0.25rem; /* Reduced gap */
+    }
+}
