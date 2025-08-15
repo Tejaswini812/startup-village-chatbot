@@ -10,6 +10,10 @@ const fs = require('fs');
 const app = express();
 const PORT = process.env.PORT || 3000;
 
+// Domain configuration
+const CUSTOM_DOMAIN = process.env.CUSTOM_DOMAIN || 'startupmysore.com';
+const BASE_URL = process.env.BASE_URL || `https://${CUSTOM_DOMAIN}`;
+
 // Middleware
 app.use(cors());
 app.use(express.json());
@@ -43,7 +47,20 @@ const activeCalls = new Map();
 
 // Root route -> Serve main dashboard
 app.get('/', (req, res) => {
-    res.sendFile(path.join(__dirname, 'public', 'Smart_Connect.html'));
+    // If custom domain is configured, redirect to it
+    if (CUSTOM_DOMAIN !== 'startupmysore.com' || process.env.CUSTOM_DOMAIN) {
+        return res.redirect(`${BASE_URL}/Smart_Connect.html`);
+    }
+    res.sendFile(path.join(__dirname, 'Smart_Connect.html'));
+});
+
+// Custom domain configuration route
+app.get('/api/domain-config', (req, res) => {
+    res.json({ 
+        customDomain: CUSTOM_DOMAIN,
+        baseUrl: BASE_URL,
+        currentHost: req.get('host')
+    });
 });
 
 // Health check

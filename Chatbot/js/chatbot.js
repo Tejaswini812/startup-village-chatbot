@@ -355,6 +355,29 @@ document.addEventListener('DOMContentLoaded', function() {
                 sendMessage();
             }
         });
+        
+        // Mobile-friendly input handling - preserve text when switching keyboards
+        userInput.addEventListener("input", function(event) {
+            // Convert to uppercase without losing text
+            const currentValue = this.value;
+            if (currentValue !== currentValue.toUpperCase()) {
+                this.value = currentValue.toUpperCase();
+            }
+        });
+        
+        // Handle focus events to preserve text on mobile
+        userInput.addEventListener("focus", function(event) {
+            // Preserve current value when input gets focus
+            this.setAttribute("data-last-value", this.value);
+        });
+        
+        // Handle blur events to preserve text on mobile
+        userInput.addEventListener("blur", function(event) {
+            // Ensure text is preserved when input loses focus
+            if (this.value && this.value !== this.getAttribute("data-last-value")) {
+                this.setAttribute("data-last-value", this.value);
+            }
+        });
     }
   
     // Global key handler for private chat
