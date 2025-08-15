@@ -3,7 +3,7 @@ let chatCache = new Map(); // Cache user data to avoid repeated API calls
 let isProcessing = false; // Prevent multiple simultaneous requests
 
 function sendMessage() {
-    const userInput = document.getElementById('userInput').value.trim();
+    const userInput = document.getElementById('userInput').value.trim().toUpperCase();
     if (!userInput || isProcessing) return;
     
     isProcessing = true;
