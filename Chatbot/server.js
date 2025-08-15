@@ -14,8 +14,8 @@ const PORT = process.env.PORT || 3000;
 app.use(cors());
 app.use(express.json());
 
-// Serve static files from public folder
-app.use(express.static(path.join(__dirname, 'public')));
+// Serve static files from current directory
+app.use(express.static(__dirname));
 
 // CSV path for backend (keep outside public for security)
 const csvPath = path.join(__dirname, 'UserData.csv');
@@ -463,7 +463,7 @@ app.use((error, req, res, next) => {
 
 // 404 fallback (important for Render/Netlify refresh issues)
 app.get('*', (req, res) => {
-    res.sendFile(path.join(__dirname, 'public', 'Smart_Connect.html'));
+    res.sendFile(path.join(__dirname, 'Smart_Connect.html'));
 });
 
 // ================== START SERVER ==================
