@@ -7,6 +7,1209 @@
     
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <link rel="stylesheet" href="css/dashboard.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        /* Main Content Layout - Clean vertical stacking */
+        .main-content {
+            padding: 2rem;
+            display: block !important;
+            width: 100% !important;
+            max-width: 1200px !important;
+            margin: 0 auto !important;
+        }
+
+        .chatbot-container {
+            display: block !important;
+            width: 100% !important;
+            max-width: 100% !important;
+            margin-bottom: 3rem !important;
+            background: white !important;
+            border-radius: 15px !important;
+            padding: 0 !important;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.1) !important;
+            overflow: hidden !important;
+        }
+
+        .chatbot-box {
+            width: 100% !important;
+            max-width: 100% !important;
+        }
+
+        .chatbot-title {
+            background: #28a745 !important;
+            color: white !important;
+            font-size: 1.5rem !important;
+            padding: 1.5rem !important;
+            margin: 0 !important;
+            display: flex !important;
+            align-items: center !important;
+            gap: 0.75rem !important;
+        }
+
+        .chatbot-title i {
+            font-size: 1.8rem !important;
+        }
+
+        .search-container {
+            display: flex !important;
+            gap: 1rem !important;
+            margin: 1.5rem !important;
+            width: calc(100% - 3rem) !important;
+        }
+
+        .search-input {
+            flex: 1 !important;
+            padding: 1rem 1.5rem !important;
+            font-size: 1.1rem !important;
+            border-radius: 10px !important;
+            border: 2px solid #9ce1ac !important;
+            transition: border-color 0.3s !important;
+        }
+
+        .search-input:focus {
+            outline: none !important;
+            border-color: #28a745 !important;
+            box-shadow: 0 0 0 3px rgba(146, 228, 146, 0.1) !important;
+        }
+
+        .send-btn {
+            padding: 1rem 1.5rem !important;
+            font-size: 1.1rem !important;
+            border-radius: 10px !important;
+            min-width: 60px !important;
+        }
+
+        .chatbox {
+            min-height: 100px !important;
+            padding: 1rem !important;
+            background: white !important;
+            border-radius: 8px !important;
+            border: none !important;
+            display: block !important;
+            transition: all 0.3s ease !important;
+            margin: 1rem !important;
+            max-height: 300px !important;
+            overflow-y: auto !important;
+        }
+
+
+
+        /* Enhanced chatbot styling for better proportions */
+        .chatbot-container {
+            margin-bottom: 3rem !important;
+        }
+
+        .chatbot-title {
+            font-size: 1.4rem !important;
+            font-weight: 600 !important;
+        }
+
+        .search-container {
+            margin-bottom: 2rem !important;
+        }
+
+        .message {
+            font-size: 1rem !important;
+            line-height: 1.5 !important;
+            padding: 1rem 1.2rem !important;
+        }
+
+        .promotional-slider {
+            display: block !important;
+            width: 100% !important;
+            margin-bottom: 3rem !important;
+            background: transparent !important;
+            border-radius: 15px !important;
+            padding: 2rem !important;
+            box-shadow: none !important;
+            border: none !important;
+        }
+
+        .booking-section {
+            display: block !important;
+            width: 100% !important;
+            background: transparent !important;
+            padding: 2rem !important;
+            border-radius: 15px !important;
+            box-shadow: none !important;
+            border: none !important;
+        }
+
+        /* Override any conflicting styles */
+        .chatbot-container *,
+        .promotional-slider *,
+        .booking-section * {
+            max-width: none !important;
+        }
+
+        .booking-title {
+            text-align: center;
+            color: #1e293b;
+            font-size: 2rem;
+            margin-bottom: 1rem;
+            font-family: 'Inter', sans-serif;
+        }
+
+        .booking-subtitle {
+            text-align: center;
+            color: #64748b;
+            margin-bottom: 2rem;
+            font-family: 'Inter', sans-serif;
+        }
+
+        .hotel-selection-modal {
+            background: transparent;
+            border-radius: 15px;
+            padding: 2rem;
+            box-shadow: none;
+            border: none;
+        }
+
+        .modal-header {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+
+        .modal-hotel-name {
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: #1e293b;
+            margin-bottom: 0.5rem;
+        }
+
+        .modal-hotel-location {
+            color: #64748b;
+            font-size: 1rem;
+        }
+
+        .rooms-title {
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: #1e293b;
+            margin-bottom: 1rem;
+        }
+
+        .hotels-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .hotel-card {
+            background: transparent;
+            border-radius: 12px;
+            overflow: visible;
+            box-shadow: none;
+            transition: transform 0.3s, box-shadow 0.3s;
+            border: none;
+        }
+
+        .hotel-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+        }
+
+        .hotel-image {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+        }
+
+        .hotel-info {
+            padding: 1.5rem;
+        }
+
+        .hotel-name {
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: #1e293b;
+            margin-bottom: 0.5rem;
+        }
+
+        .hotel-location {
+            color: #64748b;
+            margin-bottom: 0.5rem;
+        }
+
+        .hotel-price {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: #3b82f6;
+            margin-bottom: 1rem;
+        }
+
+        .view-details-btn {
+            background: #28a745;
+            color: white;
+            border: none;
+            padding: 0.75rem 1.5rem;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 500;
+            transition: background 0.3s;
+            width: 100%;
+        }
+
+        .view-details-btn:hover {
+            background: #7dd47d;
+        }
+
+        /* Cart Styles */
+        .cart-section {
+            position: fixed;
+            top: 0;
+            right: -400px;
+            width: 400px;
+            height: 100vh;
+            background: white;
+            box-shadow: -5px 0 15px rgba(0,0,0,0.1);
+            transition: right 0.3s;
+            z-index: 1000;
+            overflow-y: auto;
+        }
+
+        .cart-section.show {
+            right: 0;
+        }
+
+        .cart-header {
+            background: #28a745;
+            color: white;
+            padding: 1rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .cart-close {
+            background: none;
+            border: none;
+            color: white;
+            font-size: 1.5rem;
+            cursor: pointer;
+        }
+
+        .cart-content {
+            padding: 1rem;
+        }
+
+        .cart-items {
+            margin-bottom: 1rem;
+        }
+
+        .cart-item {
+            border: 1px solid #e2e8f0;
+            border-radius: 8px;
+            padding: 1rem;
+            margin-bottom: 1rem;
+        }
+
+        .cart-footer {
+            border-top: 1px solid #e2e8f0;
+            padding: 1rem;
+            background: #f8fafc;
+        }
+
+        .cart-total {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 1rem;
+            font-weight: 600;
+        }
+
+        .checkout-btn {
+            background: #3b82f6;
+            color: white;
+            border: none;
+            padding: 0.75rem 1.5rem;
+            border-radius: 8px;
+            cursor: pointer;
+            width: 100%;
+            font-weight: 500;
+        }
+
+        .checkout-btn:hover {
+            background: #2563eb;
+        }
+
+        /* Hotel Detail Modal */
+        .hotel-detail-modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.8);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 2000;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s;
+        }
+
+        .hotel-detail-modal.show {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .hotel-detail-modal .modal-content {
+            background: white;
+            border-radius: 15px;
+            width: 100%;
+            height: 100vh;
+            overflow-y: auto;
+            position: relative;
+        }
+
+        .modal-close {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: #000000;
+            font-weight: bold;
+        }
+
+        .modal-hotel-image {
+            width: 100%;
+            height: 250px;
+            object-fit: cover;
+            border-radius: 15px 15px 0 0;
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+        }
+
+        .rooms-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 1.5rem;
+            margin: 1.5rem 0;
+        }
+
+        /* Responsive room grid */
+        @media (max-width: 768px) {
+            .rooms-grid {
+                grid-template-columns: 1fr;
+                gap: 1rem;
+                margin: 1rem 0;
+            }
+            
+            .room-card {
+                margin-bottom: 1rem;
+            }
+            
+            .room-image {
+                height: 120px;
+            }
+            
+            .room-card-content {
+                padding: 0.75rem;
+            }
+            
+            .room-type {
+                font-size: 0.9rem;
+            }
+            
+            .room-price {
+                font-size: 0.85rem;
+            }
+            
+            .select-room-btn, .cart-plus-btn {
+                padding: 0.5rem 0.8rem;
+                font-size: 0.8rem;
+            }
+            
+            .member-selection {
+                padding: 0.75rem;
+                margin-top: 0.75rem;
+            }
+            
+            .member-controls {
+                flex-direction: column;
+                gap: 0.75rem;
+                align-items: flex-start;
+            }
+            
+            .member-type {
+                width: 100%;
+                justify-content: space-between;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .rooms-grid {
+                gap: 0.75rem;
+                margin: 0.75rem 0;
+            }
+            
+            .room-image {
+                height: 100px;
+            }
+            
+            .room-card-content {
+                padding: 0.5rem;
+            }
+            
+            .room-type {
+                font-size: 0.85rem;
+            }
+            
+            .room-price {
+                font-size: 0.8rem;
+            }
+            
+            .select-room-btn, .cart-plus-btn {
+                padding: 0.4rem 0.6rem;
+                font-size: 0.75rem;
+            }
+            
+            .member-selection {
+                padding: 0.5rem;
+                margin-top: 0.5rem;
+            }
+            
+            .member-selection h4 {
+                font-size: 0.8rem;
+                margin-bottom: 0.75rem;
+            }
+            
+            .member-type label {
+                font-size: 0.8rem;
+                min-width: 50px;
+            }
+            
+            .counter-btn {
+                width: 24px;
+                height: 24px;
+                font-size: 1rem;
+            }
+            
+            .counter-value {
+                font-size: 0.8rem;
+            }
+        }
+
+        .room-card {
+            border: 1px solid #e2e8f0;
+            border-radius: 12px;
+            padding: 0;
+            text-align: center;
+            overflow: hidden;
+            background: white;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+
+        .room-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+        }
+
+        .room-image {
+            width: 100%;
+            height: 150px;
+            object-fit: cover;
+            border-radius: 12px 12px 0 0;
+        }
+
+        .room-card-content {
+            padding: 1rem;
+        }
+
+        .room-type {
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
+
+        .room-price {
+            color: #3b82f6;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
+
+        .select-room-btn {
+            background: #28a745;
+            color: white;
+            border: none;
+            padding: 0.5rem 1rem;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 0.9rem;
+        }
+
+        .select-room-btn:hover {
+            background: #7dd47d;
+        }
+
+        .select-room-btn.selected {
+            background: #3b82f6;
+        }
+
+        .cart-plus-btn {
+            background: #28a745;
+            color: white;
+            border: none;
+            padding: 0.5rem 1rem;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 0.9rem;
+            margin-left: 0.5rem;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.3rem;
+            transition: background 0.3s;
+        }
+
+        .cart-plus-btn:hover {
+            background: #7dd47d;
+        }
+
+        .member-selection {
+            margin-top: 1rem;
+            padding: 1rem;
+            background: #f8fafc;
+            border-radius: 8px;
+            border: 1px solid #e2e8f0;
+        }
+
+        .member-selection h4 {
+            margin: 0 0 1rem 0;
+            color: #1e293b;
+            font-size: 0.9rem;
+            font-weight: 600;
+        }
+
+        .member-controls {
+            display: flex;
+            gap: 1rem;
+            align-items: center;
+        }
+
+        .member-type {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .member-type label {
+            font-size: 0.85rem;
+            color: #374151;
+            font-weight: 500;
+            min-width: 60px;
+        }
+
+        .member-counter {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .counter-btn {
+            background: #e5e7eb;
+            border: none;
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            cursor: pointer;
+            font-size: 1.2rem;
+            font-weight: bold;
+            color: #374151;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: background 0.3s;
+        }
+
+        .counter-btn:hover {
+            background: #d1d5db;
+        }
+
+        .counter-btn:disabled {
+            background: #f3f4f6;
+            color: #9ca3af;
+            cursor: not-allowed;
+        }
+
+        .counter-value {
+            font-size: 0.9rem;
+            font-weight: 600;
+            color: #1e293b;
+            min-width: 20px;
+            text-align: center;
+        }
+
+        /* Calendar Styles */
+        .calendar-section {
+            margin: 0.5rem auto;
+            padding: 0.75rem;
+            background: #f8fafc;
+            border-radius: 6px;
+            max-width: 450px;
+            text-align: center;
+        }
+
+        /* Responsive calendar */
+        @media (max-width: 768px) {
+            .calendar-section {
+                max-width: 100%;
+                margin: 0.5rem 0;
+                padding: 0.5rem;
+            }
+            
+            .calendar {
+                padding: 0.5rem;
+            }
+            
+            .calendar-header {
+                font-size: 0.9rem;
+                margin-bottom: 0.5rem;
+            }
+            
+            .calendar-nav button {
+                padding: 0.3rem 0.6rem;
+                font-size: 0.75rem;
+            }
+            
+            .calendar-grid {
+                gap: 0.3rem;
+            }
+            
+            .calendar-day {
+                min-height: 45px;
+                padding: 0.3rem;
+                font-size: 0.75rem;
+            }
+            
+            .calendar-day .price {
+                font-size: 0.7rem;
+                margin-top: 0.15rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .calendar-section {
+                padding: 0.4rem;
+            }
+            
+            .calendar {
+                padding: 0.4rem;
+            }
+            
+            .calendar-header {
+                font-size: 0.8rem;
+            }
+            
+            .calendar-nav button {
+                padding: 0.25rem 0.5rem;
+                font-size: 0.7rem;
+            }
+            
+            .calendar-day {
+                min-height: 40px;
+                padding: 0.25rem;
+                font-size: 0.7rem;
+            }
+            
+            .calendar-day .price {
+                font-size: 0.65rem;
+                margin-top: 0.1rem;
+            }
+        }
+
+        .calendar-title {
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+            font-size: 0.85rem;
+        }
+
+        .calendar {
+            background: white;
+            border-radius: 6px;
+            padding: 0.75rem;
+        }
+
+        .calendar-header {
+            text-align: center;
+            font-weight: 600;
+            margin-bottom: 0.75rem;
+            font-size: 1rem;
+        }
+
+        .calendar-nav {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 0.75rem;
+        }
+
+        .calendar-nav button {
+            background: #28a745;
+            color: white;
+            border: none;
+            padding: 0.4rem 0.8rem;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 0.85rem;
+        }
+
+        .calendar-grid {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            gap: 0.4rem;
+        }
+
+        .calendar-day {
+            padding: 0.4rem;
+            text-align: center;
+            border: 1px solid #e2e8f0;
+            border-radius: 3px;
+            cursor: pointer;
+            transition: background 0.3s;
+            font-size: 0.85rem;
+            position: relative;
+            min-height: 55px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .calendar-day:hover {
+            background: #f1f5f9;
+        }
+
+        .calendar-day.selected {
+            background: #28a745;
+            color: white;
+        }
+
+        .calendar-day.in-range {
+            background: #d1fae5;
+            color: #065f46;
+            border-color: #28a745;
+        }
+
+        .calendar-day.range-start {
+            background: #28a745;
+            color: white;
+            border-radius: 50%;
+        }
+
+        .calendar-day.range-end {
+            background: #28a745;
+            color: white;
+            border-radius: 50%;
+        }
+
+        .calendar-day.disabled {
+            background: #f1f5f9;
+            color: #cbd5e1;
+            cursor: not-allowed;
+        }
+
+        .add-to-cart-modal-btn {
+            background: #28a745;
+            color: white;
+            border: none;
+            padding: 1rem 2rem;
+            border-radius: 12px;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+            width: auto;
+            min-width: 200px;
+            margin: 1rem auto;
+            display: block;
+            box-shadow: 0 4px 15px rgba(40, 167, 69, 0.3);
+        }
+
+        .add-to-cart-modal-btn:hover {
+            background: #1e7e34;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(40, 167, 69, 0.4);
+        }
+
+        .add-to-cart-modal-btn:disabled {
+            background: #9ca3af;
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
+        }
+
+        .add-to-cart-modal-btn.enabled {
+            background: #28a745;
+            cursor: pointer;
+            transform: none;
+            box-shadow: 0 4px 15px rgba(40, 167, 69, 0.3);
+        }
+
+        .add-to-cart-modal-btn.enabled:hover {
+            background: #1e7e34;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(40, 167, 69, 0.4);
+        }
+
+        /* Responsive modal and buttons */
+        @media (max-width: 768px) {
+            .hotel-detail-modal .modal-content {
+                width: 100%;
+                height: 100vh;
+                border-radius: 0;
+            }
+            
+            .modal-hotel-image {
+                height: 200px;
+            }
+            
+            .add-to-cart-modal-btn {
+                padding: 0.75rem 1.5rem;
+                min-width: 180px;
+                font-size: 0.9rem;
+            }
+            
+            .modal-footer {
+                padding: 1rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .modal-hotel-image {
+                height: 180px;
+            }
+            
+            .add-to-cart-modal-btn {
+                padding: 0.6rem 1.2rem;
+                min-width: 160px;
+                font-size: 0.85rem;
+            }
+            
+            .modal-footer {
+                padding: 0.75rem;
+            }
+            
+            .modal-close {
+                top: 0.5rem;
+                right: 0.5rem;
+                font-size: 1.2rem;
+            }
+        }
+
+        .calendar-day .price {
+            font-size: 0.8rem;
+            color: #374151;
+            margin-top: 0.2rem;
+            display: block;
+            font-weight: 500;
+        }
+
+        .calendar-day.weekend .price {
+            color: #dc2626;
+            font-weight: 700;
+            font-size: 0.85rem;
+        }
+
+        .calendar-day.weekday .price {
+            color: #059669;
+            font-weight: 600;
+        }
+
+        .calendar-day.in-range .price {
+            color: #065f46;
+            font-weight: 600;
+        }
+
+        .calendar-day.selected .price {
+            color: white;
+            font-weight: 600;
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        /* Responsive Design for All Devices */
+        @media (max-width: 1200px) {
+            .main-content {
+                padding: 1.5rem;
+                max-width: 100%;
+            }
+            
+            .chatbot-container {
+                padding: 2rem;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .main-content {
+                padding: 1rem;
+            }
+            
+            .chatbot-container {
+                padding: 1.5rem;
+                margin-bottom: 2rem;
+            }
+            
+            .chatbot-title {
+                font-size: 1.2rem;
+                padding: 1rem;
+            }
+            
+            .search-container {
+                flex-direction: row;
+                gap: 0.5rem;
+            }
+            
+            .search-input {
+                padding: 0.6rem 0.8rem;
+                font-size: 0.9rem;
+                flex: 1;
+            }
+            
+            .send-btn {
+                padding: 0.6rem 0.8rem;
+                width: auto;
+                min-width: 50px;
+            }
+            
+            .booking-title {
+                font-size: 1.5rem;
+            }
+            
+            .booking-subtitle {
+                font-size: 0.9rem;
+            }
+            
+            .hotels-grid {
+                grid-template-columns: 1fr;
+                gap: 1rem;
+            }
+            
+            .hotel-card {
+                margin-bottom: 1rem;
+            }
+            
+            .hotel-image {
+                height: 180px;
+            }
+            
+            .hotel-info {
+                padding: 1rem;
+            }
+            
+            .hotel-name {
+                font-size: 1.1rem;
+            }
+            
+            .view-details-btn {
+                padding: 0.6rem 1.2rem;
+                font-size: 0.9rem;
+            }
+            
+            .cart-button {
+                top: 110px;
+                right: 15px;
+                padding: 0.8rem;
+            }
+            
+            .cart-section {
+                width: 100%;
+                right: -100%;
+            }
+            
+            .cart-section.show {
+                right: 0;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .main-content {
+                padding: 0.75rem;
+            }
+            
+            .chatbot-container {
+                padding: 1rem;
+                border-radius: 10px;
+            }
+            
+            .chatbot-title {
+                font-size: 1.1rem;
+                padding: 0.75rem;
+            }
+            
+            .search-container {
+                flex-direction: row;
+                gap: 0.4rem;
+            }
+            
+            .search-input {
+                padding: 0.5rem 0.6rem;
+                font-size: 0.85rem;
+                flex: 1;
+            }
+            
+            .send-btn {
+                padding: 0.5rem 0.6rem;
+                font-size: 0.85rem;
+                width: auto;
+                min-width: 45px;
+            }
+            
+            .booking-title {
+                font-size: 1.3rem;
+            }
+            
+            .booking-subtitle {
+                font-size: 0.8rem;
+            }
+            
+            .hotel-image {
+                height: 160px;
+            }
+            
+            .hotel-info {
+                padding: 0.75rem;
+            }
+            
+            .hotel-name {
+                font-size: 1rem;
+            }
+            
+            .view-details-btn {
+                padding: 0.5rem 1rem;
+                font-size: 0.85rem;
+            }
+            
+            .cart-button {
+                top: 100px;
+                right: 10px;
+                padding: 0.6rem;
+                font-size: 0.8rem;
+            }
+            
+            .header {
+                padding: 0.5rem;
+            }
+            
+            .club-title {
+                font-size: 1.2rem;
+            }
+            
+            .nav-buttons {
+                flex-wrap: wrap;
+                gap: 0.5rem;
+            }
+            
+            .nav-btn {
+                padding: 0.5rem 0.8rem;
+                font-size: 0.8rem;
+            }
+        }
+
+        @media (max-width: 360px) {
+            .main-content {
+                padding: 0.5rem;
+            }
+            
+            .chatbot-container {
+                padding: 0.75rem;
+            }
+            
+            .chatbot-title {
+                font-size: 1rem;
+                padding: 0.5rem;
+            }
+            
+            .search-input {
+                padding: 0.5rem 0.6rem;
+                font-size: 0.85rem;
+            }
+            
+            .send-btn {
+                padding: 0.5rem 0.6rem;
+                font-size: 0.85rem;
+            }
+            
+            .booking-title {
+                font-size: 1.2rem;
+            }
+            
+            .hotel-image {
+                height: 140px;
+            }
+            
+            .hotel-info {
+                padding: 0.5rem;
+            }
+            
+            .hotel-name {
+                font-size: 0.9rem;
+            }
+            
+            .view-details-btn {
+                padding: 0.4rem 0.8rem;
+                font-size: 0.8rem;
+            }
+        }
+
+        /* Tablet Specific Styles */
+        @media (min-width: 769px) and (max-width: 1024px) {
+            .main-content {
+                padding: 1.5rem;
+                max-width: 900px;
+            }
+            
+            .hotels-grid {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 1.5rem;
+            }
+            
+            .chatbot-container {
+                padding: 2rem;
+            }
+            
+            .cart-section {
+                width: 350px;
+            }
+        }
+
+        /* Large Desktop Styles */
+        @media (min-width: 1201px) {
+            .main-content {
+                max-width: 1400px;
+                padding: 2.5rem;
+            }
+            
+            .hotels-grid {
+                grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            }
+        }
+
+        /* Cart Button */
+        .cart-button {
+            position: fixed;
+            top: 120px;
+            right: 20px;
+            background: #28a745;
+            color: white;
+            border: none;
+            padding: 1rem;
+            border-radius: 50%;
+            cursor: pointer;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+            z-index: 999;
+        }
+
+        .cart-button:hover {
+            background: #28a745;
+        }
+    </style>
 </head>
 <body>
     <header class="header">
@@ -26,6 +1229,7 @@
         </div>
     </header>
     <div class="main-content">
+        <!-- Chatbot Section -->
         <div class="chatbot-container">
             <div class="chatbot-box">
                 <div class="chatbot-title">
@@ -37,24 +1241,171 @@
                         <i class="fas fa-paper-plane"></i>
                     </button>
                 </div>
-                <div class="chatbox" id="chatbox">
-                    <div class="message bot">
-                        👋 Welcome to Startup Village Club!  <br>Connect with members, share ideas, and grow your network.
+
+                <div class="chatbox" id="chatbox" style="display: none;">
+                    <!-- Chat messages will appear here -->
+                </div>
+            </div>
+        </div>
+        
+        <!-- Promotional Images Slider Section -->
+        <div class="promotional-slider">
+            <div class="slider-container">
+                <div class="slider-track">
+                    <div class="slide active">
+                        <img src="image1.png" alt="Promotional Image 1" class="promo-image" onclick="nextSlide()" style="cursor: pointer;">
                     </div>
-                   
+                    <div class="slide">
+                        <img src="image2.png" alt="Promotional Image 2" class="promo-image" onclick="nextSlide()" style="cursor: pointer;">
+                    </div>
+                    <div class="slide">
+                        <img src="image3.png" alt="Promotional Image 3" class="promo-image" onclick="nextSlide()" style="cursor: pointer;">
+                    </div>
+                </div>
+            </div>
+            <div class="slider-controls">
+                <button class="slider-btn prev-btn" onclick="previousSlide()">
+                    <i class="fas fa-chevron-left"></i>
+                </button>
+                <div class="slider-dots">
+                    <span class="dot active" onclick="goToSlide(0)"></span>
+                    <span class="dot" onclick="goToSlide(1)"></span>
+                    <span class="dot" onclick="goToSlide(2)"></span>
+                </div>
+                <button class="slider-btn next-btn" onclick="nextSlide()">
+                    <i class="fas fa-chevron-right"></i>
+                </button>
+            </div>
+        </div>
+
+        <!-- Location Buttons Section -->
+        <div class="location-buttons-section">
+            <h3 class="location-title">Popular Destinations</h3>
+            <div class="location-buttons">
+                <button class="location-btn">Wayanad</button>
+                <button class="location-btn">Shakaleshwara</button>
+                <button class="location-btn">Hassan</button>
+                <button class="location-btn">Coorg</button>
+                <button class="location-btn">Mysore</button>
+                <button class="location-btn">Chikmagalore</button>
+                <button class="location-btn">BR Hills</button>
+                <button class="location-btn">Shivana Samudra</button>
+                <button class="location-btn">Bandipur</button>
+            </div>
+        </div>
+
+        <!-- Booking Section -->
+        <div class="booking-section">
+            <h2 class="booking-title">🏨 Book Your Perfect Stay</h2>
+            <p class="booking-subtitle">Choose from our curated collection of hotels, cottages, and unique accommodations</p>
+            
+            <!-- Hotel Selection Modal -->
+            <div class="hotel-selection-modal">
+                <div class="modal-header">
+                    <div class="modal-hotel-name">Select Your Hotel & Room</div>
+                    <div class="modal-hotel-location">Choose from our available accommodations</div>
+                </div>
+                
+                <div class="rooms-section">
+                    <h3 class="rooms-title">Available Hotels</h3>
+                    <div class="hotels-grid" id="hotels-grid">
+                        <!-- Hotels will be loaded here -->
+                    </div>
                 </div>
             </div>
         </div>
     </div>
+
+    <!-- Cart Button -->
+    <button class="cart-button" onclick="showCart()">
+        🛒 <span id="cart-count">0</span>
+    </button>
+
+    <!-- Cart Overlay -->
+    <div id="cart-overlay" class="cart-overlay" onclick="hideCart()"></div>
+    
+    <!-- Cart Section -->
+    <section id="cart" class="cart-section">
+        <div class="cart-header">
+            <h3>🛒 Your Cart</h3>
+            <button class="cart-close" onclick="hideCart()">&times;</button>
+        </div>
+        
+        <div class="cart-content">
+            <div class="cart-items" id="cart-items">
+                <!-- Cart items will be displayed here -->
+            </div>
+        </div>
+        
+        <div class="cart-footer">
+            <div class="cart-total">
+                <span>Total Amount:</span>
+                <span class="cart-total-amount">₹<span id="cart-total">0</span></span>
+            </div>
+            <button class="checkout-btn" onclick="checkout()">Proceed to Checkout</button>
+        </div>
+    </section>
+
+    <!-- Hotel Detail Modal -->
+    <div id="hotel-detail-modal" class="hotel-detail-modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button class="modal-close" onclick="closeHotelModal()">&times;</button>
+                <div class="modal-hotel-image" id="modal-hotel-image"></div>
+                <div class="modal-hotel-name" id="modal-hotel-name"></div>
+                <div class="modal-hotel-location" id="modal-hotel-location"></div>
+            </div>
+            
+            <div class="rooms-section">
+                <h3 class="rooms-title">Available Room Types</h3>
+                <div class="rooms-grid" id="rooms-grid">
+                    <!-- Room types will be loaded here -->
+                </div>
+            </div>
+            
+            <!-- Calendar Section -->
+            <div class="calendar-section">
+                <h3 class="calendar-title">Select Your Dates</h3>
+                <div class="calendar-container">
+                    <div class="calendar">
+                        <div class="calendar-header" id="calendar-month-year">December 2024</div>
+                        <div class="calendar-nav">
+                            <button onclick="previousMonth()">&lt; Previous</button>
+                            <button onclick="nextMonth()">Next &gt;</button>
+                        </div>
+                        <div class="calendar-grid" id="calendar-grid">
+                            <!-- Calendar will be generated here -->
+                        </div>
+                    </div>
+                </div>
+                
+                <div id="date-selection-info" class="date-selection-info hidden">
+                    <h4>Selected Dates</h4>
+                    <div class="total-nights">Total Nights: <span id="total-nights">0</span></div>
+                    <div class="total-price">Total Price: ₹<span id="total-price">0</span></div>
+                </div>
+            </div>
+            
+            <div class="modal-footer">
+                <div id="selected-room-info" class="selected-room-info hidden">
+                    <strong>Selected Room:</strong> <span id="selected-room-type"></span> - ₹<span id="selected-room-price"></span>/night
+                </div>
+                <button class="add-to-cart-modal-btn" id="add-to-cart-modal-btn" onclick="handleAddToCartClick()">
+                    Select Room Type & Dates
+                </button>
+            </div>
+        </div>
+    </div>
+
     <footer class="dashboard-footer">
         <div class="footer-contact-info">
             <div class="contact-item">
                 <i class="fas fa-phone"></i>
-                <span class="contact-phone">9008007267</span>
+                <a href="https://api.whatsapp.com/send?phone=917676558020" target="_blank" class="contact-phone" onclick="console.log('Phone link clicked!')" style="text-decoration: none; color: inherit;">7676558020</a>
             </div>
             <div class="contact-item">
                 <i class="fas fa-envelope"></i>
-                <span class="contact-email">connect01@startupvillagecounty.in</span>
+                <span class="footer-email">connect01@startupvillagecounty.in</span>
             </div>
         </div>
         <div class="footer-content">
@@ -66,9 +1417,875 @@
                 <button class="nav-btn"> Report an Accident </button>
             </div>
         </div>
+
     </footer>
+
     <script src="js/dashboard.js"></script>
     <script src="js/chatbot.js"></script>
     <script src="js/telephony.js"></script>
+    
+    <script>
+        // Show chatbox when user starts typing
+        document.getElementById('userInput').addEventListener('input', function() {
+            const chatbox = document.getElementById('chatbox');
+            if (this.value.length > 0) {
+                chatbox.style.display = 'block';
+            } else {
+                chatbox.style.display = 'none';
+            }
+        });
+
+        // Override the sendMessage function to ensure chatbox is visible
+        const originalSendMessage = window.sendMessage;
+        window.sendMessage = function() {
+            const chatbox = document.getElementById('chatbox');
+            chatbox.style.display = 'block';
+            
+            if (originalSendMessage) {
+                originalSendMessage();
+            }
+        };
+    </script>
+    
+    <!-- Booking System JavaScript -->
+    <script>
+        // Global variables
+        let hotels = [];
+        let cart = [];
+        let selectedHotel = null;
+        let selectedRoom = null;
+        let selectedDates = [];
+        let currentMonth = new Date().getMonth();
+        let currentYear = new Date().getFullYear();
+
+        // Sample hotel data
+        const sampleHotels = [
+            {
+                id: 1,
+                name: "Sunset Retreat",
+                location: "Goa",
+                type: "Cottage",
+                price: 3500,
+                amenities: ["Pool", "Wi-Fi", "Breakfast"],
+                rating: 4.5,
+                image: "https://images.unsplash.com/photo-1571896349842-33c89424de2d?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80",
+                rooms: [
+                    { id: 101, type: "Luxury Cottage", price: 4500, amenities: ["Pool", "Wi-Fi", "Breakfast", "Ocean View"], image: "https://images.unsplash.com/photo-1571896349842-33c89424de2d?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80" },
+                    { id: 102, type: "Standard Cottage", price: 3500, amenities: ["Pool", "Wi-Fi", "Breakfast"], image: "https://images.unsplash.com/photo-1564013799919-ab600027ffc6?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80" },
+                    { id: 103, type: "Pool Villa", price: 6000, amenities: ["Private Pool", "Wi-Fi", "Breakfast", "Butler Service"], image: "https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80" },
+                    { id: 104, type: "Garden Cottage", price: 3000, amenities: ["Wi-Fi", "Breakfast", "Garden View"], image: "https://images.unsplash.com/photo-1564013799919-ab600027ffc6?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80" }
+                ]
+            },
+            {
+                id: 2,
+                name: "Ocean Breeze",
+                location: "Goa",
+                type: "Tent",
+                price: 1500,
+                amenities: ["Beach View", "Campfire"],
+                rating: 4.2,
+                image: "https://images.unsplash.com/photo-1520250497591-112f2f40a3f4?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80",
+                rooms: [
+                    { id: 201, type: "Beach Tent", price: 1500, amenities: ["Beach View", "Campfire", "Basic Amenities"], image: "https://images.unsplash.com/photo-1520250497591-112f2f40a3f4?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80" },
+                    { id: 202, type: "Luxury Tent", price: 2500, amenities: ["Beach View", "Campfire", "Private Bathroom", "Wi-Fi"], image: "https://images.unsplash.com/photo-1578662996442-48f60103fc96?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80" },
+                    { id: 203, type: "Family Tent", price: 3000, amenities: ["Beach View", "Campfire", "4 Person Capacity", "Private Bathroom"], image: "https://images.unsplash.com/photo-1504280390367-361c6d9f38f4?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80" },
+                    { id: 204, type: "Romantic Tent", price: 2000, amenities: ["Beach View", "Campfire", "Romantic Setup", "Private Area"], image: "https://images.unsplash.com/photo-1542314831-068cd1dbfeeb?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80" }
+                ]
+            },
+            {
+                id: 3,
+                name: "Mountain Escape",
+                location: "Coorg",
+                type: "Luxury Room",
+                price: 5000,
+                amenities: ["Spa", "Trekking", "Wi-Fi"],
+                rating: 4.7,
+                image: "https://images.unsplash.com/photo-1566073771259-6a8506099945?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80",
+                rooms: [
+                    { id: 301, type: "Luxury Suite", price: 8000, amenities: ["Spa", "Trekking", "Wi-Fi", "Mountain View", "Butler Service"], image: "https://images.unsplash.com/photo-1566073771259-6a8506099945?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80" },
+                    { id: 302, type: "Deluxe Room", price: 5000, amenities: ["Spa", "Trekking", "Wi-Fi", "Mountain View"], image: "https://images.unsplash.com/photo-1590490360182-c33d57733427?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80" },
+                    { id: 303, type: "Standard Room", price: 3500, amenities: ["Wi-Fi", "Trekking", "Basic Amenities"], image: "https://images.unsplash.com/photo-1578662996442-48f60103fc96?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80" },
+                    { id: 304, type: "Pool Room", price: 6000, amenities: ["Spa", "Trekking", "Wi-Fi", "Private Pool Access"], image: "https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80" }
+                ]
+            },
+            {
+                id: 4,
+                name: "Green Valley Stay",
+                location: "Coorg",
+                type: "Hostel Bed",
+                price: 900,
+                amenities: ["Wi-Fi", "Kitchen Access"],
+                rating: 4.0,
+                image: "https://images.unsplash.com/photo-1555854877-bab0e564b8d5?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80",
+                rooms: [
+                    { id: 401, type: "Dormitory Bed", price: 900, amenities: ["Wi-Fi", "Kitchen Access", "Shared Bathroom"], image: "https://images.unsplash.com/photo-1555854877-bab0e564b8d5?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80" },
+                    { id: 402, type: "Private Room", price: 1500, amenities: ["Wi-Fi", "Kitchen Access", "Private Bathroom"], image: "https://images.unsplash.com/photo-1590490360182-c33d57733427?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80" },
+                    { id: 403, type: "Family Room", price: 2500, amenities: ["Wi-Fi", "Kitchen Access", "Private Bathroom", "4 Person Capacity"], image: "https://images.unsplash.com/photo-1578662996442-48f60103fc96?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80" },
+                    { id: 404, type: "Camping Tent", price: 700, amenities: ["Kitchen Access", "Camping Experience", "Shared Facilities"], image: "https://images.unsplash.com/photo-1504280390367-361c6d9f38f4?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80" }
+                ]
+            },
+            {
+                id: 5,
+                name: "City Comfort Inn",
+                location: "Bangalore",
+                type: "Normal Room",
+                price: 2200,
+                amenities: ["Wi-Fi", "TV", "AC"],
+                rating: 4.3,
+                image: "https://images.unsplash.com/photo-1590490360182-c33d57733427?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80",
+                rooms: [
+                    { id: 501, type: "Deluxe Room", price: 3000, amenities: ["Wi-Fi", "TV", "AC", "City View", "Room Service"], image: "https://images.unsplash.com/photo-1590490360182-c33d57733427?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80" },
+                    { id: 502, type: "Standard Room", price: 2200, amenities: ["Wi-Fi", "TV", "AC"], image: "https://images.unsplash.com/photo-1578662996442-48f60103fc96?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80" },
+                    { id: 503, type: "Executive Suite", price: 5000, amenities: ["Wi-Fi", "TV", "AC", "City View", "Room Service", "Mini Bar"], image: "https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80" },
+                    { id: 504, type: "Budget Room", price: 1500, amenities: ["Wi-Fi", "TV", "AC", "Basic Amenities"], image: "https://images.unsplash.com/photo-1555854877-bab0e564b8d5?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80" }
+                ]
+            }
+        ];
+
+        // Initialize the page
+        function init() {
+            try {
+                console.log('=== INIT FUNCTION STARTED ===');
+                console.log('Sample hotels available:', typeof sampleHotels);
+                console.log('Sample hotels length:', sampleHotels ? sampleHotels.length : 'undefined');
+                
+                hotels = sampleHotels;
+                console.log('Hotels array assigned, length:', hotels.length);
+                
+                console.log('Calling displayHotels...');
+                displayHotels();
+                
+                console.log('Calling updateCartCount...');
+                updateCartCount();
+                
+                console.log('Calling generateCalendar...');
+                generateCalendar();
+                
+                console.log('✅ Page initialization complete');
+                console.log('=== INIT FUNCTION COMPLETED ===');
+            } catch (error) {
+                console.error('❌ Error during initialization:', error);
+                console.error('Error stack:', error.stack);
+            }
+        }
+
+        // Display hotels
+        function displayHotels() {
+            try {
+                console.log('=== DISPLAY HOTELS FUNCTION STARTED ===');
+                const grid = document.getElementById('hotels-grid');
+                console.log('Hotels grid element:', grid);
+                console.log('Hotels data:', hotels);
+                console.log('Hotels array length:', hotels ? hotels.length : 'undefined');
+                
+                if (!grid) {
+                    console.error('❌ Hotels grid element not found!');
+                    console.error('Available elements with similar IDs:');
+                    document.querySelectorAll('[id*="hotel"]').forEach(el => {
+                        console.log('Found element:', el.id, el);
+                    });
+                    return;
+                }
+                
+                if (!hotels || hotels.length === 0) {
+                    console.error('❌ No hotels data available!');
+                    return;
+                }
+                
+                grid.innerHTML = '';
+                console.log('Grid cleared, starting to create hotel cards...');
+                
+                hotels.forEach((hotel, index) => {
+                    console.log(`Creating hotel card ${index + 1} for:`, hotel.name);
+                    const hotelCard = document.createElement('div');
+                    hotelCard.className = 'hotel-card';
+                    hotelCard.innerHTML = `
+                        <img src="${hotel.image}" alt="${hotel.name}" class="hotel-image" onerror="this.style.display='none'">
+                        <div class="hotel-info">
+                            <div class="hotel-name">${hotel.name}</div>
+                            <div class="hotel-location">${hotel.location} • ${hotel.type}</div>
+                            <div class="hotel-price">₹${hotel.price}/night</div>
+                            <button class="view-details-btn" onclick="openHotelModal(${hotel.id})">View Details</button>
+                        </div>
+                    `;
+                    grid.appendChild(hotelCard);
+                    console.log(`Hotel card ${index + 1} added to grid`);
+                });
+                
+                console.log('✅ Total hotel cards created:', grid.children.length);
+                console.log('Grid children:', grid.children);
+                console.log('=== DISPLAY HOTELS FUNCTION COMPLETED ===');
+                
+                console.log('🎉 Hotels loaded successfully!');
+            } catch (error) {
+                console.error('❌ Error in displayHotels:', error);
+                console.error('Error stack:', error.stack);
+            }
+        }
+
+        // Open hotel detail modal
+        function openHotelModal(hotelId) {
+            selectedHotel = hotels.find(h => h.id === hotelId);
+            if (!selectedHotel) return;
+            
+            document.getElementById('modal-hotel-image').style.backgroundImage = `url(${selectedHotel.image})`;
+            document.getElementById('modal-hotel-name').textContent = selectedHotel.name;
+            document.getElementById('modal-hotel-location').textContent = `${selectedHotel.location} • ${selectedHotel.type}`;
+            
+            displayRooms();
+            document.getElementById('hotel-detail-modal').classList.add('show');
+        }
+
+        // Close hotel detail modal
+        function closeHotelModal() {
+            document.getElementById('hotel-detail-modal').classList.remove('show');
+            selectedHotel = null;
+            selectedRoom = null;
+            selectedDates = [];
+            resetModal();
+        }
+
+        // Display rooms
+        function displayRooms() {
+            const grid = document.getElementById('rooms-grid');
+            grid.innerHTML = '';
+            
+            selectedHotel.rooms.forEach(room => {
+                const roomCard = document.createElement('div');
+                roomCard.className = 'room-card';
+                roomCard.innerHTML = `
+                    <img src="${room.image}" alt="${room.type}" class="room-image" onerror="this.style.display='none'">
+                    <div class="room-card-content">
+                        <div class="room-type">${room.type}</div>
+                        <div class="room-price">₹${room.price}/night</div>
+                        <div style="display: flex; align-items: center; justify-content: center; gap: 0.5rem;">
+                            <button class="select-room-btn" onclick="selectRoom(${room.id})">Select Room</button>
+                            <button class="cart-plus-btn" onclick="addRoomToCart(${room.id})">
+                                Cart(+)
+                            </button>
+                        </div>
+                        <div class="member-selection" id="member-selection-${room.id}">
+                            <h4>Select Members</h4>
+                            <div class="member-controls">
+                                <div class="member-type">
+                                    <label>Adults:</label>
+                                    <div class="member-counter">
+                                        <button class="counter-btn" onclick="changeMemberCount(${room.id}, 'adults', -1)">-</button>
+                                        <span class="counter-value" id="adults-${room.id}">1</span>
+                                        <button class="counter-btn" onclick="changeMemberCount(${room.id}, 'adults', 1)">+</button>
+                                    </div>
+                                </div>
+                                <div class="member-type">
+                                    <label>Children:</label>
+                                    <div class="member-counter">
+                                        <button class="counter-btn" onclick="changeMemberCount(${room.id}, 'children', -1)">-</button>
+                                        <span class="counter-value" id="children-${room.id}">0</span>
+                                        <button class="counter-btn" onclick="changeMemberCount(${room.id}, 'children', 1)">+</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                `;
+                grid.appendChild(roomCard);
+            });
+        }
+
+        // Select room
+        function selectRoom(roomId) {
+            selectedRoom = selectedHotel.rooms.find(r => r.id === roomId);
+            
+            // Update button states
+            document.querySelectorAll('.select-room-btn').forEach(btn => btn.classList.remove('selected'));
+            event.target.classList.add('selected');
+            
+            document.getElementById('selected-room-info').classList.remove('hidden');
+            document.getElementById('selected-room-type').textContent = selectedRoom.type;
+            document.getElementById('selected-room-price').textContent = selectedRoom.price;
+            
+            updateAddToCartButton();
+        }
+
+        // Add room to cart directly
+        function addRoomToCart(roomId) {
+            const room = selectedHotel.rooms.find(r => r.id === roomId);
+            if (!room) return;
+            
+            // Get current member counts from the visible member selection
+                const adults = parseInt(document.getElementById(`adults-${roomId}`).textContent);
+                const children = parseInt(document.getElementById(`children-${roomId}`).textContent);
+                
+                const cartItem = {
+                    id: Date.now(),
+                    hotel: selectedHotel.name,
+                    room: room.type,
+                    location: selectedHotel.location,
+                    pricePerNight: room.price,
+                    adults: adults,
+                    children: children,
+                    totalPrice: room.price
+                };
+                
+                cart.push(cartItem);
+                updateCart();
+            alert(`Room added to cart successfully for ${adults} adult(s) and ${children} child(ren)!`);
+        }
+
+        // Change member count
+        function changeMemberCount(roomId, memberType, change) {
+            const counterElement = document.getElementById(`${memberType}-${roomId}`);
+            let currentValue = parseInt(counterElement.textContent);
+            
+            if (memberType === 'adults') {
+                // Adults: minimum 1, maximum 4
+                currentValue = Math.max(1, Math.min(4, currentValue + change));
+            } else {
+                // Children: minimum 0, maximum 4
+                currentValue = Math.max(0, Math.min(4, currentValue + change));
+            }
+            
+            counterElement.textContent = currentValue;
+        }
+
+        // Generate calendar
+        function generateCalendar() {
+            const monthYear = document.getElementById('calendar-month-year');
+            const grid = document.getElementById('calendar-grid');
+            
+            monthYear.textContent = `${getMonthName(currentMonth)} ${currentYear}`;
+            grid.innerHTML = '';
+            
+            const firstDay = new Date(currentYear, currentMonth, 1);
+            const lastDay = new Date(currentYear, currentMonth + 1, 0);
+            const startDate = new Date(firstDay);
+            startDate.setDate(startDate.getDate() - firstDay.getDay());
+            
+            for (let i = 0; i < 42; i++) {
+                const date = new Date(startDate);
+                date.setDate(startDate.getDate() + i);
+                
+                const dayElement = document.createElement('div');
+                dayElement.className = 'calendar-day';
+                
+                // Check if it's weekend (Saturday = 6, Sunday = 0)
+                const isWeekend = date.getDay() === 0 || date.getDay() === 6;
+                const isWeekday = date.getDay() >= 1 && date.getDay() <= 5;
+                
+                if (isWeekend) {
+                    dayElement.classList.add('weekend');
+                } else if (isWeekday) {
+                    dayElement.classList.add('weekday');
+                }
+                
+                // Add date number
+                const dateNumber = document.createElement('div');
+                dateNumber.textContent = date.getDate();
+                dayElement.appendChild(dateNumber);
+                
+                // Add price for every date (using base hotel price if room not selected)
+                if (date.getMonth() === currentMonth) {
+                    const priceElement = document.createElement('div');
+                    priceElement.className = 'price';
+                    
+                    // Get base price (from selected room or hotel base price)
+                    let basePrice = selectedRoom ? selectedRoom.price : (selectedHotel ? selectedHotel.price : 2000);
+                    
+                    // Weekend pricing (20% higher)
+                    let price = basePrice;
+                    if (isWeekend) {
+                        price = Math.round(basePrice * 1.2);
+                    }
+                    
+                    priceElement.textContent = `₹${price}`;
+                    dayElement.appendChild(priceElement);
+                }
+                
+                if (date.getMonth() !== currentMonth) {
+                    dayElement.classList.add('disabled');
+                } else {
+                    dayElement.onclick = () => selectDate(date);
+                }
+                
+                if (isDateSelected(date)) {
+                    dayElement.classList.add('selected');
+                } else if (isDateInRange(date)) {
+                    if (isRangeStart(date)) {
+                        dayElement.classList.add('range-start');
+                    } else if (isRangeEnd(date)) {
+                        dayElement.classList.add('range-end');
+                    } else {
+                        dayElement.classList.add('in-range');
+                    }
+                }
+                
+                grid.appendChild(dayElement);
+            }
+        }
+
+        // Get month name
+        function getMonthName(month) {
+            const months = ['January', 'February', 'March', 'April', 'May', 'June', 
+                          'July', 'August', 'September', 'October', 'November', 'December'];
+            return months[month];
+        }
+
+        // Select date
+        function selectDate(date) {
+            // If no dates selected, start new selection
+            if (selectedDates.length === 0) {
+                selectedDates = [date];
+            } else if (selectedDates.length === 1) {
+                // If one date already selected, add second date to complete range
+                selectedDates.push(date);
+                // Sort dates to ensure start is before end
+                selectedDates.sort((a, b) => a - b);
+            } else {
+                // If two dates already selected, start new selection
+                selectedDates = [date];
+            }
+            
+            generateCalendar();
+            updateDateSelectionInfo();
+            updateAddToCartButton();
+        }
+
+        // Check if date is in range
+        function isDateInRange(date) {
+            if (selectedDates.length !== 2) return false;
+            
+            const startDate = new Date(selectedDates[0]);
+            const endDate = new Date(selectedDates[1]);
+            
+            // Swap if start is after end
+            if (startDate > endDate) {
+                [startDate, endDate] = [endDate, startDate];
+            }
+            
+            return date >= startDate && date <= endDate;
+        }
+
+        // Check if date is range start
+        function isRangeStart(date) {
+            if (selectedDates.length !== 2) return false;
+            return date.toDateString() === selectedDates[0].toDateString();
+        }
+
+        // Check if date is range end
+        function isRangeEnd(date) {
+            if (selectedDates.length !== 2) return false;
+            return date.toDateString() === selectedDates[1].toDateString();
+        }
+
+        // Check if date is selected
+        function isDateSelected(date) {
+            return selectedDates.some(d => d.toDateString() === date.toDateString());
+        }
+
+        // Update date selection info
+        function updateDateSelectionInfo() {
+            const info = document.getElementById('date-selection-info');
+            const totalNights = document.getElementById('total-nights');
+            const totalPrice = document.getElementById('total-price');
+            
+            if (selectedDates.length >= 2 && selectedRoom) {
+                const nights = Math.ceil((selectedDates[selectedDates.length - 1] - selectedDates[0]) / (1000 * 60 * 60 * 24));
+                let totalPrice = 0;
+                
+                // Calculate price for each selected date
+                for (let i = 0; i < selectedDates.length - 1; i++) {
+                    const currentDate = new Date(selectedDates[i]);
+                    const isWeekend = currentDate.getDay() === 0 || currentDate.getDay() === 6;
+                    
+                    if (isWeekend) {
+                        totalPrice += Math.round(selectedRoom.price * 1.2);
+                    } else {
+                        totalPrice += selectedRoom.price;
+                    }
+                }
+                
+                totalNights.textContent = nights;
+                document.getElementById('total-price').textContent = totalPrice;
+                info.classList.remove('hidden');
+            } else {
+                info.classList.add('hidden');
+            }
+        }
+
+        // Update add to cart button
+        function updateAddToCartButton() {
+            const btn = document.getElementById('add-to-cart-modal-btn');
+            const hasRoom = selectedRoom !== null;
+            const hasDates = selectedDates.length >= 2;
+            const isEnabled = hasRoom && hasDates;
+            
+            btn.disabled = !isEnabled;
+            
+            // Update button classes for styling
+            if (isEnabled) {
+                btn.classList.add('enabled');
+                btn.classList.remove('disabled');
+            } else {
+                btn.classList.remove('enabled');
+                btn.classList.add('disabled');
+            }
+            
+            // Update button text based on what's missing
+            if (!hasRoom && !hasDates) {
+                btn.textContent = 'Select Room Type & Dates';
+            } else if (!hasRoom) {
+                btn.textContent = 'Select Room Type';
+            } else if (!hasDates) {
+                btn.textContent = 'Select Dates';
+            } else {
+                btn.textContent = 'Add to Cart';
+            }
+        }
+
+        // Add selected room to cart
+        function addSelectedRoomToCart() {
+            if (!selectedRoom || selectedDates.length < 2) {
+                showPopupMessage('Please select a room type and dates first!');
+                return;
+            }
+            
+            const nights = Math.ceil((selectedDates[selectedDates.length - 1] - selectedDates[0]) / (1000 * 60 * 60 * 24));
+            const totalPrice = nights * selectedRoom.price;
+            
+            const cartItem = {
+                id: Date.now(),
+                hotel: selectedHotel.name,
+                room: selectedRoom.type,
+                location: selectedHotel.location,
+                checkIn: selectedDates[0].toLocaleDateString(),
+                checkOut: selectedDates[selectedDates.length - 1].toLocaleDateString(),
+                nights: nights,
+                pricePerNight: selectedRoom.price,
+                totalPrice: totalPrice
+            };
+            
+            cart.push(cartItem);
+            updateCart();
+            closeHotelModal();
+            
+            alert('Room added to cart successfully!');
+        }
+
+        // Show popup message
+        function showPopupMessage(message) {
+            // Create popup element
+            const popup = document.createElement('div');
+            popup.style.cssText = `
+                position: fixed;
+                top: 50%;
+                left: 50%;
+                transform: translate(-50%, -50%);
+                background: white;
+                padding: 1.5rem;
+                border-radius: 12px;
+                box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+                z-index: 3000;
+                text-align: center;
+                max-width: 300px;
+                border: 2px solid #28a745;
+            `;
+            
+            popup.innerHTML = `
+                <div style="margin-bottom: 1rem;">
+                    <div style="font-size: 2rem; margin-bottom: 0.5rem;">⚠️</div>
+                    <div style="font-weight: 600; color: #1e293b; margin-bottom: 0.5rem;">Action Required</div>
+                    <div style="color: #64748b; font-size: 0.9rem;">${message}</div>
+                </div>
+                <button onclick="this.parentElement.remove()" style="
+                    background: #28a745;
+                    color: white;
+                    border: none;
+                    padding: 0.75rem 1.5rem;
+                    border-radius: 8px;
+                    cursor: pointer;
+                    font-weight: 500;
+                    width: 100%;
+                ">OK</button>
+            `;
+            
+            document.body.appendChild(popup);
+            
+            // Auto-remove after 5 seconds
+            setTimeout(() => {
+                if (popup.parentElement) {
+                    popup.remove();
+                }
+            }, 5000);
+        }
+
+        // Handle add to cart button click
+        function handleAddToCartClick() {
+            if (!selectedRoom && selectedDates.length < 2) {
+                showPopupMessage('Please select a room type and dates first!');
+            } else if (!selectedRoom) {
+                showPopupMessage('Please select a room type first!');
+            } else if (selectedDates.length < 2) {
+                showPopupMessage('Please select dates (check-in and check-out) first!');
+            } else {
+                addSelectedRoomToCart();
+            }
+        }
+
+        // Show cart
+        function showCart() {
+            document.getElementById('cart').classList.add('show');
+        }
+
+        // Hide cart
+        function hideCart() {
+            document.getElementById('cart').classList.remove('show');
+        }
+
+        // Update cart
+        function updateCart() {
+            const cartItems = document.getElementById('cart-items');
+            const cartTotal = document.getElementById('cart-total');
+            
+            cartItems.innerHTML = '';
+            let total = 0;
+            
+            cart.forEach(item => {
+                const itemElement = document.createElement('div');
+                itemElement.className = 'cart-item';
+                itemElement.innerHTML = `
+                    <div><strong>${item.hotel}</strong></div>
+                    <div>${item.room} - ${item.location}</div>
+                    <div>${item.checkIn} to ${item.checkOut} (${item.nights} nights)</div>
+                    <div>₹${item.totalPrice}</div>
+                    <button onclick="removeFromCart(${item.id})" style="background: #ef4444; color: white; border: none; padding: 0.25rem 0.5rem; border-radius: 4px; cursor: pointer; margin-top: 0.5rem;">Remove</button>
+                `;
+                cartItems.appendChild(itemElement);
+                total += item.totalPrice;
+            });
+            
+            cartTotal.textContent = total;
+            updateCartCount();
+        }
+
+        // Remove from cart
+        function removeFromCart(itemId) {
+            cart = cart.filter(item => item.id !== itemId);
+            updateCart();
+        }
+
+        // Update cart count
+        function updateCartCount() {
+            document.getElementById('cart-count').textContent = cart.length;
+        }
+
+        // Checkout
+        function checkout() {
+            if (cart.length === 0) {
+                alert('Your cart is empty!');
+                return;
+            }
+            
+            // Show booking form modal
+            showBookingForm();
+        }
+        
+        // Show booking form modal
+        function showBookingForm() {
+            const modal = document.createElement('div');
+            modal.className = 'booking-form-modal';
+            modal.innerHTML = `
+                <div class="booking-form-content">
+                    <div class="booking-form-header">
+                        <h3>📋 Complete Your Booking</h3>
+                        <button class="booking-form-close" onclick="closeBookingForm()">&times;</button>
+                    </div>
+                    <form id="bookingForm" onsubmit="submitBooking(event)">
+                        <div class="form-group">
+                            <label for="guestName">Full Name *</label>
+                            <input type="text" id="guestName" name="guestName" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="guestEmail">Email *</label>
+                            <input type="email" id="guestEmail" name="guestEmail" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="guestPhone">Phone Number *</label>
+                            <input type="tel" id="guestPhone" name="guestPhone" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="numberOfMembers">Number of Members *</label>
+                            <select id="numberOfMembers" name="numberOfMembers" required>
+                                <option value="">Select number of members</option>
+                                <option value="1">1 Member</option>
+                                <option value="2">Members</option>
+                                <option value="3">3 Members</option>
+                                <option value="4">4 Members</option>
+                                <option value="5">5 Members</option>
+                                <option value="6">6 Members</option>
+                                <option value="7">7 Members</option>
+                                <option value="8">8 Members</option>
+                                <option value="9">9 Members</option>
+                                <option value="10">10+ Members</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="specialRequests">Special Requests (Optional)</label>
+                            <textarea id="specialRequests" name="specialRequests" rows="3" placeholder="Any special requirements or requests..."></textarea>
+                        </div>
+                        <div class="booking-summary">
+                            <h4>Booking Summary</h4>
+                            <div class="summary-item">
+                                <span>Total Amount:</span>
+                                <span>₹<span id="form-total-amount">0</span></span>
+                            </div>
+                            <div class="summary-item">
+                                <span>Items in Cart:</span>
+                                <span id="form-cart-count">0</span>
+                            </div>
+                        </div>
+                        <div class="form-actions">
+                            <button type="button" class="btn-secondary" onclick="closeBookingForm()">Cancel</button>
+                            <button type="submit" class="btn-primary">Confirm Booking</button>
+                        </div>
+                    </form>
+                </div>
+            `;
+            
+            document.body.appendChild(modal);
+            
+            // Update form with current cart info
+            document.getElementById('form-total-amount').textContent = document.getElementById('cart-total').textContent;
+            document.getElementById('form-cart-count').textContent = cart.length;
+            
+            // Show modal
+            setTimeout(() => modal.classList.add('show'), 10);
+        }
+        
+        // Close booking form modal
+        function closeBookingForm() {
+            const modal = document.querySelector('.booking-form-modal');
+            if (modal) {
+                modal.classList.remove('show');
+                setTimeout(() => modal.remove(), 300);
+            }
+        }
+        
+        // Submit booking
+        function submitBooking(event) {
+            event.preventDefault();
+            
+            const formData = new FormData(event.target);
+            const bookingData = {
+                guestName: formData.get('guestName'),
+                guestEmail: formData.get('guestEmail'),
+                guestPhone: formData.get('guestPhone'),
+                numberOfMembers: formData.get('numberOfMembers'),
+                specialRequests: formData.get('specialRequests'),
+                cartItems: cart,
+                totalAmount: document.getElementById('cart-total').textContent,
+                bookingDate: new Date().toISOString()
+            };
+            
+            console.log('Booking submitted:', bookingData);
+            
+            // Show success message
+            alert(`Thank you for your booking, ${bookingData.guestName}! We will contact you soon to confirm your reservation for ${bookingData.numberOfMembers} member(s).`);
+            
+            // Clear cart and close everything
+            cart = [];
+            updateCart();
+            hideCart();
+            closeBookingForm();
+        }
+
+        // Previous month
+        function previousMonth() {
+            currentMonth--;
+            if (currentMonth < 0) {
+                currentMonth = 11;
+                currentYear--;
+            }
+            generateCalendar();
+        }
+
+        // Next month
+        function nextMonth() {
+            currentMonth++;
+            if (currentMonth > 11) {
+                currentMonth = 0;
+                currentYear++;
+            }
+            generateCalendar();
+        }
+
+        // Reset modal
+        function resetModal() {
+            document.getElementById('selected-room-info').classList.add('hidden');
+            document.getElementById('date-selection-info').classList.add('hidden');
+            document.getElementById('add-to-cart-modal-btn').disabled = true;
+        }
+
+        // Initialize when page loads
+        window.addEventListener('load', function() {
+            console.log('Page loaded, initializing...');
+            setTimeout(init, 100);
+        });
+        
+        // Also try to initialize when DOM is ready
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('DOM ready, initializing...');
+            setTimeout(init, 200);
+        });
+        
+        // Slider functionality - using functions from dashboard.js
+        
+        // Auto-advance slides every 3 seconds
+        setInterval(function() {
+            if (typeof nextSlide === 'function') {
+                nextSlide();
+            }
+        }, 3000);
+        
+        // Final fallback initialization
+        setTimeout(function() {
+            console.log('Final fallback initialization...');
+            if (typeof init === 'function') {
+                console.log('Calling init function...');
+                init();
+            } else {
+                console.error('❌ Init function not found!');
+                // Try to manually display hotels
+                console.log('Trying to manually display hotels...');
+                if (typeof displayHotels === 'function') {
+                    displayHotels();
+                } else {
+                    console.error('❌ displayHotels function not found either!');
+                }
+            }
+        }, 1000);
+
+        // Initialize slider when page loads
+        document.addEventListener('DOMContentLoaded', function() {
+            if (typeof initSlider === 'function') {
+                initSlider();
+            }
+        });
+        
+        // Add a simple test to verify JavaScript is working
+        console.log('✅ JavaScript file loaded successfully!');
+        console.log('Available functions:', {
+            init: typeof init,
+            displayHotels: typeof displayHotels,
+            updateCartCount: typeof updateCartCount,
+            generateCalendar: typeof generateCalendar
+        });
+        
+        // Try to manually call init after a delay
+        setTimeout(function() {
+            console.log('Manual init call...');
+            if (typeof init === 'function') {
+                init();
+            }
+        }, 2000);
+    </script>
 </body>
 </html>

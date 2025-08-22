@@ -94,7 +94,7 @@ body, html {
     width: 100%;
     padding: 14px;
     border: none;
-    background: linear-gradient(135deg, #667eea, #764ba2, #f093fb);
+    background: linear-gradient(135deg, #0e5641, #257549, #096b23);
     color: #fff;
     font-size: 16px;
     font-weight: bold;
@@ -104,7 +104,7 @@ body, html {
 }
 
 .btn-primary:hover {
-    background: linear-gradient(135deg, #5a6fd8, #6a4190, #e67edb);
+    background: linear-gradient(135deg, #0e5641, #257549, #096b23);
     transform: translateY(-2px);
 }
 

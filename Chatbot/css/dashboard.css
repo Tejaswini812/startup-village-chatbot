@@ -21,7 +21,7 @@ body::before {
     left: 0;
     width: 100%;
     height: 100%;
-    background: linear-gradient(135deg, rgba(102, 126, 234, 0.15), rgba(118, 75, 162, 0.1), rgba(240, 147, 251, 0.1));
+    background: linear-gradient(135deg, rgba(40, 167, 69, 0.15), rgba(32, 201, 151, 0.1), rgba(76, 175, 80, 0.1));
     backdrop-filter: blur(8px); /* Reduced from 12px for better performance */
     z-index: -1;
 }
@@ -49,7 +49,7 @@ body::before {
 }
 
 .signup-btn-top {
-    background: linear-gradient(135deg, #667eea, #764ba2);
+    background: linear-gradient(135deg, #56c556, #28a745);
     color: #fff;
     padding: 6px 12px; /* Reduced padding to make button smaller */
     border-radius: 12px;
@@ -59,16 +59,16 @@ body::before {
     align-items: center;
     gap: 4px; /* Reduced gap */
     transition: all 0.3s ease;
-    box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
+    box-shadow: 0 4px 15px rgba(146, 228, 146, 0.3);
     border: 1px solid rgba(255,255,255,0.2);
     min-width: 80px; /* Smaller minimum width */
     max-width: 100px; /* Maximum width */
 }
 
 .signup-btn-top:hover {
-    background: linear-gradient(135deg, #5a6fd8, #6a4190);
+    background: linear-gradient(135deg, #56c556, #28a745);
     transform: translateY(-2px) scale(1.02);
-    box-shadow: 0 6px 20px rgba(102, 126, 234, 0.4);
+    box-shadow: 0 6px 20px rgba(146, 228, 146, 0.4);
 }
 
 .header-top {
@@ -113,7 +113,7 @@ body::before {
 
 .club-tagline-left {
     font-size: 1rem;
-    color: #667eea;
+    color: #23a523;
     font-weight: 500;
     margin: 0.5rem 0;
     text-align: center;
@@ -129,7 +129,7 @@ body::before {
 }
 
 .nav-btn {
-    background: linear-gradient(135deg, #667eea, #764ba2);
+    background: linear-gradient(135deg, #56c556, #28a745);
     color: #fff;
     border: none;
     padding: 0.6rem 1rem; /* Reduced padding */
@@ -138,7 +138,7 @@ body::before {
     font-weight: 600;
     cursor: pointer;
     transition: all 0.3s ease;
-    box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
+    box-shadow: 0 4px 15px rgba(146, 228, 146, 0.3);
     border: 1px solid rgba(255,255,255,0.2);
     min-width: 100px; /* Smaller minimum width */
     max-width: 150px; /* Maximum width */
@@ -146,9 +146,9 @@ body::before {
 }
 
 .nav-btn:hover {
-    background: linear-gradient(135deg, #5a6fd8, #6a4190);
+    background: linear-gradient(135deg, #56c556, #28a745);
     transform: translateY(-2px);
-    box-shadow: 0 6px 20px rgba(102, 126, 234, 0.4);
+    box-shadow: 0 6px 20px rgba(146, 228, 146, 0.4);
 }
 
 .main-content {
@@ -164,58 +164,66 @@ body::before {
 
 .chatbot-container {
     width: 100%;
-    max-width: 800px;
-    background: transparent; /* Ensure no background color */
+    max-width: 100%;
+    background: transparent;
+    box-shadow: none;
+    border: none;
 }
 
 .chatbot-box {
-    background: rgba(255,255,255,0.95);
+    background: transparent;
     border-radius: 20px;
-    box-shadow: 0 10px 30px rgba(0,0,0,0.1);
-    overflow: hidden;
-    backdrop-filter: blur(10px);
-    border: 1px solid rgba(255,255,255,0.3);
-    margin: 0 auto; /* Center the box */
+    box-shadow: none;
+    overflow: visible;
+    backdrop-filter: none;
+    border: none;
+    width: 100%;
+    max-width: 100%;
 }
 
 .chatbot-title {
-    background: linear-gradient(135deg, #667eea, #764ba2);
-    color: #fff;
-    padding: 1.5rem;
-    font-size: 1.2rem;
+    background: #92e492;
+    color: #71ea8d;
+    padding: 1rem;
+    font-size: 1.1rem;
     font-weight: 600;
     text-align: center;
     display: flex;
     align-items: center;
     justify-content: center;
     gap: 0.5rem;
+    border: none;
+    border-radius: 12px 12px 0 0;
 }
 
 .search-container {
     display: flex;
     padding: 1.5rem;
     gap: 1rem;
-    border-bottom: 1px solid rgba(0,0,0,0.1);
+    border-bottom: none;
+    width: 100%;
+    background: transparent;
 }
 
 .search-input {
     flex: 1;
-    padding: 1rem;
-    border: 2px solid #e0e0e0;
+    padding: 1rem 1.5rem;
+    border: 2px solid #1a7f31;
     border-radius: 12px;
     font-size: 1rem;
     transition: border-color 0.3s ease;
-    background: #fff;
+    background: #ffffff;
+    min-height: 50px;
 }
 
 .search-input:focus {
     outline: none;
-    border-color: #667eea;
-    box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+    border-color: #267626;
+    box-shadow: 0 0 0 3px rgba(146, 228, 146, 0.555);
 }
 
 .send-btn {
-    background: linear-gradient(135deg, #667eea, #764ba2);
+    background: linear-gradient(135deg, #56c556, #28a745);
     color: #fff;
     border: none;
     padding: 1rem 1.5rem;
@@ -223,21 +231,27 @@ body::before {
     font-size: 1rem;
     cursor: pointer;
     transition: all 0.3s ease;
-    box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
+    box-shadow: 0 4px 15px rgba(146, 228, 146, 0.3);
+    min-width: 60px;
+    min-height: 50px;
 }
 
 .send-btn:hover {
-    background: linear-gradient(135deg, #5a6fd8, #6a4190);
+    background: linear-gradient(135deg, #56c556, #28a745);
     transform: translateY(-2px);
-    box-shadow: 0 6px 20px rgba(102, 126, 234, 0.4);
+    box-shadow: 0 6px 20px rgba(146, 228, 146, 0.4);
 }
 
 .chatbox {
-    max-height: 470px; /* Increased from 500px to 800px for much taller chat box */
-    min-height: 370px; /* Added minimum height to ensure consistent tall appearance */
+    max-height: 200px; /* Reduced height */
+    min-height: 150px; /* Reduced minimum height */
     overflow-y: auto;
     padding: 1.5rem;
-    background: #f8f9fa;
+    background: transparent;
+    display: block; /* Show by default for functionality */
+    transition: all 0.3s ease; /* Smooth transition */
+    border: none;
+    box-shadow: none;
 }
 
 .message {
@@ -261,29 +275,29 @@ body::before {
 }
 
 .message.user {
-    background: linear-gradient(135deg, #667eea, #764ba2);
+    background: linear-gradient(135deg, #56c556, #28a745);
     color: #fff;
     margin-left: auto;
     text-align: right;
 }
 
 .message.bot {
-    background: #fff;
+    background: transparent;
     color: #333;
-    border: 1px solid #e0e0e0;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    border: none;
+    box-shadow: none;
 }
 
 .message.error-message {
-    background: #fff5f5;
-    color: #e53e3e;
-    border: 1px solid #fed7d7;
+    background: #f8f5ff;
+    color: #28a745;
+    border: 1px solid #d6b3ff;
 }
 
 .typing-indicator {
-    background: #fff !important;
-    border: 1px solid #e0e0e0;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    background: transparent !important;
+    border: none;
+    box-shadow: none;
 }
 
 .typing-dots {
@@ -293,7 +307,7 @@ body::before {
 }
 
 .typing-dots i {
-    color: #667eea;
+    color: #28a745;
     animation: typingBounce 1.2s infinite ease-in-out;
 }
 
@@ -329,7 +343,7 @@ body::before {
 
 .customer-avatar i {
     font-size: 2rem;
-    color: #667eea;
+    color: #28a745;
 }
 
 .customer-name {
@@ -349,7 +363,7 @@ body::before {
 }
 
 .customer-car i {
-    color: #667eea;
+    color: #28a745;
 }
 
 .car-number {
@@ -359,56 +373,58 @@ body::before {
 
 .action-buttons {
     display: flex;
-    gap: 1rem;
+    gap: 0.6rem;
     margin-bottom: 1rem;
     flex-wrap: wrap;
+    justify-content: center;
 }
 
 .action-btn {
-    background: linear-gradient(135deg, #667eea, #764ba2);
+    background: linear-gradient(135deg, #56c556, #28a745);
     color: #fff;
     border: none;
-    padding: 0.8rem 1rem;
+    padding: 0.6rem 0.8rem;
     border-radius: 8px;
-    font-size: 0.9rem;
+    font-size: 0.8rem;
     cursor: pointer;
     transition: all 0.3s ease;
-    box-shadow: 0 2px 8px rgba(102, 126, 234, 0.3);
+    box-shadow: 0 2px 8px rgba(146, 228, 146, 0.3);
     display: flex;
     align-items: center;
-    gap: 0.5rem;
+    gap: 0.4rem;
     justify-content: center;
-    min-width: 120px;
+    min-width: 100px;
+    max-width: 110px;
 }
 
 .action-btn:hover {
-    background: linear-gradient(135deg, #5a6fd8, #6a4190);
+    background: linear-gradient(135deg, #56c556, #28a745);
     transform: translateY(-2px);
-    box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
+    box-shadow: 0 4px 15px rgba(146, 228, 146, 0.4);
 }
 
 .chat-btn {
-    background: linear-gradient(135deg, #28a745, #20c997);
+    background: linear-gradient(135deg, #56c556, #28a745);
 }
 
 .chat-btn:hover {
-    background: linear-gradient(135deg, #218838, #1ea085);
+    background: linear-gradient(135deg, #56c556, #28a745);
 }
 
 .call-btn {
-    background: linear-gradient(135deg, #007bff, #0056b3);
+    background: linear-gradient(135deg, #56c556, #28a745);
 }
 
 .call-btn:hover {
-    background: linear-gradient(135deg, #0056b3, #004085);
+    background: linear-gradient(135deg, #56c556, #28a745);
 }
 
 .whatsapp-btn {
-    background: linear-gradient(135deg, #25d366, #128c7e);
+    background: linear-gradient(135deg, #56c556, #28a745);
 }
 
 .whatsapp-btn:hover {
-    background: linear-gradient(135deg, #128c7e, #075e54);
+    background: linear-gradient(135deg, #56c556, #28a745);
 }
 
 .message-time {
@@ -451,7 +467,7 @@ body::before {
 }
 
 .chat-window-header {
-    background: linear-gradient(135deg, #667eea, #764ba2);
+    background: linear-gradient(135deg, #28a745, #20c997);
     color: #fff;
     padding: 1rem 1.5rem;
     border-radius: 20px 20px 0 0;
@@ -549,7 +565,7 @@ body::before {
 }
 
 .user-private-message {
-    background: linear-gradient(135deg, #667eea, #764ba2);
+    background: linear-gradient(135deg, #28a745, #20c997);
     color: #fff;
     margin-left: auto;
     text-align: right;
@@ -594,12 +610,12 @@ body::before {
 
 .private-message-input:focus {
     outline: none;
-    border-color: #667eea;
-    box-shadow: 0 0 0 2px rgba(102, 126, 234, 0.1);
+    border-color: #28a745;
+    box-shadow: 0 0 0 2px rgba(40, 167, 69, 0.1);
 }
 
 .send-private-btn {
-    background: linear-gradient(135deg, #667eea, #764ba2);
+    background: linear-gradient(135deg, #28a745, #20c997);
     color: #fff;
     border: none;
     padding: 0.8rem 1rem;
@@ -609,7 +625,7 @@ body::before {
 }
 
 .send-private-btn:hover {
-    background: linear-gradient(135deg, #5a6fd8, #6a4190);
+    background: linear-gradient(135deg, #218838, #1ea085);
     transform: translateY(-1px);
 }
 
@@ -644,15 +660,15 @@ body::before {
 }
 
 .notification-toast.success {
-    border-left: 4px solid #28a745;
+    border-left: 4px solid #286828;
 }
 
 .notification-toast.error {
-    border-left: 4px solid #dc3545;
+    border-left: 4px solid #286d28;
 }
 
 .notification-toast.info {
-    border-left: 4px solid #17a2b8;
+    border-left: 4px solid #285d34;
 }
 
 .dashboard-footer {
@@ -671,6 +687,35 @@ body::before {
     min-height: fit-content; /* Ensure footer only takes needed height */
 }
 
+/* WhatsApp button styles */
+.whatsapp-button-container {
+    position: absolute;
+    bottom: 20px;
+    right: 20px;
+}
+
+.whatsapp-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 60px;
+    height: 60px;
+    background: linear-gradient(135deg, #92e492, #71ea8d);
+    color: white;
+    border-radius: 50%;
+    text-decoration: none;
+    font-size: 28px;
+    box-shadow: 0 4px 15px rgba(146, 228, 146, 0.4);
+    transition: all 0.3s ease;
+    border: 2px solid rgba(255,255,255,0.3);
+}
+
+.whatsapp-btn:hover {
+    transform: scale(1.1);
+    box-shadow: 0 6px 20px rgba(146, 228, 146, 0.6);
+    background: linear-gradient(135deg, #56c556, #28a745);
+}
+
 .footer-contact-info {
     position: relative; /* Changed from absolute to relative */
     left: auto; /* Remove absolute positioning */
@@ -683,7 +728,7 @@ body::before {
     background: rgba(255, 255, 255, 0.95); /* More opaque white */
     padding: 1rem; /* Reduced padding */
     border-radius: 20px;
-    border: 1px solid rgba(102, 126, 234, 0.2);
+    border: 1px solid rgba(40, 167, 69, 0.2);
     box-shadow: 0 8px 25px rgba(0,0,0,0.1);
     backdrop-filter: blur(10px);
     transition: all 0.3s ease;
@@ -695,7 +740,7 @@ body::before {
 .footer-contact-info:hover {
     transform: scale(1.02); /* Simplified hover effect */
     box-shadow: 0 15px 35px rgba(0,0,0,0.15);
-    border-color: rgba(102, 126, 234, 0.4);
+    border-color: rgba(40, 167, 69, 0.4);
 }
 
 .contact-item {
@@ -718,8 +763,9 @@ body::before {
     top: 0;
     width: 0;
     height: 100%;
-    background: linear-gradient(90deg, rgba(102, 126, 234, 0.1), transparent);
+    background: linear-gradient(90deg, rgba(40, 167, 69, 0.1), transparent);
     transition: width 0.3s ease;
+    z-index: 1;
 }
 
 .contact-item:hover::before {
@@ -728,12 +774,12 @@ body::before {
     
 .contact-item:hover {
     transform: translateX(8px);
-    color: #667eea;
-    background: rgba(102, 126, 234, 0.05);
+    color: #28a745;
+    background: rgba(40, 167, 69, 0.05);
 }
 
 .contact-item i {
-    color: #667eea;
+    color: #28a745;
     font-size: 1.2rem;
     width: 25px;
     transition: all 0.3s ease;
@@ -741,27 +787,33 @@ body::before {
 
 .contact-item:hover i {
     transform: scale(1.2);
-    color: #764ba2;
+    color: #20c997;
 }
 
 .contact-phone {
-    color: #667eea;
+    color: #286228;
     font-weight: 600;
     transition: all 0.3s ease;
+    text-decoration: none;
+    cursor: pointer;
+    display: inline-block;
+    position: relative;
+    z-index: 2;
 }
 
 .contact-phone:hover {
-    color: #764ba2;
+    color: #71ea8d;
+    text-decoration: underline;
 }
 
 .contact-email {
-    color: #e74c3c;
+    color: #92e492;
     font-weight: 600;
     transition: all 0.3s ease;
 }
 
 .contact-email:hover {
-    color: #c0392b;
+    color: #71ea8d;
 }
 
 .footer-content {
@@ -932,7 +984,8 @@ body::before {
     
     .chatbot-container {
         max-width: 100%;
-        padding: 0 0.5rem;
+        padding: 0 1rem;
+        width: 100%;
     }
     
     .nav-buttons {
@@ -950,7 +1003,9 @@ body::before {
     
     .chatbot-box {
         border-radius: 15px;
-        margin: 0 0.5rem;
+        margin: 0;
+        width: 100%;
+        max-width: 100%;
     }
     
 .search-container {
@@ -1072,11 +1127,15 @@ body::before {
     }
     
     .chatbot-container {
-        padding: 0 0.25rem;
+        padding: 0 0.5rem;
+        width: 100%;
+        max-width: 100%;
     }
     
     .chatbot-box {
-        margin: 0 0.25rem;
+        margin: 0;
+        width: 100%;
+        max-width: 100%;
     }
     
     .nav-buttons {
@@ -1117,7 +1176,7 @@ body::before {
     }
     
     .chatbox {
-        max-height: 400px;
+        max-height: 200px;
     }
     
     .message {
@@ -1209,11 +1268,15 @@ body::before {
     }
     
     .chatbot-container {
-        padding: 0 0.1rem;
+        padding: 0 0.25rem;
+        width: 100%;
+        max-width: 100%;
     }
     
     .chatbot-box {
-        margin: 0 0.1rem;
+        margin: 0;
+        width: 100%;
+        max-width: 100%;
     }
     
     .nav-buttons {
@@ -1261,5 +1324,1149 @@ body::before {
     .dashboard-footer {
         padding: 0.5rem 0.6rem 0.3rem 0.6rem; /* Reduced padding */
         gap: 0.25rem; /* Reduced gap */
+    }
+}
+
+/* Booking Form Modal Styles */
+.booking-form-modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.7);
+    z-index: 10000;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.booking-form-modal.show {
+    opacity: 1;
+}
+
+.booking-form-content {
+    background: white;
+    border-radius: 20px;
+    padding: 2rem;
+    max-width: 500px;
+    width: 90%;
+    max-height: 90vh;
+    overflow-y: auto;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+    transform: scale(0.9);
+    transition: transform 0.3s ease;
+}
+
+.booking-form-modal.show .booking-form-content {
+    transform: scale(1);
+}
+
+.booking-form-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 2rem;
+    padding-bottom: 1rem;
+    border-bottom: 2px solid #e0e0e0;
+}
+
+.booking-form-header h3 {
+    color: #2c3e50;
+    font-size: 1.5rem;
+    font-weight: 600;
+    margin: 0;
+}
+
+.booking-form-close {
+    background: #000000;
+    border: none;
+    font-size: 1.5rem;
+    color: white;
+    cursor: pointer;
+    padding: 0.5rem;
+    border-radius: 50%;
+    transition: all 0.3s ease;
+}
+
+.booking-form-close:hover {
+    background: #333333;
+    color: white;
+}
+
+.form-group {
+    margin-bottom: 1.5rem;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 0.5rem;
+    color: #2c3e50;
+    font-weight: 600;
+    font-size: 0.9rem;
+}
+
+.form-group input,
+.form-group select,
+.form-group textarea {
+    width: 100%;
+    padding: 0.8rem;
+    border: 2px solid #e0e0e0;
+    border-radius: 8px;
+    font-size: 1rem;
+    transition: border-color 0.3s ease;
+    box-sizing: border-box;
+}
+
+.form-group input:focus,
+.form-group select:focus,
+.form-group textarea:focus {
+    outline: none;
+    border-color: #28a745;
+    box-shadow: 0 0 0 3px rgba(40, 167, 69, 0.1);
+}
+
+.form-group textarea {
+    resize: vertical;
+    min-height: 80px;
+}
+
+.booking-summary {
+    background: #f8f9fa;
+    border-radius: 12px;
+    padding: 1.5rem;
+    margin: 1.5rem 0;
+    border: 1px solid #e0e0e0;
+}
+
+.booking-summary h4 {
+    color: #2c3e50;
+    margin: 0 0 1rem 0;
+    font-size: 1.1rem;
+}
+
+.summary-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 0.5rem;
+    padding: 0.5rem 0;
+    border-bottom: 1px solid #e0e0e0;
+}
+
+.summary-item:last-child {
+    border-bottom: none;
+    margin-bottom: 0;
+}
+
+.summary-item span:first-child {
+    color: #666;
+    font-weight: 500;
+}
+
+.summary-item span:last-child {
+    color: #28a745;
+    font-weight: 600;
+}
+
+.form-actions {
+    display: flex;
+    gap: 1rem;
+    justify-content: flex-end;
+    margin-top: 2rem;
+}
+
+.btn-secondary,
+.btn-primary {
+    padding: 0.8rem 1.5rem;
+    border: none;
+    border-radius: 8px;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    min-width: 120px;
+}
+
+.btn-secondary {
+    background: #6c757d;
+    color: white;
+}
+
+.btn-secondary:hover {
+    background: #5a6268;
+    transform: translateY(-2px);
+}
+
+.btn-primary {
+    background: linear-gradient(135deg, #56c556, #28a745);
+    color: white;
+}
+
+.btn-primary:hover {
+    background: linear-gradient(135deg, #56c556, #28a745);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 15px rgba(146, 228, 146, 0.4);
+}
+
+/* Responsive design for booking form */
+@media (max-width: 768px) {
+    .booking-form-content {
+        padding: 1.5rem;
+        width: 95%;
+        max-height: 95vh;
+    }
+    
+    .booking-form-header h3 {
+        font-size: 1.3rem;
+    }
+    
+    .form-actions {
+        flex-direction: column;
+    }
+    
+    .btn-secondary,
+    .btn-primary {
+        width: 100%;
+        min-width: auto;
+    }
+}
+
+@media (max-width: 480px) {
+    .booking-form-content {
+        padding: 1rem;
+        width: 98%;
+        border-radius: 15px;
+    }
+    
+    .booking-form-header h3 {
+        font-size: 1.2rem;
+    }
+    
+    .form-group label {
+        font-size: 0.85rem;
+    }
+    
+    .form-group input,
+    .form-group select,
+    .form-group textarea {
+        padding: 0.7rem;
+        font-size: 0.9rem;
+    }
+}
+
+/* Member Selection Styles */
+.member-selection {
+    margin: 1rem 0;
+    padding: 1rem;
+    background: #f8f9fa;
+    border-radius: 10px;
+    border: 1px solid #e0e0e0;
+}
+
+.member-selection h4 {
+    margin: 0 0 1rem 0;
+    color: #2c3e50;
+    font-size: 1rem;
+    font-weight: 600;
+    text-align: center;
+}
+
+.member-controls {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.member-type {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0.5rem 0;
+}
+
+.member-type label {
+    font-weight: 600;
+    color: #2c3e50;
+    font-size: 0.9rem;
+}
+
+.member-counter {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.counter-btn {
+    width: 30px;
+    height: 30px;
+    border: 2px solid #286128;
+    background: white;
+    color: #92e492;
+    border-radius: 50%;
+    cursor: pointer;
+    font-size: 1.2rem;
+    font-weight: bold;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s ease;
+}
+
+.counter-btn:hover {
+    background: #28a745;
+    color: white;
+    transform: scale(1.1);
+}
+
+.counter-btn:disabled {
+    border-color: #ccc;
+    color: #ccc;
+    cursor: not-allowed;
+    transform: none;
+}
+
+.counter-value {
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: #2c3e50;
+    min-width: 20px;
+    text-align: center;
+}
+
+/* Location Buttons Section */
+.location-buttons-section {
+    background: rgba(255, 255, 255, 0.95);
+    border-radius: 15px;
+    padding: 2rem;
+    margin: 2rem 0;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+    text-align: center;
+}
+
+.location-title {
+    font-size: 1.8rem;
+    font-weight: 600;
+    color: #1e293b;
+    margin-bottom: 1.5rem;
+    font-family: 'Inter', sans-serif;
+}
+
+.location-buttons {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+    justify-content: center;
+    align-items: center;
+}
+
+.location-btn {
+    background: #e5e7eb;
+    color: #374151;
+    border: none;
+    padding: 0.8rem 1.5rem;
+    border-radius: 25px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    font-weight: 600;
+    font-size: 0.9rem;
+    box-shadow: 0 4px 15px rgba(229, 231, 235, 0.3);
+}
+
+.location-btn:hover {
+    background: #d1d5db;
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(209, 213, 219, 0.4);
+}
+
+.location-btn:active {
+    transform: translateY(0);
+}
+
+/* Responsive design for location buttons */
+@media (max-width: 768px) {
+    .location-buttons-section {
+        padding: 1.5rem;
+        margin: 1.5rem 0;
+    }
+    
+    .location-title {
+        font-size: 1.5rem;
+    }
+    
+    .location-buttons {
+        gap: 0.8rem;
+    }
+    
+    .location-btn {
+        padding: 0.6rem 1.2rem;
+        font-size: 0.8rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .location-buttons-section {
+        padding: 1rem;
+        margin: 1rem 0;
+    }
+    
+    .location-title {
+        font-size: 1.3rem;
+    }
+    
+    .location-buttons {
+        gap: 0.6rem;
+    }
+    
+    .location-btn {
+        padding: 0.5rem 1rem;
+        font-size: 0.75rem;
+    }
+}
+
+/* Hotel Booking Section Styles */
+.booking-section {
+    background: rgba(255, 255, 255, 0.1) !important;
+    border-radius: 15px;
+    padding: 2rem;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1) !important;
+    margin-top: 2rem;
+    border: 2px solid rgba(40, 167, 69, 0.2) !important;
+    display: block !important;
+    visibility: visible !important;
+    opacity: 1 !important;
+}
+
+.booking-title {
+    text-align: center;
+    color: #1e293b;
+    font-size: 2rem;
+    margin-bottom: 1rem;
+    font-family: 'Inter', sans-serif;
+}
+
+.booking-subtitle {
+    text-align: center;
+    color: #64748b;
+    margin-bottom: 2rem;
+    font-family: 'Inter', sans-serif;
+}
+
+.hotel-selection-modal {
+    background: rgba(255, 255, 255, 0.1) !important;
+    border-radius: 15px;
+    padding: 2rem;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1) !important;
+    border: 1px solid rgba(40, 167, 69, 0.2) !important;
+    display: block !important;
+    visibility: visible !important;
+    opacity: 1 !important;
+}
+
+.modal-header {
+    text-align: center;
+    margin-bottom: 2rem;
+}
+
+.modal-hotel-name {
+    font-size: 1.5rem;
+    font-weight: 600;
+    color: #1e293b;
+    margin-bottom: 0.5rem;
+}
+
+.modal-hotel-location {
+    color: #64748b;
+    font-size: 1rem;
+}
+
+.rooms-title {
+    font-size: 1.2rem;
+    font-weight: 600;
+    color: #1e293b;
+    margin-bottom: 1rem;
+}
+
+.hotels-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 1.5rem;
+    margin-bottom: 2rem;
+    visibility: visible;
+    opacity: 1;
+    min-height: 200px;
+    background: rgba(255, 255, 255, 0.1);
+    padding: 1rem;
+    border-radius: 10px;
+}
+
+.hotel-card {
+    background: rgba(255, 255, 255, 0.95);
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+    border: 1px solid rgba(40, 167, 69, 0.1);
+    display: block;
+    visibility: visible;
+    opacity: 1;
+    margin-bottom: 1rem;
+    padding: 0;
+    transition: transform 0.3s, box-shadow 0.3s;
+    min-height: 300px;
+}
+
+.hotel-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+}
+
+.hotel-image {
+    width: 100%;
+    height: 200px;
+    object-fit: cover;
+    display: block;
+    visibility: visible;
+    opacity: 1;
+    border-radius: 8px;
+}
+
+.hotel-info {
+    padding: 1.5rem;
+    background: rgba(255, 255, 255, 0.98);
+    color: #333;
+    visibility: visible;
+    opacity: 1;
+    display: block;
+}
+
+.hotel-name {
+    font-size: 1.2rem;
+    font-weight: 600;
+    color: #1e293b;
+    margin-bottom: 0.5rem;
+    visibility: visible;
+    opacity: 1;
+    display: block;
+}
+
+.hotel-location {
+    color: #64748b;
+    margin-bottom: 0.5rem;
+}
+
+.hotel-price {
+    color: #28a745;
+    font-weight: 600;
+    font-size: 1.1rem;
+    margin-bottom: 1rem;
+}
+
+.view-details-btn {
+    background: linear-gradient(135deg, #56c556, #28a745);
+    color: white;
+    border: none;
+    padding: 0.8rem 1.5rem;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    font-weight: 600;
+}
+
+.view-details-btn:hover {
+    background: linear-gradient(135deg, #56c556, #28a745);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 15px rgba(146, 228, 146, 0.4);
+}
+
+/* Responsive design for hotel booking */
+@media (max-width: 1024px) {
+    .hotels-grid {
+        grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+        gap: 1.2rem;
+    }
+    
+    .booking-section {
+        padding: 1.5rem;
+    }
+    
+    .booking-title {
+        font-size: 1.8rem;
+    }
+    
+    .hotel-card {
+        margin-bottom: 1rem;
+    }
+    
+    .member-selection {
+        padding: 0.8rem;
+    }
+    
+    .member-type {
+        flex-direction: column;
+        gap: 0.5rem;
+        text-align: center;
+    }
+}
+
+@media (max-width: 768px) {
+    .hotels-grid {
+        grid-template-columns: 1fr;
+        gap: 1rem;
+    }
+    
+    .hotel-card {
+        margin-bottom: 1rem;
+    }
+    
+    .booking-section {
+        padding: 1rem;
+    }
+    
+    .booking-title {
+        font-size: 1.5rem;
+    }
+    
+    .hotel-image {
+        height: 180px;
+    }
+    
+    .hotel-info {
+        padding: 1rem;
+    }
+    
+    .view-details-btn {
+        padding: 0.6rem 1.2rem;
+        font-size: 0.9rem;
+    }
+    
+    .member-selection {
+        padding: 0.6rem;
+        margin: 0.8rem 0;
+    }
+    
+    .member-selection h4 {
+        font-size: 0.9rem;
+        margin-bottom: 0.8rem;
+    }
+    
+    .counter-btn {
+        width: 28px;
+        height: 28px;
+        font-size: 1rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .hotels-grid {
+        grid-template-columns: 1fr;
+        gap: 0.8rem;
+    }
+    
+    .booking-section {
+        padding: 0.8rem;
+    }
+    
+    .booking-title {
+        font-size: 1.3rem;
+    }
+    
+    .hotel-image {
+        height: 160px;
+    }
+    
+    .hotel-info {
+        padding: 0.8rem;
+    }
+    
+    .hotel-name {
+        font-size: 1.1rem;
+    }
+    
+    .view-details-btn {
+        padding: 0.5rem 1rem;
+        font-size: 0.8rem;
+        width: 100%;
+    }
+    
+    .member-selection {
+        padding: 0.5rem;
+        margin: 0.6rem 0;
+    }
+    
+    .member-selection h4 {
+        font-size: 0.85rem;
+        margin-bottom: 0.6rem;
+    }
+    
+    .member-type {
+        gap: 0.3rem;
+    }
+    
+    .counter-btn {
+        width: 26px;
+        height: 26px;
+        font-size: 0.9rem;
+    }
+    
+    .counter-value {
+        font-size: 1rem;
+    }
+}
+
+/* Hotel Detail Modal Responsive Styles */
+@media (max-width: 768px) {
+    .hotel-detail-modal .modal-content {
+        max-width: 95%;
+        max-height: 95vh;
+        margin: 1rem;
+    }
+    
+    .modal-hotel-image {
+        height: 200px;
+    }
+    
+    .rooms-grid {
+        grid-template-columns: 1fr;
+        gap: 0.8rem;
+    }
+    
+    .room-card {
+        padding: 0.8rem;
+    }
+    
+    .calendar-section {
+        margin: 1rem 0;
+        padding: 0.8rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .hotel-detail-modal .modal-content {
+        max-width: 98%;
+        max-height: 98vh;
+        margin: 0.5rem;
+    }
+    
+    .modal-hotel-image {
+        height: 150px;
+    }
+    
+    .room-card {
+        padding: 0.6rem;
+    }
+    
+    .select-room-btn {
+        padding: 0.4rem 0.8rem;
+        font-size: 0.8rem;
+        width: 100%;
+    }
+}
+
+/* Main Content Responsive Improvements */
+@media (max-width: 1024px) {
+    .main-content {
+        padding: 1.5rem;
+        max-width: 100%;
+    }
+    
+    .chatbot-container {
+        padding: 2rem;
+        margin-bottom: 2rem;
+    }
+}
+
+/* Cart and Booking Elements Responsive Styles */
+@media (max-width: 768px) {
+    .cart-section {
+        width: 95%;
+        right: 2.5%;
+    }
+    
+    .cart-header {
+        padding: 1rem;
+    }
+    
+    .cart-content {
+        padding: 1rem;
+    }
+    
+    .cart-item {
+        padding: 0.8rem;
+        margin-bottom: 0.8rem;
+    }
+    
+    .cart-footer {
+        padding: 1rem;
+    }
+    
+    .checkout-btn {
+        padding: 0.8rem 1.5rem;
+        font-size: 0.9rem;
+    }
+    
+    .cart-button {
+        width: 50px;
+        height: 50px;
+        font-size: 1.2rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .cart-section {
+        width: 98%;
+        right: 1%;
+    }
+    
+    .cart-header {
+        padding: 0.8rem;
+    }
+    
+    .cart-content {
+        padding: 0.8rem;
+    }
+    
+    .cart-item {
+        padding: 0.6rem;
+        margin-bottom: 0.6rem;
+    }
+    
+    .cart-footer {
+        padding: 0.8rem;
+    }
+    
+    .checkout-btn {
+        padding: 0.6rem 1.2rem;
+        font-size: 0.8rem;
+        width: 100%;
+    }
+    
+    .cart-button {
+        width: 45px;
+        height: 45px;
+        font-size: 1rem;
+        bottom: 1rem;
+        right: 1rem;
+    }
+}
+
+
+
+/* Promotional Images Slider - JioHotstar Style */
+.promotional-slider {
+    margin-top: 2rem;
+    background: transparent !important;
+    border-radius: 25px;
+    padding: 2rem;
+    box-shadow: none !important;
+    backdrop-filter: none;
+    border: none !important;
+}
+
+.slider-container {
+    position: relative;
+    overflow: hidden;
+    border-radius: 20px;
+    margin-bottom: 1.5rem;
+    background: transparent !important;
+    box-shadow: none !important;
+    border: none !important;
+    width: 100%;
+    height: auto;
+    min-height: 500px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.slider-track {
+    display: flex;
+    transition: transform 0.5s ease-in-out;
+    width: 100%;
+    height: 100%;
+    position: relative;
+}
+
+.slide {
+    width: 100%;
+    flex-shrink: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    opacity: 1;
+    position: relative;
+    min-height: 500px;
+    text-align: center;
+}
+
+.slide.active {
+    opacity: 1;
+    z-index: 2;
+    display: flex;
+}
+
+.slide:not(.active) {
+    opacity: 0;
+    pointer-events: none;
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: 1;
+    display: none;
+}
+
+.promo-image {
+    width: 100%;
+    height: auto;
+    max-height: 600px;
+    max-width: 100%;
+    object-fit: contain;
+    border-radius: 15px;
+    box-shadow: none !important;
+    transition: all 0.3s ease;
+    background: transparent !important;
+    border: none !important;
+    display: block;
+    margin: 0 auto;
+    cursor: pointer;
+}
+
+.promo-image:hover {
+    transform: scale(1.02);
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+}
+
+.promo-image:hover {
+    transform: scale(1.02);
+}
+
+.slider-controls {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 1rem;
+}
+
+/* Responsive Slider Styles */
+@media (max-width: 768px) {
+    .promotional-slider {
+        padding: 1rem;
+        margin-top: 1rem;
+    }
+    
+    .slider-container {
+        margin-bottom: 1rem;
+        min-height: 250px;
+    }
+    
+    .slide {
+        min-height: 250px;
+    }
+    
+    .promo-image {
+        max-height: 250px;
+        max-width: 100%;
+        border-radius: 10px;
+        object-fit: contain;
+    }
+    
+    .slider-btn {
+        width: 40px;
+        height: 40px;
+        font-size: 1rem;
+    }
+    
+    .slider-dots {
+        gap: 0.4rem;
+    }
+    
+    .dot {
+        width: 10px;
+        height: 10px;
+    }
+}
+
+@media (max-width: 480px) {
+    .promotional-slider {
+        padding: 0.75rem;
+    }
+    
+    .slider-container {
+        min-height: 200px;
+    }
+    
+    .slide {
+        min-height: 200px;
+    }
+    
+    .promo-image {
+        max-height: 200px;
+        max-width: 100%;
+        border-radius: 8px;
+        object-fit: contain;
+    }
+    
+    .slider-btn {
+        width: 35px;
+        height: 35px;
+        font-size: 0.9rem;
+    }
+    
+    .slider-dots {
+        gap: 0.3rem;
+    }
+    
+    .dot {
+        width: 8px;
+        height: 8px;
+    }
+}
+
+.slider-btn {
+    background: linear-gradient(135deg, #56c556, #28a745);
+    color: white;
+    border: none;
+    width: 45px;
+    height: 45px;
+    border-radius: 50%;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.2rem;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 15px rgba(146, 228, 146, 0.3);
+}
+
+.slider-btn:hover {
+    transform: translateY(-2px) scale(1.05);
+    box-shadow: 0 6px 20px rgba(146, 228, 146, 0.4);
+}
+
+.slider-btn:active {
+    transform: translateY(0) scale(1.02);
+}
+
+.slider-dots {
+    display: flex;
+    gap: 0.5rem;
+}
+
+.dot {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    background: rgba(146, 228, 146, 0.3);
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.dot.active {
+    background: #92e492;
+    transform: scale(1.2);
+}
+
+.dot:hover {
+    background: rgba(146, 228, 146, 0.6);
+}
+
+/* Responsive design for promotional slider */
+@media (max-width: 1024px) {
+    .promo-image {
+        max-height: 500px;
+        object-fit: contain;
+    }
+    
+    .slider-container {
+        padding: 0.8rem;
+        min-height: 450px;
+    }
+    
+    .slide {
+        min-height: 450px;
+    }
+    
+    .promotional-slider {
+        padding: 2.5rem;
+    }
+}
+
+@media (max-width: 768px) {
+    .promotional-slider {
+        padding: 1.5rem;
+    }
+    
+    .slider-container {
+        padding: 0.5rem;
+        min-height: 350px;
+    }
+    
+    .slide {
+        min-height: 350px;
+    }
+    
+    .promo-image {
+        max-height: 350px;
+        max-width: 100%;
+        object-fit: contain;
+    }
+    
+    .slider-btn {
+        width: 40px;
+        height: 40px;
+        font-size: 1rem;
+    }
+    
+    .slider-track {
+        width: 100%;
+    }
+    
+    .slide {
+        width: 100%;
+    }
+}
+
+@media (max-width: 480px) {
+    .promotional-slider {
+        padding: 1rem;
+    }
+    
+    .slider-container {
+        padding: 0.3rem;
+        min-height: 300px;
+    }
+    
+    .slide {
+        min-height: 300px;
+    }
+    
+    .promo-image {
+        max-height: 300px;
+        max-width: 100%;
+        object-fit: contain;
+    }
+    
+    .slider-btn {
+        width: 35px;
+        height: 35px;
+        font-size: 0.9rem;
+    }
+    
+    .slider-dots {
+        gap: 0.3rem;
+    }
+    
+    .dot {
+        width: 10px;
+        height: 10px;
+    }
+    
+    .slider-track {
+        width: 100%;
+    }
+    
+    .slide {
+        width: 100%;
     }
 }

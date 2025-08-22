@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Admin - Pending Signups - Startup Village Club</title>
+    <link rel="stylesheet" href="css/auth.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+</head>
+<body>
+    <div class="auth-wrapper">
+        <div class="header-section">
+            <img src="image.jpg.jpg" alt="Startup Village Club Logo" class="logo">
+            <h1 class="club-title">Startup Village Club</h1>
+            <h2 style="color: #28a745; margin-top: 10px;">Admin Panel - Pending Signups</h2>
+        </div>
+
+        <div class="auth-container">
+            <div class="admin-controls">
+                <button onclick="refreshPendingSignups()" class="btn btn-primary">
+                    <i class="fas fa-sync-alt"></i> Refresh
+                </button>
+                <a href="Smart_Connect.html" class="btn btn-secondary">
+                    <i class="fas fa-arrow-left"></i> Back to Dashboard
+                </a>
+            </div>
+
+            <div id="pendingSignupsContainer">
+                <div class="loading">Loading pending signups...</div>
+            </div>
+        </div>
+    </div>
+
+    <style>
+        .admin-controls {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 20px;
+            justify-content: center;
+        }
+        
+        .btn-secondary {
+            background: #6c757d;
+        }
+        
+        .btn-secondary:hover {
+            background: #5a6268;
+        }
+        
+        .pending-signup-card {
+            background: #fff;
+            border: 1px solid #e0e0e0;
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+        
+        .signup-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid #e0e0e0;
+        }
+        
+        .signup-name {
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: #2c3e50;
+        }
+        
+        .signup-date {
+            font-size: 0.9rem;
+            color: #666;
+        }
+        
+        .signup-details {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+        
+        .detail-item {
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .detail-label {
+            font-weight: 600;
+            color: #666;
+            font-size: 0.9rem;
+            margin-bottom: 5px;
+        }
+        
+        .detail-value {
+            color: #2c3e50;
+            word-break: break-word;
+        }
+        
+        .signup-actions {
+            display: flex;
+            gap: 10px;
+            justify-content: flex-end;
+        }
+        
+        .btn-approve {
+            background: #28a745;
+        }
+        
+        .btn-approve:hover {
+            background: #218838;
+        }
+        
+        .btn-reject {
+            background: #dc3545;
+        }
+        
+        .btn-reject:hover {
+            background: #c82333;
+        }
+        
+        .loading {
+            text-align: center;
+            color: #666;
+            font-style: italic;
+            padding: 40px;
+        }
+        
+        .no-signups {
+            text-align: center;
+            color: #666;
+            padding: 40px;
+            font-style: italic;
+        }
+        
+        .status-badge {
+            padding: 4px 8px;
+            border-radius: 12px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            text-transform: uppercase;
+        }
+        
+        .status-pending {
+            background: #fff3cd;
+            color: #856404;
+        }
+    </style>
+
+    <script>
+        async function loadPendingSignups() {
+            try {
+                const response = await fetch('/api/pending-signups');
+                const result = await response.json();
+                
+                if (result.success) {
+                    displayPendingSignups(result.signups);
+                } else {
+                    showError('Failed to load pending signups: ' + result.message);
+                }
+            } catch (error) {
+                showError('Error loading pending signups: ' + error.message);
+            }
+        }
+
+        function displayPendingSignups(signups) {
+            const container = document.getElementById('pendingSignupsContainer');
+            
+            if (signups.length === 0) {
+                container.innerHTML = '<div class="no-signups">No pending signups found.</div>';
+                return;
+            }
+            
+            container.innerHTML = signups.map(signup => `
+                <div class="pending-signup-card">
+                    <div class="signup-header">
+                        <div>
+                            <div class="signup-name">${signup.name}</div>
+                            <div class="signup-date">${new Date(signup.signupDate).toLocaleString()}</div>
+                        </div>
+                        <span class="status-badge status-pending">Pending</span>
+                    </div>
+                    
+                    <div class="signup-details">
+                        <div class="detail-item">
+                            <div class="detail-label">Email</div>
+                            <div class="detail-value">${signup.email}</div>
+                        </div>
+                        <div class="detail-item">
+                            <div class="detail-label">Phone</div>
+                            <div class="detail-value">${signup.phone}</div>
+                        </div>
+                        <div class="detail-item">
+                            <div class="detail-label">Car Number</div>
+                            <div class="detail-value">${signup.carNumber || 'Not provided'}</div>
+                        </div>
+                        <div class="detail-item">
+                            <div class="detail-label">Referral ID</div>
+                            <div class="detail-value">${signup.referral || 'None'}</div>
+                        </div>
+                        <div class="detail-item">
+                            <div class="detail-label">Company/LinkedIn</div>
+                            <div class="detail-value">${signup.companyLink || 'None'}</div>
+                        </div>
+                    </div>
+                    
+                    <div class="signup-actions">
+                        <button onclick="approveSignup('${signup.id}')" class="btn btn-approve">
+                            <i class="fas fa-check"></i> Approve
+                        </button>
+                        <button onclick="rejectSignup('${signup.id}')" class="btn btn-reject">
+                            <i class="fas fa-times"></i> Reject
+                        </button>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        async function approveSignup(pendingId) {
+            if (!confirm('Are you sure you want to approve this user?')) return;
+            
+            try {
+                const response = await fetch(`/api/approve-signup/${pendingId}`);
+                const result = await response.json();
+                
+                if (result.success) {
+                    alert(`User approved successfully! User ID: ${result.userId}`);
+                    loadPendingSignups(); // Refresh the list
+                } else {
+                    alert('Error approving user: ' + result.message);
+                }
+            } catch (error) {
+                alert('Error approving user: ' + error.message);
+            }
+        }
+
+        async function rejectSignup(pendingId) {
+            if (!confirm('Are you sure you want to reject this user?')) return;
+            
+            try {
+                const response = await fetch(`/api/reject-signup/${pendingId}`);
+                const result = await response.json();
+                
+                if (result.success) {
+                    alert('User rejected successfully!');
+                    loadPendingSignups(); // Refresh the list
+                } else {
+                    alert('Error rejecting user: ' + result.message);
+                }
+            } catch (error) {
+                alert('Error rejecting user: ' + error.message);
+            }
+        }
+
+        function refreshPendingSignups() {
+            loadPendingSignups();
+        }
+
+        function showError(message) {
+            const container = document.getElementById('pendingSignupsContainer');
+            container.innerHTML = `<div class="no-signups" style="color: #dc3545;">${message}</div>`;
+        }
+
+        // Load pending signups when page loads
+        document.addEventListener('DOMContentLoaded', loadPendingSignups);
+    </script>
+</body>
+</html>

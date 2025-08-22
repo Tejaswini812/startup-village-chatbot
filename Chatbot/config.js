@@ -12,8 +12,8 @@ module.exports = {
     TWILIO_AUTH_TOKEN: process.env.TWILIO_AUTH_TOKEN || '',
     TWILIO_PHONE_NUMBER: process.env.TWILIO_PHONE_NUMBER || '',
     
-    // WhatsApp Business API Configuration
     WHATSAPP_API_TOKEN: process.env.WHATSAPP_API_TOKEN || '',
     WHATSAPP_PHONE_ID: process.env.WHATSAPP_PHONE_ID || '',
     WHATSAPP_BUSINESS_ID: process.env.WHATSAPP_BUSINESS_ID || ''
 };
+

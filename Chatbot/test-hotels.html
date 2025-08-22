@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Hotel Booking Test</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            padding: 20px;
+            background: #f0f0f0;
+        }
+        .hotel-card {
+            background: white;
+            border: 1px solid #ddd;
+            border-radius: 10px;
+            padding: 20px;
+            margin: 10px 0;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        .hotel-image {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+            border-radius: 8px;
+            margin-bottom: 15px;
+        }
+        .hotel-name {
+            font-size: 18px;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+        .hotel-location {
+            color: #666;
+            margin-bottom: 10px;
+        }
+        .hotel-price {
+            color: #28a745;
+            font-weight: bold;
+            margin-bottom: 15px;
+        }
+        .view-details-btn {
+            background: #28a745;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        .view-details-btn:hover {
+            background: #218838;
+        }
+        .test-info {
+            background: #e7f3ff;
+            border: 1px solid #b3d9ff;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+    </style>
+</head>
+<body>
+    <h1>🏨 Hotel Booking System Test</h1>
+    
+    <div class="test-info">
+        <h3>Test Information:</h3>
+        <p>This is a simple test page to verify the hotel booking system works.</p>
+        <p>If you can see the hotels below, the basic structure is working.</p>
+    </div>
+
+    <div id="hotels-grid">
+        <!-- Test hotels will be loaded here -->
+    </div>
+
+    <script>
+        // Sample hotel data
+        const testHotels = [
+            {
+                id: 1,
+                name: "Sunset Retreat",
+                location: "Goa",
+                type: "Cottage",
+                price: 3500,
+                image: "https://images.unsplash.com/photo-1571896349842-33c89424de2d?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80"
+            },
+            {
+                id: 2,
+                name: "Ocean Breeze",
+                location: "Goa",
+                type: "Tent",
+                price: 1500,
+                image: "https://images.unsplash.com/photo-1520250497591-112f2f40a3f4?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80"
+            },
+            {
+                id: 3,
+                name: "Mountain Escape",
+                location: "Coorg",
+                type: "Luxury Room",
+                price: 5000,
+                image: "https://images.unsplash.com/photo-1566073771259-6a8506099945?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80"
+            }
+        ];
+
+        function displayTestHotels() {
+            const grid = document.getElementById('hotels-grid');
+            
+            testHotels.forEach(hotel => {
+                const hotelCard = document.createElement('div');
+                hotelCard.className = 'hotel-card';
+                hotelCard.innerHTML = `
+                    <img src="${hotel.image}" alt="${hotel.name}" class="hotel-image">
+                    <div class="hotel-name">${hotel.name}</div>
+                    <div class="hotel-location">${hotel.location} • ${hotel.type}</div>
+                    <div class="hotel-price">₹${hotel.price}/night</div>
+                    <button class="view-details-btn" onclick="alert('Selected: ${hotel.name}')">View Details</button>
+                `;
+                grid.appendChild(hotelCard);
+            });
+        }
+
+        // Display hotels when page loads
+        window.addEventListener('load', displayTestHotels);
+        
+        console.log('Test page loaded successfully!');
+        console.log('Test hotels:', testHotels);
+    </script>
+</body>
+</html>

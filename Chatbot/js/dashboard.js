@@ -87,6 +87,103 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 });
 
+// Promotional Images Slider Functionality
+let currentSlide = 0;
+let autoSlideInterval;
+const totalSlides = 3;
+
+function initSlider() {
+    // Set initial state
+    const slides = document.querySelectorAll('.slide');
+    slides.forEach((slide, index) => {
+        if (index === 0) {
+            slide.classList.add('active');
+            slide.style.display = 'flex';
+        } else {
+            slide.classList.remove('active');
+            slide.style.display = 'none';
+        }
+    });
+    
+    updateSlider();
+    startAutoSlide();
+}
+
+function nextSlide() {
+    currentSlide = (currentSlide + 1) % totalSlides;
+    updateSlider();
+    resetAutoSlide();
+}
+
+function previousSlide() {
+    currentSlide = (currentSlide - 1 + totalSlides) % totalSlides;
+    updateSlider();
+    resetAutoSlide();
+}
+
+function goToSlide(slideIndex) {
+    currentSlide = slideIndex;
+    updateSlider();
+    resetAutoSlide();
+}
+
+function updateSlider() {
+    const sliderTrack = document.querySelector('.slider-track');
+    const dots = document.querySelectorAll('.dot');
+    const slides = document.querySelectorAll('.slide');
+    
+    // No transform needed for single image display
+    if (sliderTrack) {
+        sliderTrack.style.transform = 'translateX(0)';
+    }
+    
+    // Update active slide and dots
+    slides.forEach((slide, index) => {
+        if (index === currentSlide) {
+            slide.classList.add('active');
+            slide.style.display = 'flex';
+        } else {
+            slide.classList.remove('active');
+            slide.style.display = 'none';
+        }
+    });
+    
+    dots.forEach((dot, index) => {
+        dot.classList.toggle('active', index === currentSlide);
+    });
+}
+
+function startAutoSlide() {
+    autoSlideInterval = setInterval(() => {
+        nextSlide();
+    }, 5000); // Change slide every 3 seconds
+}
+
+function resetAutoSlide() {
+    if (autoSlideInterval) {
+        clearInterval(autoSlideInterval);
+        startAutoSlide();
+    }
+}
+
+function stopAutoSlide() {
+    if (autoSlideInterval) {
+        clearInterval(autoSlideInterval);
+    }
+}
+
+// Pause auto-slide on hover
+document.addEventListener('DOMContentLoaded', function() {
+    const sliderContainer = document.querySelector('.slider-container');
+    if (sliderContainer) {
+        sliderContainer.addEventListener('mouseenter', stopAutoSlide);
+        sliderContainer.addEventListener('mouseleave', startAutoSlide);
+    }
+    
+    // Initialize slider
+    initSlider();
+});
+
 const style = document.createElement('style');
 style.textContent = `
     @keyframes ripple {
