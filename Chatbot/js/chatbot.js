@@ -197,7 +197,7 @@ function createChatWindow(memberName, memberID) {
                         <strong>ID:</strong> ${memberID}
                     </div>
                 </div>
-                <div class="whatsapp-notification-section">
+                <div class="-notification-section">
                     <div class="notification-status">
                         <i class="fas fa-check-circle"></i>
                         <span>WhatsApp notification sent automatically to customer</span>

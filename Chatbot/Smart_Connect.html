@@ -7,6 +7,7 @@
     
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <link rel="stylesheet" href="css/dashboard.css">
+    <link rel="stylesheet" href="css/chatbot-buttons.css">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <style>
         /* Main Content Layout - Clean vertical stacking */
@@ -22,7 +23,7 @@
             display: block !important;
             width: 100% !important;
             max-width: 100% !important;
-            margin-bottom: 3rem !important;
+            margin-bottom: 1.5rem !important;
             background: white !important;
             border-radius: 15px !important;
             padding: 0 !important;
@@ -96,7 +97,7 @@
 
         /* Enhanced chatbot styling for better proportions */
         .chatbot-container {
-            margin-bottom: 3rem !important;
+            margin-bottom: 1.5rem !important;
         }
 
         .chatbot-title {
@@ -117,10 +118,10 @@
         .promotional-slider {
             display: block !important;
             width: 100% !important;
-            margin-bottom: 3rem !important;
+            margin-bottom: 1.5rem !important;
             background: transparent !important;
             border-radius: 15px !important;
-            padding: 2rem !important;
+            padding: 1rem !important;
             box-shadow: none !important;
             border: none !important;
         }
@@ -1086,6 +1087,12 @@
                 font-size: 0.85rem;
             }
             
+            .whatsapp-button {
+                top: 160px;
+                right: 10px;
+                padding: 0.6rem;
+            }
+            
             .cart-button {
                 top: 100px;
                 right: 10px;
@@ -1191,6 +1198,61 @@
             }
         }
 
+        /* WhatsApp Button */
+        .whatsapp-button {
+            position: fixed !important;
+            top: 180px !important;
+            right: 20px !important;
+            background: #28a745 !important;
+            color: white !important;
+            border: none !important;
+            padding: 0.8rem !important;
+            border-radius: 50% !important;
+            cursor: pointer !important;
+            box-shadow: 0 2px 8px rgba(40, 167, 69, 0.3) !important;
+            z-index: 999 !important;
+            transition: all 0.3s ease !important;
+            display: flex !important;
+            align-items: center !important;
+            justify-content: center !important;
+            width: 50px !important;
+            height: 50px !important;
+            text-decoration: none !important;
+            font-size: 1.2rem !important;
+        }
+
+        .whatsapp-button:hover {
+            background: #28a745 !important;
+            color: white !important;
+            transform: translateY(-2px) !important;
+            box-shadow: 0 4px 15px rgba(40, 167, 69, 0.3) !important;
+        }
+
+        /* Override any conflicting styles from external CSS */
+        body .whatsapp-button,
+        html .whatsapp-button,
+        .main-content .whatsapp-button {
+            position: fixed !important;
+            top: 180px !important;
+            right: 20px !important;
+            background: #28a745 !important;
+            color: white !important;
+            border: none !important;
+            padding: 0.8rem !important;
+            border-radius: 50% !important;
+            cursor: pointer !important;
+            box-shadow: 0 2px 8px rgba(40, 167, 69, 0.3) !important;
+            z-index: 999 !important;
+            transition: all 0.3s ease !important;
+            display: flex !important;
+            align-items: center !important;
+            justify-content: center !important;
+            width: 50px !important;
+            height: 50px !important;
+            text-decoration: none !important;
+            font-size: 1.2rem !important;
+        }
+
         /* Cart Button */
         .cart-button {
             position: fixed;
@@ -1208,6 +1270,215 @@
 
         .cart-button:hover {
             background: #28a745;
+        }
+
+        /* Hotel card transitions for smooth horizontal scrolling */
+        .hotel-card {
+            transition: opacity 0.5s ease-in-out;
+            width: 100%;
+            max-width: 400px;
+            margin: 0 auto;
+            display: none;
+            opacity: 0;
+            cursor: pointer;
+        }
+
+        .hotel-card.active {
+            display: block;
+            opacity: 1;
+        }
+
+        .hotel-image {
+            width: 100%;
+            height: 250px;
+            object-fit: cover;
+            border-radius: 10px 10px 0 0;
+        }
+
+        .hotel-info {
+            padding: 1rem;
+            background: white;
+            border-radius: 0 0 10px 10px;
+        }
+
+        /* Hotel navigation dots */
+        .hotel-navigation-dots {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 0.5rem;
+            margin-top: 1rem;
+            padding: 1rem 0;
+        }
+
+        .hotel-dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background: #e5e7eb;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .hotel-dot.active {
+            background: #28a745;
+            transform: scale(1.2);
+        }
+
+        .hotel-dot:hover {
+            background: #28a745;
+            transform: scale(1.1);
+        }
+
+        /* Promotional slider mobile optimization */
+        .slider-container {
+            width: 100%;
+            max-width: 100%;
+            overflow: visible;
+            margin: 1rem auto;
+            padding: 0.5rem;
+        }
+
+        .slider-track {
+            display: flex;
+            transition: transform 0.5s ease;
+            justify-content: center;
+        }
+
+        .slide {
+            min-width: 100%;
+            display: none;
+            text-align: center;
+        }
+
+        .slide.active {
+            display: block;
+        }
+
+        .promo-image {
+    width: 100%;
+    height: auto;
+    max-width: 100%;
+    object-fit: fill;   /* stretches to fit exactly */
+    border-radius: 15px;
+    display: block;
+    margin: 0 auto;
+    border: 2px solid #e5e7eb;
+    padding: 0.5rem;
+    background: white;
+}
+
+
+        /* Mobile responsive adjustments */
+        @media (max-width: 768px) {
+    .promo-image {
+        max-height: 400px;  /* for mobile view */
+    }
+}
+
+        @media (max-width: 480px) {
+            .promo-image {
+                width: 100%;
+                height: auto;
+                max-width: 100%;
+                min-height: 300px;
+            }
+        }
+
+        /* Slider navigation dots - centered */
+        .slider-controls {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-top: 0.5rem;
+            padding: 0.5rem 0;
+        }
+
+        .slider-dots {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 0.8rem;
+        }
+
+        .dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background: #e5e7eb;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .dot.active {
+            background: #28a745;
+            transform: scale(1.2);
+        }
+
+        .dot:hover {
+            background: #28a745;
+            transform: scale(1.1);
+        }
+
+        /* Location buttons section styling */
+        .location-title {
+            text-align: center;
+            color: #1e293b;
+            font-size: 1.8rem;
+            font-weight: 600;
+            margin: 1rem 0 0.5rem 0;
+            font-family: 'Inter', sans-serif;
+        }
+
+        .location-buttons-section {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 15px;
+            padding: 1.5rem;
+            margin: 0 0 1rem 0;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            text-align: center;
+        }
+
+        .location-buttons {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1rem;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .location-btn {
+            background: #e5e7eb;
+            color: #374151;
+            border: none;
+            padding: 0.8rem 1.5rem;
+            border-radius: 25px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: 600;
+            font-size: 0.9rem;
+            box-shadow: 0 4px 15px rgba(229, 231, 235, 0.3);
+        }
+
+        .location-btn:hover {
+            background: #d1d5db;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(209, 213, 219, 0.4);
+        }
+
+        /* Mobile responsive for location buttons */
+        @media (max-width: 768px) {
+            .location-btn {
+                padding: 0.6rem 1.2rem;
+                font-size: 0.8rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .location-btn {
+                padding: 0.5rem 1rem;
+                font-size: 0.75rem;
+            }
         }
     </style>
 </head>
@@ -1264,23 +1535,17 @@
                 </div>
             </div>
             <div class="slider-controls">
-                <button class="slider-btn prev-btn" onclick="previousSlide()">
-                    <i class="fas fa-chevron-left"></i>
-                </button>
                 <div class="slider-dots">
                     <span class="dot active" onclick="goToSlide(0)"></span>
                     <span class="dot" onclick="goToSlide(1)"></span>
                     <span class="dot" onclick="goToSlide(2)"></span>
                 </div>
-                <button class="slider-btn next-btn" onclick="nextSlide()">
-                    <i class="fas fa-chevron-right"></i>
-                </button>
             </div>
         </div>
 
         <!-- Location Buttons Section -->
+        <h3 class="location-title">Popular Destinations</h3>
         <div class="location-buttons-section">
-            <h3 class="location-title">Popular Destinations</h3>
             <div class="location-buttons">
                 <button class="location-btn">Wayanad</button>
                 <button class="location-btn">Shakaleshwara</button>
@@ -1296,13 +1561,11 @@
 
         <!-- Booking Section -->
         <div class="booking-section">
-            <h2 class="booking-title">🏨 Book Your Perfect Stay</h2>
-            <p class="booking-subtitle">Choose from our curated collection of hotels, cottages, and unique accommodations</p>
             
             <!-- Hotel Selection Modal -->
             <div class="hotel-selection-modal">
                 <div class="modal-header">
-                    <div class="modal-hotel-name">Select Your Hotel & Room</div>
+                    <div class="modal-hotel-name">Select Your Stays</div>
                     <div class="modal-hotel-location">Choose from our available accommodations</div>
                 </div>
                 
@@ -1311,10 +1574,20 @@
                     <div class="hotels-grid" id="hotels-grid">
                         <!-- Hotels will be loaded here -->
                     </div>
+                    
+                    <!-- Navigation dots for hotels -->
+                    <div class="hotel-navigation-dots" id="hotel-navigation-dots">
+                        <!-- Dots will be generated here -->
+                    </div>
                 </div>
             </div>
         </div>
     </div>
+
+    <!-- WhatsApp Button -->
+    <button class="whatsapp-button" onclick="openWhatsApp()">
+        <i class="fab fa-whatsapp"></i>
+    </button>
 
     <!-- Cart Button -->
     <button class="cart-button" onclick="showCart()">
@@ -1400,10 +1673,6 @@
     <footer class="dashboard-footer">
         <div class="footer-contact-info">
             <div class="contact-item">
-                <i class="fas fa-phone"></i>
-                <a href="https://api.whatsapp.com/send?phone=917676558020" target="_blank" class="contact-phone" onclick="console.log('Phone link clicked!')" style="text-decoration: none; color: inherit;">7676558020</a>
-            </div>
-            <div class="contact-item">
                 <i class="fas fa-envelope"></i>
                 <span class="footer-email">connect01@startupvillagecounty.in</span>
             </div>
@@ -1417,7 +1686,6 @@
                 <button class="nav-btn"> Report an Accident </button>
             </div>
         </div>
-
     </footer>
 
     <script src="js/dashboard.js"></script>
@@ -1458,6 +1726,127 @@
         let currentMonth = new Date().getMonth();
         let currentYear = new Date().getFullYear();
 
+        // Promotional images for scrolling
+        const promotionalImages = [
+            "https://images.unsplash.com/photo-1571896349842-33c89424de2d?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80",
+            "https://images.unsplash.com/photo-1520250497591-112f2f40a3f4?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80",
+            "https://images.unsplash.com/photo-1566073771259-6a8506099945?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80",
+            "https://images.unsplash.com/photo-1555854877-bab0e564b8d5?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80",
+            "https://images.unsplash.com/photo-1590490360182-c33d57733427?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80",
+            "https://images.unsplash.com/photo-1578662996442-48f60103fc96?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80",
+            "https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80",
+            "https://images.unsplash.com/photo-1504280390367-361c6d9f38f4?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80",
+            "https://images.unsplash.com/photo-1542314831-068cd1dbfeeb?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80"
+        ];
+
+        // Track current image index for sequential scrolling
+        let currentImageIndex = 0;
+        
+        // Track current hotel index for horizontal scrolling
+        let currentHotelIndex = 0;
+        
+        // Timer variable to prevent multiple timers
+        let hotelTimer = null;
+
+        // Function to get promotional image by index
+        function getPromotionalImageByIndex(index) {
+            return promotionalImages[index % promotionalImages.length];
+        }
+
+        // Function to show one hotel at a time in horizontal scrolling
+        function showNextHotel() {
+            const hotelCards = document.querySelectorAll('.hotel-card');
+            
+            // Remove active class from all hotels
+            hotelCards.forEach((card) => {
+                card.classList.remove('active');
+            });
+            
+            // Add active class to current hotel
+            if (hotelCards[currentHotelIndex]) {
+                hotelCards[currentHotelIndex].classList.add('active');
+            }
+            
+            // Update navigation dots
+            updateNavigationDots();
+            
+            // Update current hotel index
+            currentHotelIndex = (currentHotelIndex + 1) % hotels.length;
+        }
+
+        // Function to change all promotional images at the same time
+        function changeAllPromotionalImages() {
+            const hotelImages = document.querySelectorAll('.hotel-image');
+            const nextImageIndex = (currentImageIndex + 1) % promotionalImages.length;
+            
+            hotelImages.forEach((img) => {
+                img.src = promotionalImages[nextImageIndex];
+            });
+            
+            currentImageIndex = nextImageIndex;
+        }
+
+        // Function to generate navigation dots
+        function generateHotelNavigationDots() {
+            const dotsContainer = document.getElementById('hotel-navigation-dots');
+            if (!dotsContainer) return;
+            
+            dotsContainer.innerHTML = '';
+            
+            for (let i = 0; i < hotels.length; i++) {
+                const dot = document.createElement('div');
+                dot.className = 'hotel-dot';
+                dot.onclick = () => goToHotel(i);
+                
+                if (i === 0) {
+                    dot.classList.add('active');
+                }
+                
+                dotsContainer.appendChild(dot);
+            }
+        }
+
+        // Function to go to specific hotel
+        function goToHotel(index) {
+            const hotelCards = document.querySelectorAll('.hotel-card');
+            const dots = document.querySelectorAll('.hotel-dot');
+            
+            // Hide all hotels
+            hotelCards.forEach((card) => {
+                card.classList.remove('active');
+            });
+            
+            // Remove active from all dots
+            dots.forEach((dot) => {
+                dot.classList.remove('active');
+            });
+            
+            // Show selected hotel
+            if (hotelCards[index]) {
+                hotelCards[index].classList.add('active');
+            }
+            
+            // Activate selected dot
+            if (dots[index]) {
+                dots[index].classList.add('active');
+            }
+            
+            // Update current hotel index
+            currentHotelIndex = (index + 1) % hotels.length;
+        }
+
+        // Function to update navigation dots
+        function updateNavigationDots() {
+            const dots = document.querySelectorAll('.hotel-dot');
+            dots.forEach((dot, index) => {
+                if (index === (currentHotelIndex - 1 + hotels.length) % hotels.length) {
+                    dot.classList.add('active');
+                } else {
+                    dot.classList.remove('active');
+                }
+            });
+        }
+
         // Sample hotel data
         const sampleHotels = [
             {
@@ -1468,12 +1857,12 @@
                 price: 3500,
                 amenities: ["Pool", "Wi-Fi", "Breakfast"],
                 rating: 4.5,
-                image: "https://images.unsplash.com/photo-1571896349842-33c89424de2d?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80",
+                image: promotionalImages[0],
                 rooms: [
-                    { id: 101, type: "Luxury Cottage", price: 4500, amenities: ["Pool", "Wi-Fi", "Breakfast", "Ocean View"], image: "https://images.unsplash.com/photo-1571896349842-33c89424de2d?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80" },
-                    { id: 102, type: "Standard Cottage", price: 3500, amenities: ["Pool", "Wi-Fi", "Breakfast"], image: "https://images.unsplash.com/photo-1564013799919-ab600027ffc6?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80" },
-                    { id: 103, type: "Pool Villa", price: 6000, amenities: ["Private Pool", "Wi-Fi", "Breakfast", "Butler Service"], image: "https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80" },
-                    { id: 104, type: "Garden Cottage", price: 3000, amenities: ["Wi-Fi", "Breakfast", "Garden View"], image: "https://images.unsplash.com/photo-1564013799919-ab600027ffc6?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80" }
+                    { id: 101, type: "Luxury Cottage", price: 4500, amenities: ["Pool", "Wi-Fi", "Breakfast", "Ocean View"], image: promotionalImages[0] },
+                    { id: 102, type: "Standard Cottage", price: 3500, amenities: ["Pool", "Wi-Fi", "Breakfast"], image: promotionalImages[1] },
+                    { id: 103, type: "Pool Villa", price: 6000, amenities: ["Private Pool", "Wi-Fi", "Breakfast", "Butler Service"], image: promotionalImages[2] },
+                    { id: 104, type: "Garden Cottage", price: 3000, amenities: ["Wi-Fi", "Breakfast", "Garden View"], image: promotionalImages[3] }
                 ]
             },
             {
@@ -1484,12 +1873,12 @@
                 price: 1500,
                 amenities: ["Beach View", "Campfire"],
                 rating: 4.2,
-                image: "https://images.unsplash.com/photo-1520250497591-112f2f40a3f4?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80",
+                image: promotionalImages[1],
                 rooms: [
-                    { id: 201, type: "Beach Tent", price: 1500, amenities: ["Beach View", "Campfire", "Basic Amenities"], image: "https://images.unsplash.com/photo-1520250497591-112f2f40a3f4?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80" },
-                    { id: 202, type: "Luxury Tent", price: 2500, amenities: ["Beach View", "Campfire", "Private Bathroom", "Wi-Fi"], image: "https://images.unsplash.com/photo-1578662996442-48f60103fc96?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80" },
-                    { id: 203, type: "Family Tent", price: 3000, amenities: ["Beach View", "Campfire", "4 Person Capacity", "Private Bathroom"], image: "https://images.unsplash.com/photo-1504280390367-361c6d9f38f4?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80" },
-                    { id: 204, type: "Romantic Tent", price: 2000, amenities: ["Beach View", "Campfire", "Romantic Setup", "Private Area"], image: "https://images.unsplash.com/photo-1542314831-068cd1dbfeeb?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80" }
+                    { id: 201, type: "Beach Tent", price: 1500, amenities: ["Beach View", "Campfire", "Basic Amenities"], image: promotionalImages[1] },
+                    { id: 202, type: "Luxury Tent", price: 2500, amenities: ["Beach View", "Campfire", "Private Bathroom", "Wi-Fi"], image: promotionalImages[2] },
+                    { id: 203, type: "Family Tent", price: 3000, amenities: ["Beach View", "Campfire", "4 Person Capacity", "Private Bathroom"], image: promotionalImages[3] },
+                    { id: 204, type: "Romantic Tent", price: 2000, amenities: ["Beach View", "Campfire", "Romantic Setup", "Private Area"], image: promotionalImages[4] }
                 ]
             },
             {
@@ -1500,12 +1889,12 @@
                 price: 5000,
                 amenities: ["Spa", "Trekking", "Wi-Fi"],
                 rating: 4.7,
-                image: "https://images.unsplash.com/photo-1566073771259-6a8506099945?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80",
+                image: promotionalImages[2],
                 rooms: [
-                    { id: 301, type: "Luxury Suite", price: 8000, amenities: ["Spa", "Trekking", "Wi-Fi", "Mountain View", "Butler Service"], image: "https://images.unsplash.com/photo-1566073771259-6a8506099945?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80" },
-                    { id: 302, type: "Deluxe Room", price: 5000, amenities: ["Spa", "Trekking", "Wi-Fi", "Mountain View"], image: "https://images.unsplash.com/photo-1590490360182-c33d57733427?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80" },
-                    { id: 303, type: "Standard Room", price: 3500, amenities: ["Wi-Fi", "Trekking", "Basic Amenities"], image: "https://images.unsplash.com/photo-1578662996442-48f60103fc96?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80" },
-                    { id: 304, type: "Pool Room", price: 6000, amenities: ["Spa", "Trekking", "Wi-Fi", "Private Pool Access"], image: "https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80" }
+                    { id: 301, type: "Luxury Suite", price: 8000, amenities: ["Spa", "Trekking", "Wi-Fi", "Mountain View", "Butler Service"], image: promotionalImages[2] },
+                    { id: 302, type: "Deluxe Room", price: 5000, amenities: ["Spa", "Trekking", "Wi-Fi", "Mountain View"], image: promotionalImages[3] },
+                    { id: 303, type: "Standard Room", price: 3500, amenities: ["Wi-Fi", "Trekking", "Basic Amenities"], image: promotionalImages[4] },
+                    { id: 304, type: "Pool Room", price: 6000, amenities: ["Spa", "Trekking", "Wi-Fi", "Private Pool Access"], image: promotionalImages[5] }
                 ]
             },
             {
@@ -1516,12 +1905,12 @@
                 price: 900,
                 amenities: ["Wi-Fi", "Kitchen Access"],
                 rating: 4.0,
-                image: "https://images.unsplash.com/photo-1555854877-bab0e564b8d5?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80",
+                image: promotionalImages[3],
                 rooms: [
-                    { id: 401, type: "Dormitory Bed", price: 900, amenities: ["Wi-Fi", "Kitchen Access", "Shared Bathroom"], image: "https://images.unsplash.com/photo-1555854877-bab0e564b8d5?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80" },
-                    { id: 402, type: "Private Room", price: 1500, amenities: ["Wi-Fi", "Kitchen Access", "Private Bathroom"], image: "https://images.unsplash.com/photo-1590490360182-c33d57733427?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80" },
-                    { id: 403, type: "Family Room", price: 2500, amenities: ["Wi-Fi", "Kitchen Access", "Private Bathroom", "4 Person Capacity"], image: "https://images.unsplash.com/photo-1578662996442-48f60103fc96?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80" },
-                    { id: 404, type: "Camping Tent", price: 700, amenities: ["Kitchen Access", "Camping Experience", "Shared Facilities"], image: "https://images.unsplash.com/photo-1504280390367-361c6d9f38f4?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80" }
+                    { id: 401, type: "Dormitory Bed", price: 900, amenities: ["Wi-Fi", "Kitchen Access", "Shared Bathroom"], image: promotionalImages[3] },
+                    { id: 402, type: "Private Room", price: 1500, amenities: ["Wi-Fi", "Kitchen Access", "Private Bathroom"], image: promotionalImages[4] },
+                    { id: 403, type: "Family Room", price: 2500, amenities: ["Wi-Fi", "Kitchen Access", "Private Bathroom", "4 Person Capacity"], image: promotionalImages[5] },
+                    { id: 404, type: "Camping Tent", price: 700, amenities: ["Kitchen Access", "Camping Experience", "Shared Facilities"], image: promotionalImages[6] }
                 ]
             },
             {
@@ -1532,12 +1921,12 @@
                 price: 2200,
                 amenities: ["Wi-Fi", "TV", "AC"],
                 rating: 4.3,
-                image: "https://images.unsplash.com/photo-1590490360182-c33d57733427?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80",
+                image: promotionalImages[4],
                 rooms: [
-                    { id: 501, type: "Deluxe Room", price: 3000, amenities: ["Wi-Fi", "TV", "AC", "City View", "Room Service"], image: "https://images.unsplash.com/photo-1590490360182-c33d57733427?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80" },
-                    { id: 502, type: "Standard Room", price: 2200, amenities: ["Wi-Fi", "TV", "AC"], image: "https://images.unsplash.com/photo-1578662996442-48f60103fc96?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80" },
-                    { id: 503, type: "Executive Suite", price: 5000, amenities: ["Wi-Fi", "TV", "AC", "City View", "Room Service", "Mini Bar"], image: "https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80" },
-                    { id: 504, type: "Budget Room", price: 1500, amenities: ["Wi-Fi", "TV", "AC", "Basic Amenities"], image: "https://images.unsplash.com/photo-1555854877-bab0e564b8d5?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80" }
+                    { id: 501, type: "Deluxe Room", price: 3000, amenities: ["Wi-Fi", "TV", "AC", "City View", "Room Service"], image: promotionalImages[4] },
+                    { id: 502, type: "Standard Room", price: 2200, amenities: ["Wi-Fi", "TV", "AC"], image: promotionalImages[5] },
+                    { id: 503, type: "Executive Suite", price: 5000, amenities: ["Wi-Fi", "TV", "AC", "City View", "Room Service", "Mini Bar"], image: promotionalImages[6] },
+                    { id: 504, type: "Budget Room", price: 1500, amenities: ["Wi-Fi", "TV", "AC", "Basic Amenities"], image: promotionalImages[7] }
                 ]
             }
         ];
@@ -1599,8 +1988,9 @@
                     console.log(`Creating hotel card ${index + 1} for:`, hotel.name);
                     const hotelCard = document.createElement('div');
                     hotelCard.className = 'hotel-card';
+                    const sequentialImage = getPromotionalImageByIndex(index);
                     hotelCard.innerHTML = `
-                        <img src="${hotel.image}" alt="${hotel.name}" class="hotel-image" onerror="this.style.display='none'">
+                        <img src="${sequentialImage}" alt="${hotel.name}" class="hotel-image" onerror="this.style.display='none'">
                         <div class="hotel-info">
                             <div class="hotel-name">${hotel.name}</div>
                             <div class="hotel-location">${hotel.location} • ${hotel.type}</div>
@@ -1608,6 +1998,22 @@
                             <button class="view-details-btn" onclick="openHotelModal(${hotel.id})">View Details</button>
                         </div>
                     `;
+                    
+                    // Add click event to move to next hotel
+                    hotelCard.addEventListener('click', function(e) {
+                        // Don't trigger if clicking on the button
+                        if (e.target.classList.contains('view-details-btn')) {
+                            return;
+                        }
+                        showNextHotel();
+                        changeAllPromotionalImages();
+                    });
+                    
+                    // Initially show only the first hotel
+                    if (index === 0) {
+                        hotelCard.classList.add('active');
+                    }
+                    
                     grid.appendChild(hotelCard);
                     console.log(`Hotel card ${index + 1} added to grid`);
                 });
@@ -1617,6 +2023,20 @@
                 console.log('=== DISPLAY HOTELS FUNCTION COMPLETED ===');
                 
                 console.log('🎉 Hotels loaded successfully!');
+                
+                // Generate navigation dots
+                generateHotelNavigationDots();
+                
+                // Clear any existing timer first
+                if (hotelTimer) {
+                    clearInterval(hotelTimer);
+                }
+                
+                // Start horizontal hotel scrolling and image changing
+                hotelTimer = setInterval(() => {
+                    showNextHotel();
+                    changeAllPromotionalImages();
+                }, 5000); // Show next hotel and change all images every 5 seconds
             } catch (error) {
                 console.error('❌ Error in displayHotels:', error);
                 console.error('Error stack:', error.stack);
@@ -2028,6 +2448,14 @@
             } else {
                 addSelectedRoomToCart();
             }
+        }
+
+        // Open WhatsApp
+        function openWhatsApp() {
+            const phoneNumber = '7676558020';
+            const message = 'Hello! I would like to know more about your services.';
+            const whatsappUrl = `https://api.whatsapp.com/send?phone=91${phoneNumber}&text=${encodeURIComponent(message)}`;
+            window.open(whatsappUrl, '_blank');
         }
 
         // Show cart

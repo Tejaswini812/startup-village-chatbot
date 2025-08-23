@@ -1,0 +1,142 @@
+/* Unified button styling for all action buttons */
+.action-btn {
+    background: linear-gradient(90deg, #28a745, #218838);
+    color: white;
+    font-weight: 600;
+    border: none;
+    border-radius: 6px;
+    padding: 10px 20px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    cursor: pointer;
+    transition: background 0.3s ease;
+    font-size: 14px;
+    text-decoration: none;
+    min-height: 44px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.action-btn:hover {
+    background: linear-gradient(90deg, #218838, #1e7e34);
+    transform: translateY(-1px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+}
+
+.action-btn:active {
+    transform: translateY(0);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+/* Specific button overrides to ensure consistency */
+.chat-btn,
+.call-btn,
+.whatsapp-btn {
+    background: linear-gradient(90deg, #28a745, #218838);
+    border-radius: 6px;
+    padding: 10px 20px;
+    min-height: 44px;
+}
+
+.chat-btn:hover,
+.call-btn:hover,
+.whatsapp-btn:hover {
+    background: linear-gradient(90deg, #218838, #1e7e34);
+}
+
+/* Remove any existing WhatsApp-specific styling */
+.action-buttons .whatsapp-btn {
+    border-radius: 6px !important;
+    background: linear-gradient(90deg, #28a745, #218838) !important;
+    width: auto !important;
+    height: auto !important;
+    border-radius: 6px !important;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1) !important;
+    border: none !important;
+    transform: none !important;
+}
+
+.action-buttons .whatsapp-btn:hover {
+    background: linear-gradient(90deg, #218838, #1e7e34) !important;
+    transform: translateY(-1px) !important;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15) !important;
+}
+
+/* Action buttons container */
+.action-buttons {
+    display: flex;
+    gap: 10px;
+    margin: 15px 0;
+    flex-wrap: wrap;
+}
+
+.action-buttons .action-btn {
+    flex: 1;
+    min-width: 120px;
+}
+
+/* Force override any conflicting styles for buttons within action-buttons */
+.action-buttons .action-btn,
+.action-buttons .chat-btn,
+.action-buttons .call-btn,
+.action-buttons .whatsapp-btn {
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    gap: 8px !important;
+    cursor: pointer !important;
+    transition: background 0.3s ease !important;
+    font-size: 14px !important;
+    text-decoration: none !important;
+    min-height: 44px !important;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1) !important;
+    border: none !important;
+    border-radius: 6px !important;
+    padding: 10px 20px !important;
+    background: linear-gradient(90deg, #28a745, #218838) !important;
+    color: white !important;
+    font-weight: 600 !important;
+}
+
+/* Icon styling */
+.action-btn i {
+    font-size: 16px;
+}
+
+/* Hover effects for action buttons */
+.action-buttons .action-btn:hover,
+.action-buttons .chat-btn:hover,
+.action-buttons .call-btn:hover,
+.action-buttons .whatsapp-btn:hover {
+    background: linear-gradient(90deg, #218838, #1e7e34) !important;
+    transform: translateY(-1px) !important;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15) !important;
+}
+
+.action-buttons .action-btn:active,
+.action-buttons .chat-btn:active,
+.action-buttons .call-btn:active,
+.action-buttons .whatsapp-btn:active {
+    transform: translateY(0) !important;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1) !important;
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+    .action-buttons {
+        flex-direction: row;
+        gap: 8px;
+    }
+    
+    .action-buttons .action-btn {
+        min-width: auto;
+        padding: 8px 12px;
+        font-size: 12px;
+        min-height: 36px;
+    }
+    
+    .action-buttons .action-btn i {
+        font-size: 14px;
+    }
+}
