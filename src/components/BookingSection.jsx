@@ -107,6 +107,7 @@ const BookingSection = () => {
           const name = hotel.name || hotel.title
           const location = extractCity(hotel.location || hotel.destination)
           const type = hotel.type || 'Homestay'
+          const rating = hotel.rating || parseFloat((4.5 + Math.random() * 0.5).toFixed(1))
           
           return {
             id: hotel._id || hotel.id,
@@ -114,10 +115,22 @@ const BookingSection = () => {
             location: location,
             type: type,
             price: price,
-            image: hotel.image && !hotel.image.startsWith('http') ? `http://localhost:5000/${hotel.image}` : hotel.image || "https://images.unsplash.com/photo-1571896349842-33c89424de2d?w=500&h=300&fit=crop",
+            rating: rating,
+            image: (() => {
+              if (hotel.image) {
+                // If image starts with http or https, use it directly
+                if (hotel.image.startsWith('http://') || hotel.image.startsWith('https://')) {
+                  return hotel.image;
+                }
+                // Otherwise, prepend localhost
+                return `http://localhost:5000/${hotel.image}`;
+              }
+              // Fallback to default image
+              return "https://images.unsplash.com/photo-1571896349842-33c89424de2d?w=500&h=300&fit=crop";
+            })(),
             description: hotel.description || '',
             amenities: Array.isArray(hotel.amenities) ? hotel.amenities.join(', ') : hotel.amenities || '',
-            rating: hotel.rating || 4.5
+            contactInfo: hotel.contactInfo || {}
           }
         })
         
@@ -231,11 +244,11 @@ const BookingSection = () => {
               <div key={hotel.id} className="hotel-card">
                 <div className="hotel-content">
                   <img
-                    src={hotel.image}
+                    src={hotel.image || "https://images.unsplash.com/photo-1571896349842-33c89424de2d?w=500&h=300&fit=crop"}
                     alt={hotel.name}
                     className="hotel-image"
                     onError={(e) => {
-                      e.target.style.display = 'none'
+                      e.target.src = "https://images.unsplash.com/photo-1571896349842-33c89424de2d?w=500&h=300&fit=crop"
                     }}
                   />
                   <div className="hotel-details">

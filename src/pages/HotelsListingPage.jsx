@@ -123,7 +123,18 @@ const HotelsListingPage = () => {
             type: type,
             price: price,
             rating: rating,
-            image: hotel.image && !hotel.image.startsWith('http') ? `http://localhost:5000/${hotel.image}` : hotel.image || "https://images.unsplash.com/photo-1571896349842-33c89424de2d?w=500&h=300&fit=crop",
+            image: (() => {
+              if (hotel.image) {
+                // If image starts with http or https, use it directly
+                if (hotel.image.startsWith('http://') || hotel.image.startsWith('https://')) {
+                  return hotel.image;
+                }
+                // Otherwise, prepend localhost
+                return `http://localhost:5000/${hotel.image}`;
+              }
+              // Fallback to default image
+              return "https://images.unsplash.com/photo-1571896349842-33c89424de2d?w=500&h=300&fit=crop";
+            })(),
             description: hotel.description || '',
             amenities: Array.isArray(hotel.amenities) ? hotel.amenities.join(', ') : hotel.amenities || '',
             contactInfo: hotel.contactInfo || {}
@@ -341,9 +352,12 @@ const HotelsListingPage = () => {
             <div key={hotel.id} className="item-card">
               <div className="card-image-container">
                 <img 
-                  src={hotel.image} 
+                  src={hotel.image || "https://images.unsplash.com/photo-1571896349842-33c89424de2d?w=500&h=300&fit=crop"} 
                   alt={hotel.name}
                   className="card-image"
+                  onError={(e) => {
+                    e.target.src = "https://images.unsplash.com/photo-1571896349842-33c89424de2d?w=500&h=300&fit=crop"
+                  }}
                 />
                 <div className="rating-badge">
                   <i className="fas fa-star"></i>
