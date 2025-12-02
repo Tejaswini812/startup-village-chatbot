@@ -7,6 +7,13 @@ const router = express.Router()
 function loadUsersFromCSV() {
   try {
     const csvPath = path.join(__dirname, '../data/UserData.csv')
+    
+    // Check if file exists before reading
+    if (!fs.existsSync(csvPath)) {
+      console.log('CSV file not found, using empty user list. File path:', csvPath)
+      return []
+    }
+    
     const csvData = fs.readFileSync(csvPath, 'utf8')
     const lines = csvData.split('\n')
     const users = []
