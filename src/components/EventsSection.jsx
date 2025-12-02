@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import axios from 'axios'
+import { API_BASE_URL } from '../config/api'
 
 const EventsSection = () => {
   const navigate = useNavigate()
@@ -55,7 +56,7 @@ const EventsSection = () => {
   const fetchEvents = async () => {
     try {
       console.log('Fetching events from API...')
-      const response = await axios.get('/api/events')
+      const response = await axios.get(`${API_BASE_URL}/events`)
       console.log('Events API response:', response.data)
       
       if (response.data && response.data.length > 0) {

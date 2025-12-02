@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import axios from 'axios'
+import { API_BASE_URL } from '../config/api'
 
 const HostListings = ({ user, isAuthenticated }) => {
   const [listings, setListings] = useState({
@@ -26,12 +27,12 @@ const HostListings = ({ user, isAuthenticated }) => {
       // For now, we'll fetch all listings since user-specific endpoints don't exist yet
       // TODO: Implement user-specific API endpoints (my-properties, my-events, etc.)
       const [propertiesRes, eventsRes, carsRes, packagesRes, landPropertiesRes, productsRes] = await Promise.allSettled([
-        axios.get('/api/properties'),
-        axios.get('/api/events'),
-        axios.get('/api/cars'),
-        axios.get('/api/packages'),
-        axios.get('/api/land-properties'),
-        axios.get('/api/products')
+        axios.get(`${API_BASE_URL}/properties`),
+        axios.get(`${API_BASE_URL}/events`),
+        axios.get(`${API_BASE_URL}/cars`),
+        axios.get(`${API_BASE_URL}/packages`),
+        axios.get(`${API_BASE_URL}/land-properties`),
+        axios.get(`${API_BASE_URL}/products`)
       ])
 
       setListings({

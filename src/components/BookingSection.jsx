@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import axios from 'axios'
+import { API_BASE_URL } from '../config/api'
 
 const BookingSection = () => {
   const navigate = useNavigate()
@@ -14,16 +15,27 @@ const BookingSection = () => {
 
   const fetchHotels = async () => {
     try {
-      console.log('Fetching hotels from API...')
-      const response = await axios.get('/api/hotels')
-      console.log('Hotels API response:', response.data)
+      console.log('Fetching stays from API...')
+      // Fetch from stays endpoint (homestays)
+      const staysResponse = await axios.get(`${API_BASE_URL}/stays`)
+      console.log('Stays API response:', staysResponse.data)
       
-      // Handle both array and object response formats
-      const hotelsData = response.data.data || response.data
+      // Also fetch hotels for backward compatibility
+      let hotelsResponse = null
+      try {
+        hotelsResponse = await axios.get(`${API_BASE_URL}/hotels`)
+      } catch (err) {
+        console.log('Hotels endpoint not available, using only stays')
+      }
       
-      if (hotelsData && Array.isArray(hotelsData) && hotelsData.length > 0) {
-        // Transform API hotels to match the expected format
-        const apiHotels = hotelsData.map(hotel => {
+      // Combine stays and hotels data
+      const staysData = staysResponse.data.stays || staysResponse.data.data || staysResponse.data || []
+      const hotelsData = hotelsResponse?.data?.data || hotelsResponse?.data || []
+      const allAccommodations = [...staysData, ...hotelsData]
+      
+      if (allAccommodations && Array.isArray(allAccommodations) && allAccommodations.length > 0) {
+        // Transform API accommodations to match the expected format
+        const apiHotels = allAccommodations.map(hotel => {
           // Extract city name from full address
           const extractCity = (address) => {
             if (!address) return 'Location TBD'
@@ -64,23 +76,48 @@ const BookingSection = () => {
           }
 
           // Debug price handling
-          console.log('Hotel price from API:', hotel.price, 'Type:', typeof hotel.price)
+          console.log('Hotel price from API:', hotel.price, 'pricePerNight:', hotel.pricePerNight, 'Type:', typeof hotel.price)
           
-          // Better price handling - if price is 0, empty, or invalid, use default
-          let displayPrice = hotel.price
-          if (!displayPrice || displayPrice === '0' || displayPrice === 0 || displayPrice === '' || displayPrice === null || displayPrice === undefined) {
-            displayPrice = '1000' // Default price
+          // Handle price extraction - prioritize pricePerNight (numeric), then parse price string, then default
+          let price = 1000 // Default price
+          
+          if (hotel.pricePerNight && !isNaN(hotel.pricePerNight)) {
+            // Use pricePerNight if available and valid
+            price = parseInt(hotel.pricePerNight)
+          } else if (hotel.price) {
+            // If price is a string like "₹3,500/night", extract the number
+            if (typeof hotel.price === 'string') {
+              // Remove currency symbols, commas, and text, then extract number
+              const priceMatch = hotel.price.replace(/[₹,]/g, '').match(/\d+/)
+              if (priceMatch) {
+                price = parseInt(priceMatch[0])
+              }
+            } else if (!isNaN(hotel.price)) {
+              // If it's already a number
+              price = parseInt(hotel.price)
+            }
           }
+          
+          // Ensure price is valid
+          if (isNaN(price) || price <= 0) {
+            price = 1000
+          }
+          
+          // Handle both Stay and Hotel models
+          const name = hotel.name || hotel.title
+          const location = extractCity(hotel.location || hotel.destination)
+          const type = hotel.type || 'Homestay'
           
           return {
             id: hotel._id || hotel.id,
-            name: hotel.name,
-            location: extractCity(hotel.location),
-            type: hotel.type || 'Hotel',
-            price: displayPrice,
+            name: name,
+            location: location,
+            type: type,
+            price: price,
             image: hotel.image && !hotel.image.startsWith('http') ? `http://localhost:5000/${hotel.image}` : hotel.image || "https://images.unsplash.com/photo-1571896349842-33c89424de2d?w=500&h=300&fit=crop",
             description: hotel.description || '',
-            amenities: hotel.amenities || ''
+            amenities: Array.isArray(hotel.amenities) ? hotel.amenities.join(', ') : hotel.amenities || '',
+            rating: hotel.rating || 4.5
           }
         })
         

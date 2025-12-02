@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import axios from 'axios'
+import { API_BASE_URL } from '../config/api'
 import Footer from '../components/Footer'
 import '../styles/listing-pages.css'
 
@@ -22,8 +23,8 @@ const AccessoriesListingPage = () => {
         console.log('Fetching ALL accessories from API...')
         // Try both accessories and products APIs
         const [accessoriesResponse, productsResponse] = await Promise.all([
-          axios.get('/api/accessories', { timeout: 5000 }).catch(() => ({ data: { data: [] } })),
-          axios.get('/api/products', { timeout: 5000 }).catch(() => ({ data: [] }))
+          axios.get(`${API_BASE_URL}/accessories`, { timeout: 5000 }).catch(() => ({ data: { data: [] } })),
+          axios.get(`${API_BASE_URL}/products`, { timeout: 5000 }).catch(() => ({ data: [] }))
         ])
         
         console.log('Accessories API response:', accessoriesResponse.data)

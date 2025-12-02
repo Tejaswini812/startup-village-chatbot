@@ -11,14 +11,23 @@ const fs = require('fs')
 const authRoutes = require('./routes/auth')
 const hotelRoutes = require('./routes/hotels')
 const propertyRoutes = require('./routes/properties')
+const landPropertyRoutes = require('./routes/landProperties')
+const productRoutes = require('./routes/products')
 const accessoryRoutes = require('./routes/accessories')
 const eventRoutes = require('./routes/events')
 const adminRoutes = require('./routes/admin')
+const carsRoutes = require('./routes/cars')
+const packagesRoutes = require('./routes/packages')
+const staysRoutes = require('./routes/stays')
+const userRoutes = require('./routes/users')
+const notificationRoutes = require('./routes/notifications')
 
 dotenv.config()
 
 const app = express()
-const PORT = process.env.PORT || 5000
+// Hostinger provides PORT via environment variable - use it!
+// If not set, fallback to 5000 for local development
+const PORT = process.env.PORT || process.env.NODE_PORT || 5000
 
 // Security middleware
 app.use(helmet({
@@ -42,7 +51,7 @@ const limiter = rateLimit({
 })
 app.use(limiter)
 
-// CORS configuration
+// CORS configuration - Allow all origins in production for now
 const corsOptions = {
   origin: function (origin, callback) {
     // Allow requests with no origin (like mobile apps or curl requests)
@@ -51,19 +60,37 @@ const corsOptions = {
     const allowedOrigins = [
       process.env.FRONTEND_URL,
       'http://localhost:3000',
-      'https://localhost:3000'
+      'https://localhost:3000',
+      'http://localhost:5173',
+      'https://localhost:5173',
+      'https://villagecounty.in',
+      'http://villagecounty.in',
+      'https://www.villagecounty.in',
+      'http://www.villagecounty.in',
+      'https://*.villagecounty.in',
+      'http://*.villagecounty.in'
     ].filter(Boolean)
+    
+    // Allow all origins in production (you can restrict this later)
+    if (process.env.NODE_ENV === 'production') {
+      return callback(null, true)
+    }
     
     if (allowedOrigins.indexOf(origin) !== -1) {
       callback(null, true)
     } else {
-      callback(new Error('Not allowed by CORS'))
+      callback(null, true) // Allow all for now - change to callback(new Error(...)) to restrict
     }
   },
   credentials: true,
-  optionsSuccessStatus: 200
+  optionsSuccessStatus: 200,
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS', 'PATCH'],
+  allowedHeaders: ['Content-Type', 'Authorization', 'X-Requested-With', 'Accept', 'Origin']
 }
 app.use(cors(corsOptions))
+
+// Handle preflight requests
+app.options('*', cors(corsOptions))
 
 // Body parsing middleware
 app.use(express.json({ 
@@ -79,13 +106,36 @@ app.use(express.urlencoded({
 
 // Create uploads directory if it doesn't exist
 const uploadDir = process.env.UPLOAD_PATH || 'uploads'
-if (!fs.existsSync(uploadDir)) {
-  fs.mkdirSync(uploadDir, { recursive: true })
-  fs.mkdirSync(path.join(uploadDir, 'documents'), { recursive: true })
-}
+const uploadDirs = [
+  uploadDir,
+  path.join(uploadDir, 'documents'),
+  path.join(uploadDir, 'hotels'),
+  path.join(uploadDir, 'properties'),
+  path.join(uploadDir, 'events'),
+  path.join(uploadDir, 'cars'),
+  path.join(uploadDir, 'land-properties'),
+  path.join(uploadDir, 'packages'),
+  path.join(uploadDir, 'products'),
+  path.join(uploadDir, 'accessories')
+]
 
-// Static files
-app.use('/uploads', express.static(uploadDir))
+uploadDirs.forEach(dir => {
+  if (!fs.existsSync(dir)) {
+    fs.mkdirSync(dir, { recursive: true })
+    console.log(`✅ Created upload directory: ${dir}`)
+  }
+})
+
+// Static files - serve uploads with CORS
+app.use('/uploads', (req, res, next) => {
+  res.setHeader('Access-Control-Allow-Origin', '*')
+  res.setHeader('Cross-Origin-Resource-Policy', 'cross-origin')
+  next()
+}, express.static(uploadDir))
+
+// Serve public images
+app.use('/images', express.static(path.join(__dirname, '../public')))
+app.use(express.static(path.join(__dirname, '../public')))
 
 // Trust proxy (important for production)
 app.set('trust proxy', 1)
@@ -96,12 +146,9 @@ const connectDB = async () => {
     const mongoURI = process.env.MONGODB_URI || 'mongodb://localhost:27017/startup-village-county'
     
     await mongoose.connect(mongoURI, {
-      useNewUrlParser: true,
-      useUnifiedTopology: true,
       maxPoolSize: 10, // Maintain up to 10 socket connections
       serverSelectionTimeoutMS: 5000, // Keep trying to send operations for 5 seconds
       socketTimeoutMS: 45000, // Close sockets after 45 seconds of inactivity
-      bufferMaxEntries: 0, // Disable mongoose buffering
       bufferCommands: false, // Disable mongoose buffering
     })
     
@@ -121,9 +168,16 @@ connectDB()
 app.use('/api/auth', authRoutes)
 app.use('/api/hotels', hotelRoutes)
 app.use('/api/properties', propertyRoutes)
+app.use('/api/land-properties', landPropertyRoutes)
+app.use('/api/products', productRoutes)
 app.use('/api/accessories', accessoryRoutes)
 app.use('/api/events', eventRoutes)
 app.use('/api/admin', adminRoutes)
+app.use('/api/cars', carsRoutes)
+app.use('/api/packages', packagesRoutes)
+app.use('/api/stays', staysRoutes)
+app.use('/api/user', userRoutes)
+app.use('/api', notificationRoutes)
 
 // Health check endpoint
 app.get('/api/health', (req, res) => {

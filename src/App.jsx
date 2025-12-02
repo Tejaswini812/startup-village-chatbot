@@ -6,6 +6,7 @@ import HomePage from './pages/HomePage'
 import Dashboard from './pages/Dashboard'
 import Signup from './pages/Signup'
 import HotelsListingPage from './pages/HotelsListingPage'
+import BookingPage from './pages/BookingPage'
 import EventsListingPage from './pages/EventsListingPage'
 import PropertiesListingPage from './pages/PropertiesListingPage'
 import CarsListingPage from './pages/CarsListingPage'
@@ -23,6 +24,7 @@ function App() {
               <Route path="/dashboard" element={<Dashboard />} />
               <Route path="/signup" element={<Signup />} />
               <Route path="/hotels" element={<HotelsListingPage />} />
+              <Route path="/booking" element={<BookingPage />} />
               <Route path="/events" element={<EventsListingPage />} />
               <Route path="/properties" element={<PropertiesListingPage />} />
               <Route path="/cars" element={<CarsListingPage />} />

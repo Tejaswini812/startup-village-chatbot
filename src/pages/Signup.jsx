@@ -1,5 +1,6 @@
 import React, { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
+import { API_BASE_URL } from '../config/api'
 import '../styles/Signup.css'
 
 const Signup = () => {
@@ -34,7 +35,7 @@ const Signup = () => {
 
     try {
       // Check if user already exists in CSV data
-      const response = await fetch('/api/user')
+      const response = await fetch(`${API_BASE_URL}/user`)
       const users = await response.json()
       
       // Find user by name or email

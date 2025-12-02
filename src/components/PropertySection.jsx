@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import axios from 'axios'
+import { API_BASE_URL } from '../config/api'
 
 const PropertySection = () => {
   const navigate = useNavigate()
@@ -32,8 +33,8 @@ const PropertySection = () => {
     try {
       // Fetch both properties and land properties
       const [propertiesResponse, landPropertiesResponse] = await Promise.all([
-        axios.get('/api/properties'),
-        axios.get('/api/land-properties')
+        axios.get(`${API_BASE_URL}/properties`),
+        axios.get(`${API_BASE_URL}/land-properties`)
       ])
       
       console.log('Properties API response:', propertiesResponse.data)

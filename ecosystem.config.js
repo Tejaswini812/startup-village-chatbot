@@ -1,6 +1,6 @@
 module.exports = {
   apps: [{
-    name: 'startup-village-backend',
+    name: 'villagecounty-backend',  // Unique name to avoid conflicts with other projects
     script: 'backend/production-server.js',
     instances: 1,
     autorestart: true,
@@ -14,11 +14,11 @@ module.exports = {
     listen_timeout: 10000,
     env: {
       NODE_ENV: 'development',
-      PORT: 5000
+      PORT: process.env.PORT || 5000
     },
     env_production: {
       NODE_ENV: 'production',
-      PORT: 5000
+      PORT: process.env.PORT || 5000  // Hostinger sets this automatically
     },
     error_file: './logs/err.log',
     out_file: './logs/out.log',

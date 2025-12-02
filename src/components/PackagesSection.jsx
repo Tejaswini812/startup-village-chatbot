@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import axios from 'axios'
+import { API_BASE_URL } from '../config/api'
 
 const PackagesSection = () => {
   const navigate = useNavigate()
@@ -38,7 +39,7 @@ const PackagesSection = () => {
   const fetchPackages = async () => {
     try {
       console.log('Fetching packages from API...')
-      const response = await axios.get('/api/packages')
+      const response = await axios.get(`${API_BASE_URL}/packages`)
       console.log('Packages API response:', response.data)
       
       if (response.data && response.data.length > 0) {

@@ -34,6 +34,13 @@ const Chatbot = () => {
     }
   }, [messages])
 
+  // Auto-scroll to bottom when messages change
+  useEffect(() => {
+    if (chatboxRef.current && messages.length > 0) {
+      chatboxRef.current.scrollTop = chatboxRef.current.scrollHeight
+    }
+  }, [messages])
+
   const sendMessage = async () => {
     const inputValue = userInput.trim().toUpperCase()
     if (!inputValue || isProcessing) return

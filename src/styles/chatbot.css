@@ -51,13 +51,44 @@
   display: block !important;
   transition: all 0.3s ease !important;
   margin: 0.1rem 0.75rem 0.1rem 0.75rem !important;
-  max-height: none !important;
-  overflow-y: visible !important;
+  max-height: 400px !important;
+  overflow-y: auto !important;
+  overflow-x: hidden !important;
+  scroll-behavior: smooth !important;
+}
+
+/* Custom scrollbar styling */
+.chatbox::-webkit-scrollbar {
+  width: 6px;
+}
+
+.chatbox::-webkit-scrollbar-track {
+  background: #f1f1f1;
+  border-radius: 10px;
+}
+
+.chatbox::-webkit-scrollbar-thumb {
+  background: #28a745;
+  border-radius: 10px;
+}
+
+.chatbox::-webkit-scrollbar-thumb:hover {
+  background: #218838;
 }
 
 .chatbox.visible {
   display: block;
   animation: slideDown 0.3s ease-out;
+}
+
+/* Message styling for proper spacing */
+.chatbox .message {
+  margin-bottom: 0.8rem !important;
+  padding: 0.5rem 0 !important;
+}
+
+.chatbox .message:last-child {
+  margin-bottom: 0.5rem !important;
 }
 
 .chatbox-signup {
@@ -152,8 +183,9 @@
     display: block !important;
     transition: all 0.3s ease !important;
     margin: 0.1rem 0.75rem 0.1rem 0.75rem !important;
-    max-height: none !important;
-    overflow-y: visible !important;
+    max-height: 400px !important;
+    overflow-y: auto !important;
+    overflow-x: hidden !important;
   }
   
   .action-btn {
@@ -704,8 +736,10 @@
 /* Laptop view - Increase chatbox height and center it */
 @media (min-width: 769px) {
   .chatbot-box .chatbox {
-    max-height: 250px !important;
+    max-height: 500px !important;
     min-height: 150px !important;
+    overflow-y: auto !important;
+    overflow-x: hidden !important;
   }
   
   .chatbot-container {
@@ -759,9 +793,11 @@
 /* Additional mobile view for very small screens */
 @media (max-width: 480px) {
   .chatbox {
-    max-height: 250px !important;
+    max-height: 350px !important;
     min-height: 150px !important;
     padding: 0.8rem !important;
+    overflow-y: auto !important;
+    overflow-x: hidden !important;
   }
   
   .action-btn {

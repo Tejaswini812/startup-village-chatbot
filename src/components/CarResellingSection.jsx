@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import axios from 'axios'
+import { API_BASE_URL } from '../config/api'
 
 const CarResellingSection = () => {
   const navigate = useNavigate()
@@ -50,7 +51,7 @@ const CarResellingSection = () => {
   const fetchCars = async () => {
     try {
       console.log('Fetching cars from API...')
-      const response = await axios.get('/api/cars')
+      const response = await axios.get(`${API_BASE_URL}/cars`)
       console.log('Cars API response:', response.data)
       
       if (response.data && response.data.length > 0) {
