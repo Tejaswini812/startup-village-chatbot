@@ -2,6 +2,7 @@ const express = require('express')
 const multer = require('multer')
 const path = require('path')
 const LandProperty = require('../models/LandProperty')
+const { compressUploadedImages } = require('../utils/compressImages')
 const router = express.Router()
 
 // Configure multer for file uploads
@@ -28,16 +29,20 @@ const upload = multer({
   }
 })
 
-// Create new land property
-router.post('/', upload.array('images', 10), async (req, res) => {
+// Create new land property (frontend sends size; model has area, purpose, ownership)
+router.post('/', upload.array('images', 10), compressUploadedImages, async (req, res) => {
   try {
     const {
       title,
       description,
       price,
       location,
+      address,
+      city,
+      state,
       landType,
       area,
+      size,
       unit,
       purpose,
       ownership,
@@ -45,18 +50,20 @@ router.post('/', upload.array('images', 10), async (req, res) => {
     } = req.body
 
     const imagePaths = req.files ? req.files.map(file => file.path) : []
+    const areaNum = parseFloat(area || size) || 0
+    const locationStr = [location, address, city, state].filter(Boolean).join(', ') || location || 'Location TBD'
 
     const landProperty = new LandProperty({
-      title,
-      description,
-      price: parseInt(price),
-      location,
-      landType,
-      area: parseFloat(area),
-      unit,
-      purpose,
-      ownership,
-      contactInfo,
+      title: (title || 'Untitled Land').trim(),
+      description: (description || 'No description').trim(),
+      price: parseInt(price, 10) || 0,
+      location: (locationStr || 'Location TBD').trim(),
+      landType: (landType || 'residential').toLowerCase().replace(/\s+/g, '-'),
+      area: areaNum,
+      unit: (unit || 'sqft').toLowerCase(),
+      purpose: (purpose || 'sale').toLowerCase(),
+      ownership: (ownership || 'freehold').toLowerCase(),
+      contactInfo: (contactInfo || 'Contact not provided').trim(),
       images: imagePaths,
       createdAt: new Date()
     })
@@ -65,7 +72,7 @@ router.post('/', upload.array('images', 10), async (req, res) => {
     res.status(201).json({ message: 'Land property created successfully', landProperty })
   } catch (error) {
     console.error('Error creating land property:', error)
-    res.status(500).json({ error: 'Error creating land property' })
+    res.status(500).json({ error: 'Error creating land property', details: error.message })
   }
 })
 
@@ -95,7 +102,7 @@ router.get('/:id', async (req, res) => {
 })
 
 // Update land property
-router.put('/:id', upload.array('images', 10), async (req, res) => {
+router.put('/:id', upload.array('images', 10), compressUploadedImages, async (req, res) => {
   try {
     const landProperty = await LandProperty.findById(req.params.id)
     if (!landProperty) {

@@ -16,46 +16,50 @@ const AccessoriesListingPage = () => {
   })
   const [loading, setLoading] = useState(true)
 
+  const baseUrl = API_BASE_URL.replace(/\/api\/?$/, '')
+  const toImageUrl = (path) => {
+    if (!path || typeof path !== 'string') return 'https://images.unsplash.com/photo-1594736797933-d0501ba2fe65?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80'
+    if (path.startsWith('http://') || path.startsWith('https://')) return path
+    const normalized = path.replace(/\\/g, '/')
+    return normalized.startsWith('uploads/') ? `${baseUrl}/${normalized}` : `${baseUrl}/uploads/products/${normalized}`
+  }
+
   // Fetch accessories from API - ALL accessories (not limited to 10)
   useEffect(() => {
     const fetchAccessories = async () => {
       try {
-        console.log('Fetching ALL accessories from API...')
         // Try both accessories and products APIs
         const [accessoriesResponse, productsResponse] = await Promise.all([
           axios.get(`${API_BASE_URL}/accessories`, { timeout: 5000 }).catch(() => ({ data: { data: [] } })),
           axios.get(`${API_BASE_URL}/products`, { timeout: 5000 }).catch(() => ({ data: [] }))
         ])
         
-        console.log('Accessories API response:', accessoriesResponse.data)
-        console.log('Products API response:', productsResponse.data)
-        
         // Handle both array and object response formats
-        const accessoriesData = accessoriesResponse.data.data || accessoriesResponse.data
+        const accessoriesData = accessoriesResponse?.data?.data ?? accessoriesResponse?.data
         
-        // Transform accessories data
+        // Transform accessories data (build full image URL for relative paths)
         const transformedAccessories = (accessoriesData && Array.isArray(accessoriesData)) ? accessoriesData.map(accessory => ({
           id: accessory._id,
           name: accessory.name,
           location: 'Online Store',
           price: accessory.price,
-          rating: 4.5, // Default rating
+          rating: 4.5,
           category: accessory.category || 'Accessories',
-          image: accessory.image || 'https://images.unsplash.com/photo-1594736797933-d0501ba2fe65?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80',
+          image: toImageUrl(accessory.image || accessory.images?.[0]),
           description: accessory.description || 'High quality product'
         })) : []
         
-        // Transform products data
-        const transformedProducts = productsResponse.data?.map(product => ({
+        // Transform products data (build full image URL for relative paths)
+        const transformedProducts = (Array.isArray(productsResponse?.data) ? productsResponse.data : []).map(product => ({
           id: `product_${product._id}`,
           name: product.name,
           location: 'Online Store',
           price: product.price,
-          rating: 4.5, // Default rating
+          rating: 4.5,
           category: product.category || 'Products',
-          image: product.images?.[0] || 'https://images.unsplash.com/photo-1594736797933-d0501ba2fe65?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80',
+          image: toImageUrl(product.images?.[0] || product.image),
           description: product.description || 'High quality product'
-        })) || []
+        }))
         
         // Combine both types - ALL accessories (no limit)
         const allAccessories = [...transformedAccessories, ...transformedProducts]
@@ -427,6 +431,7 @@ const AccessoriesListingPage = () => {
                   src={accessory.image} 
                   alt={accessory.name}
                   className="card-image"
+                  onError={(e) => { e.target.src = 'https://images.unsplash.com/photo-1594736797933-d0501ba2fe65?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80' }}
                 />
                 <div className="rating-badge">
                   <i className="fas fa-star"></i>

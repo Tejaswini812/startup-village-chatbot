@@ -3,6 +3,7 @@ const multer = require('multer')
 const path = require('path')
 const mongoose = require('mongoose')
 const Hotel = require('../models/Hotel')
+const { compressUploadedImages } = require('../utils/compressImages')
 
 const router = express.Router()
 
@@ -85,7 +86,7 @@ router.get('/:id', async (req, res) => {
 // @route   POST /api/hotels
 // @desc    Create new hotel (multipart with files)
 // @access  Private
-router.post('/', upload.array('images', 10), async (req, res) => {
+router.post('/', upload.array('images', 10), compressUploadedImages, async (req, res) => {
   try {
     console.log('=== HOTEL CREATION REQUEST ===')
     console.log('Request body:', req.body)

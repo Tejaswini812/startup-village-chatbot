@@ -26,26 +26,38 @@ dotenv.config()
 const app = express()
 const PORT = process.env.PORT || 5000
 
-// Security middleware
-app.use(helmet())
-
-// Rate limiting
-const limiter = rateLimit({
-  windowMs: 15 * 60 * 1000, // 15 minutes
-  max: 100 // limit each IP to 100 requests per windowMs
-})
-app.use(limiter)
-
-// CORS configuration
-app.use(cors({
-  origin: ['https://villagecounty.in', 'http://localhost:3000', 'http://localhost:5173'],
+// CORS first so preflight (OPTIONS) gets correct headers before helmet/rate-limit
+const allowedOrigins = [
+  'https://villagecounty.in',
+  'https://www.villagecounty.in',
+  'http://localhost:3000',
+  'http://127.0.0.1:3000',
+  'http://localhost:5173',
+  'http://127.0.0.1:5173'
+]
+const corsOptions = {
+  origin: (origin, cb) => {
+    const allowed = !origin || allowedOrigins.includes(origin) || /^https?:\/\/(localhost|127\.0\.0\.1)(:\d+)?$/i.test(origin)
+    cb(null, allowed)
+  },
   credentials: true,
-  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
-  allowedHeaders: ['Content-Type', 'Authorization', 'X-Requested-With']
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS', 'PATCH'],
+  allowedHeaders: ['Content-Type', 'Authorization', 'X-Requested-With', 'Accept', 'Origin']
+}
+app.use(cors(corsOptions))
+app.options('*', cors(corsOptions))
+
+// Security middleware
+app.use(helmet({
+  crossOriginResourcePolicy: { policy: 'cross-origin' }
 }))
 
-// Handle preflight requests
-app.options('*', cors())
+// Rate limiting: higher limit so login works after heavy use (100 was causing 429 on logout then login)
+const limiter = rateLimit({
+  windowMs: 15 * 60 * 1000, // 15 minutes
+  max: 500 // per IP; avoids 429 when using app then logging in again
+})
+app.use(limiter)
 
 // Body parsing middleware
 app.use(express.json({ limit: '10mb' }))
@@ -96,7 +108,21 @@ app.use('/api/cars', carsRoutes)
 app.use('/api/packages', packagesRoutes)
 app.use('/api/stays', staysRoutes)
 app.use('/api/user', userRoutes)
+// Handle invalid /api/other/:id before notification router (avoids 404)
+app.get('/api/other/:id', (req, res) => {
+  res.status(400).json({ message: 'Invalid API resource. Use /api/stays, /api/events, /api/properties, etc.' })
+})
 app.use('/api', notificationRoutes)
+
+// API root - avoids 404 when hitting GET /api
+app.get('/api', (req, res) => {
+  res.json({ status: 'OK', message: 'Village County API', docs: '/api/health' })
+})
+
+// Catch invalid /api/:resource/:id (e.g. other, electronics) - return 400 so no 404
+app.get('/api/:resource/:id', (req, res) => {
+  res.status(400).json({ message: 'Invalid API resource. Use a valid path (e.g. /api/products/:id, /api/events/:id).' })
+})
 
 // Health check endpoint
 app.get('/api/health', (req, res) => {

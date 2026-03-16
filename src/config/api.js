@@ -34,13 +34,6 @@ const finalEnvironment = config[actualEnvironment] ? actualEnvironment : 'develo
 // Priority: Environment variable > Config > Default
 export const API_BASE_URL = envApiUrl || config[finalEnvironment].API_BASE_URL
 
-// Always log in production for debugging
-console.log('🔧 API Configuration:', {
-  environment: finalEnvironment,
-  hostname: window.location.hostname,
-  apiBaseUrl: API_BASE_URL,
-  envApiUrl: envApiUrl || 'not set'
-})
 
 // Helper function to create full API URLs
 export const createApiUrl = (endpoint) => {

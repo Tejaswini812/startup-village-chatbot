@@ -22,24 +22,59 @@ const HotelsListingPage = () => {
 
   const fetchHotels = async () => {
     try {
-      console.log('Fetching stays from API...')
-      // Fetch from stays endpoint (homestays)
-      const staysResponse = await axios.get(`${API_BASE_URL}/stays`)
-      console.log('Stays API response:', staysResponse.data)
-      
-      // Also fetch hotels for backward compatibility
-      let hotelsResponse = null
-      try {
-        hotelsResponse = await axios.get(`${API_BASE_URL}/hotels`)
-      } catch (err) {
-        console.log('Hotels endpoint not available, using only stays')
+      // Fetch stays, hotels and hosted properties in parallel so all show in Find Your Stay
+      const [staysResult, hotelsResult, propertiesResult] = await Promise.allSettled([
+        axios.get(`${API_BASE_URL}/stays`),
+        axios.get(`${API_BASE_URL}/hotels`).catch(() => null),
+        axios.get(`${API_BASE_URL}/properties`)
+      ])
+      const staysResponse = staysResult.status === 'fulfilled' ? staysResult.value : null
+      const hotelsResponse = hotelsResult.status === 'fulfilled' ? hotelsResult.value : null
+      let propertiesResponse = propertiesResult.status === 'fulfilled' ? propertiesResult.value : null
+
+      const staysData = (Array.isArray(staysResponse?.data?.stays) ? staysResponse.data.stays : Array.isArray(staysResponse?.data?.data) ? staysResponse.data.data : Array.isArray(staysResponse?.data) ? staysResponse.data : []).map(s => ({ ...s, _source: 'stays' }))
+      const hotelsData = (Array.isArray(hotelsResponse?.data?.data) ? hotelsResponse.data.data : Array.isArray(hotelsResponse?.data) ? hotelsResponse.data : []).map(h => ({ ...h, _source: 'hotels' }))
+      let propertiesRaw = Array.isArray(propertiesResponse?.data) ? propertiesResponse.data : []
+
+      if (propertiesRaw.length === 0) {
+        try {
+          const res = await axios.get(`${API_BASE_URL}/properties`)
+          propertiesRaw = Array.isArray(res?.data) ? res.data : []
+        } catch (_) {}
       }
-      
-      // Combine stays and hotels data
-      const staysData = staysResponse.data.stays || staysResponse.data.data || staysResponse.data || []
-      const hotelsData = hotelsResponse?.data?.data || hotelsResponse?.data || []
-      const allAccommodations = [...staysData, ...hotelsData]
-      
+
+      // Map hosted properties to same format as stays/hotels so they show in the list
+      const propertiesAsStays = Array.isArray(propertiesRaw)
+        ? propertiesRaw.map(property => {
+            let imageUrl = 'https://images.unsplash.com/photo-1571896349842-33c89424de2d?w=500&h=300&fit=crop'
+            if (property.images?.[0]) {
+              const imagePath = property.images[0]
+              if (typeof imagePath === 'string') {
+                if (imagePath.startsWith('http://') || imagePath.startsWith('https://')) {
+                  imageUrl = imagePath
+                } else {
+                  const baseUrl = API_BASE_URL.replace(/\/api$/, '')
+                  imageUrl = `${baseUrl}/${imagePath.replace(/\\/g, '/')}`
+                }
+              }
+            }
+            return {
+              _id: property._id,
+              name: property.title,
+              location: property.location,
+              type: property.propertyType || 'Homestay',
+              pricePerNight: property.price,
+              image: imageUrl,
+              description: property.description || '',
+              amenities: property.amenities || '',
+              contactInfo: property.contactInfo || {},
+              _source: 'properties'
+            }
+          })
+        : []
+
+      const allAccommodations = [...staysData, ...hotelsData, ...propertiesAsStays]
+
       if (allAccommodations && Array.isArray(allAccommodations) && allAccommodations.length > 0) {
         // Transform API accommodations to match the expected format
         const apiHotels = allAccommodations.map(hotel => {
@@ -118,6 +153,7 @@ const HotelsListingPage = () => {
           
           return {
             id: hotel._id || hotel.id,
+            source: hotel._source || 'stays',
             name: name,
             location: location,
             type: type,
@@ -145,6 +181,48 @@ const HotelsListingPage = () => {
         setHotels(apiHotels)
         setFilteredHotels(apiHotels)
       } else {
+        // Fallback: fetch only properties so hosted listings still show
+        try {
+          const res = await axios.get(`${API_BASE_URL}/properties`)
+          const raw = Array.isArray(res?.data) ? res.data : []
+          if (raw.length > 0) {
+            const propertiesAsStaysOnly = raw.map(property => {
+              let imageUrl = 'https://images.unsplash.com/photo-1571896349842-33c89424de2d?w=500&h=300&fit=crop'
+              if (property.images?.[0]) {
+                const imagePath = property.images[0]
+                if (typeof imagePath === 'string') {
+                  imageUrl = (imagePath.startsWith('http') ? imagePath : `${API_BASE_URL.replace(/\/api$/, '')}/${imagePath.replace(/\\/g, '/')}`)
+                }
+              }
+              return {
+                _id: property._id,
+                name: property.title,
+                location: property.location || 'Location not specified',
+                type: property.propertyType || 'Homestay',
+                pricePerNight: property.price,
+                image: imageUrl,
+                _source: 'properties'
+              }
+            })
+            const apiHotels = propertiesAsStaysOnly.map(h => ({
+              id: h._id || h.id,
+              source: 'properties',
+              name: h.name || h.title,
+              location: typeof h.location === 'string' ? h.location : 'Location not specified',
+              type: h.type || 'Homestay',
+              price: !isNaN(Number(h.pricePerNight)) ? Number(h.pricePerNight) : 1000,
+              rating: parseFloat((4.5 + Math.random() * 0.5).toFixed(1)),
+              image: h.image || 'https://images.unsplash.com/photo-1571896349842-33c89424de2d?w=500&h=300&fit=crop',
+              description: h.description || '',
+              amenities: Array.isArray(h.amenities) ? h.amenities.join(', ') : h.amenities || '',
+              contactInfo: h.contactInfo || {}
+            }))
+            setHotels(apiHotels)
+            setFilteredHotels(apiHotels)
+            setLoading(false)
+            return
+          }
+        } catch (_) {}
         throw new Error('No hotels in API response')
       }
     } catch (error) {
@@ -154,6 +232,7 @@ const HotelsListingPage = () => {
       const fallbackHotels = [
         {
           id: 1,
+          source: 'stays',
           name: "Sunset Retreat",
           location: "Goa",
           type: "Cottage",
@@ -163,6 +242,7 @@ const HotelsListingPage = () => {
         },
         {
           id: 2,
+          source: 'stays',
           name: "Ocean Breeze",
           location: "Goa",
           type: "Tent",
@@ -172,6 +252,7 @@ const HotelsListingPage = () => {
         },
         {
           id: 3,
+          source: 'stays',
           name: "Mountain Escape",
           location: "Coorg",
           type: "Luxury Room",
@@ -181,6 +262,7 @@ const HotelsListingPage = () => {
         },
         {
           id: 4,
+          source: 'stays',
           name: "Green Valley Stay",
           location: "Coorg",
           type: "Hostel Bed",
@@ -190,6 +272,7 @@ const HotelsListingPage = () => {
         },
         {
           id: 5,
+          source: 'stays',
           name: "City Comfort Inn",
           location: "Bangalore",
           type: "Normal Room",
@@ -199,6 +282,7 @@ const HotelsListingPage = () => {
         },
         {
           id: 6,
+          source: 'stays',
           name: "Riverside Resort",
           location: "Mysore",
           type: "Villa",
@@ -388,8 +472,20 @@ const HotelsListingPage = () => {
                     <span className="price-unit">per night</span>
                   </div>
                 </div>
-                <div className="action-buttons">
-                  <button 
+                <div className="action-buttons" style={{ display: 'flex', gap: '0.5rem', flexWrap: 'wrap' }}>
+                  <button
+                    type="button"
+                    className="action-btn primary-btn"
+                    onClick={() => {
+                    const rawSource = hotel.source || hotel._source || 'stays'
+                    const source = ['stays', 'hotels', 'properties'].includes(rawSource) ? rawSource : 'stays'
+                    navigate(`/stay/${source}/${hotel.id}`, { state: { stayCard: hotel } })
+                  }}
+                  >
+                    <i className="fas fa-info-circle"></i>
+                    View Details
+                  </button>
+                  <button
                     className="action-btn primary-btn"
                     onClick={() => handleBookNow(hotel)}
                   >

@@ -2,6 +2,7 @@ const express = require('express')
 const multer = require('multer')
 const path = require('path')
 const Package = require('../models/Package')
+const { compressUploadedImages } = require('../utils/compressImages')
 const router = express.Router()
 
 // Configure multer for file uploads
@@ -28,8 +29,8 @@ const upload = multer({
   }
 })
 
-// Create new package
-router.post('/', upload.array('images', 10), async (req, res) => {
+// Create new package (frontend may not send packageType; duration can be number)
+router.post('/', upload.array('images', 10), compressUploadedImages, async (req, res) => {
   try {
     const {
       title,
@@ -45,18 +46,19 @@ router.post('/', upload.array('images', 10), async (req, res) => {
     } = req.body
 
     const imagePaths = req.files ? req.files.map(file => file.path) : []
+    const durationStr = typeof duration === 'string' ? duration : (duration ? `${duration} days` : '1 day')
 
     const packageData = new Package({
-      title,
-      description,
-      price: parseInt(price),
-      destination,
-      duration,
-      packageType,
-      includes,
-      excludes,
-      itinerary,
-      contactInfo,
+      title: (title || 'Untitled Package').trim(),
+      description: (description || 'No description').trim(),
+      price: parseInt(price, 10) || 0,
+      destination: (destination || 'TBD').trim(),
+      duration: durationStr.trim(),
+      packageType: (packageType || 'leisure').toLowerCase(),
+      includes: (includes || 'See description').trim(),
+      excludes: (excludes || '').trim(),
+      itinerary: (itinerary || '').trim(),
+      contactInfo: (contactInfo || 'Contact not provided').trim(),
       images: imagePaths,
       createdAt: new Date()
     })
@@ -65,7 +67,7 @@ router.post('/', upload.array('images', 10), async (req, res) => {
     res.status(201).json({ message: 'Package created successfully', package: packageData })
   } catch (error) {
     console.error('Error creating package:', error)
-    res.status(500).json({ error: 'Error creating package' })
+    res.status(500).json({ error: 'Error creating package', details: error.message })
   }
 })
 
@@ -95,7 +97,7 @@ router.get('/:id', async (req, res) => {
 })
 
 // Update package
-router.put('/:id', upload.array('images', 10), async (req, res) => {
+router.put('/:id', upload.array('images', 10), compressUploadedImages, async (req, res) => {
   try {
     const packageData = await Package.findById(req.params.id)
     if (!packageData) {

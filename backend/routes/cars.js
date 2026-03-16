@@ -2,6 +2,7 @@ const express = require('express')
 const multer = require('multer')
 const path = require('path')
 const Car = require('../models/Car')
+const { compressUploadedImages } = require('../utils/compressImages')
 const router = express.Router()
 
 // Configure multer for file uploads
@@ -28,8 +29,8 @@ const upload = multer({
   }
 })
 
-// Create new car
-router.post('/', upload.array('images', 10), async (req, res) => {
+// Create new car (defaults for missing required: location, seller)
+router.post('/', upload.array('images', 10), compressUploadedImages, async (req, res) => {
   try {
     const {
       make,
@@ -50,19 +51,19 @@ router.post('/', upload.array('images', 10), async (req, res) => {
     const imagePaths = req.files ? req.files.map(file => file.path) : []
 
     const car = new Car({
-      make,
-      model,
-      year: parseInt(year),
-      price: parseInt(price),
-      mileage: parseInt(mileage),
-      fuelType,
-      transmission,
-      color,
-      condition,
-      location,
-      description,
-      seller,
-      contactInfo,
+      make: (make || 'Make').trim(),
+      model: (model || 'Model').trim(),
+      year: parseInt(year, 10) || new Date().getFullYear(),
+      price: parseInt(price, 10) || 0,
+      mileage: parseInt(mileage, 10) || 0,
+      fuelType: (fuelType || 'petrol').toLowerCase(),
+      transmission: (transmission || 'manual').toLowerCase(),
+      color: (color || 'N/A').trim(),
+      condition: (condition || 'good').toLowerCase(),
+      location: (location || 'Location TBD').trim(),
+      description: (description || 'No description').trim(),
+      seller: (seller || 'Seller').trim(),
+      contactInfo: (contactInfo || 'Contact not provided').trim(),
       images: imagePaths,
       createdAt: new Date()
     })
@@ -71,7 +72,7 @@ router.post('/', upload.array('images', 10), async (req, res) => {
     res.status(201).json({ message: 'Car created successfully', car })
   } catch (error) {
     console.error('Error creating car:', error)
-    res.status(500).json({ error: 'Error creating car' })
+    res.status(500).json({ error: 'Error creating car', details: error.message })
   }
 })
 
@@ -101,7 +102,7 @@ router.get('/:id', async (req, res) => {
 })
 
 // Update car
-router.put('/:id', upload.array('images', 10), async (req, res) => {
+router.put('/:id', upload.array('images', 10), compressUploadedImages, async (req, res) => {
   try {
     const car = await Car.findById(req.params.id)
     if (!car) {

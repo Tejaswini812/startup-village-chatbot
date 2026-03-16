@@ -1,6 +1,11 @@
 const express = require('express')
 const router = express.Router()
 
+// Invalid resource - frontend must not request /api/other; return 400 to avoid 404
+router.get('/other/:id', (req, res) => {
+  res.status(400).json({ message: 'Invalid API resource. Use /api/stays, /api/hotels, /api/properties, /api/events, etc.' })
+})
+
 // WhatsApp notification endpoint
 router.post('/send-whatsapp', (req, res) => {
   try {

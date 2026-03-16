@@ -381,6 +381,7 @@ const Dashboard = () => {
         <LoginForm
           onClose={() => setShowLoginModal(false)}
           onSuccess={handleLoginSuccess}
+          onShowSignup={() => { setShowLoginModal(false); setShowSignupModal(true) }}
         />
       )}
 

@@ -64,13 +64,17 @@ cd startup-village-county
 ```
 
 2. **Install dependencies**
+
+   **Important (Windows):** Do not type `#` or anything after it on the same line as the command. In CMD/PowerShell, `#` is not a comment and causes "Invalid tag name '#'" errors. Run each command alone.
+
 ```bash
 # Install all dependencies (frontend + backend)
 npm run install:all
 
-# Or install separately
-npm install                    # Frontend dependencies
-cd backend && npm install      # Backend dependencies
+# Or install separately (run each line without the # part on Windows):
+npm install
+cd backend && npm install
+cd ..
 ```
 
 3. **Environment Setup**
@@ -83,13 +87,16 @@ nano backend/.env
 ```
 
 4. **Start Development Server**
+
+   Run these from the **project folder** `startup-village-county` (where `package.json` is). If you see "ENOENT: no such file or directory, open '...package.json'", run `cd startup-village-county` first.
+
 ```bash
 # Start both frontend and backend
 npm start
 
-# Or start separately
-npm run dev                    # Frontend (port 3000)
-npm run server:dev            # Backend (port 5000)
+# Or start separately: frontend (port 3000), then in another terminal backend (port 5000)
+npm run dev
+npm run server
 ```
 
 ## 🌐 Production Deployment (Hostinger VPS)

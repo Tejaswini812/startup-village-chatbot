@@ -1,7 +1,24 @@
 import { API_BASE_URL } from '../config/api'
+import imageCompression from 'browser-image-compression'
 
-// Helper function to create FormData for multipart uploads
-const createFormData = (formData, images) => {
+const MAX_SIZE_MB = 1
+const MAX_DIMENSION = 1024
+
+// Compress image file if over 1MB (returns same file if not image or already small). Exported for use in SignupForm etc.
+export async function compressImageIfNeeded(file) {
+  if (!file || !file.type?.startsWith('image/')) return file
+  if (file.size <= MAX_SIZE_MB * 1024 * 1024) return file
+  try {
+    const options = { maxSizeMB: MAX_SIZE_MB, maxWidthOrHeight: MAX_DIMENSION, useWebWorker: true }
+    const compressed = await imageCompression(file, options)
+    return compressed
+  } catch {
+    return file
+  }
+}
+
+// Helper function to create FormData for multipart uploads (compresses images > 1MB)
+const createFormData = async (formData, images) => {
   const data = new FormData()
   
   // Add all form fields
@@ -15,11 +32,12 @@ const createFormData = (formData, images) => {
     }
   })
   
-  // Add images
+  // Add images (compressed if > 1MB)
   if (images && images.length > 0) {
-    images.forEach((image, index) => {
-      data.append('images', image.file)
-    })
+    for (const image of images) {
+      const file = image?.file ? await compressImageIfNeeded(image.file) : image
+      if (file) data.append('images', file)
+    }
   }
   
   return data
@@ -29,7 +47,7 @@ const createFormData = (formData, images) => {
 export const submitProperty = async (formData, images, token) => {
   try {
     // Use multipart endpoint to handle file uploads
-    const formDataToSend = createFormData(formData, images)
+    const formDataToSend = await createFormData(formData, images)
     
     console.log('🔧 Form Submission Debug:')
     console.log('- API Base URL:', API_BASE_URL)
@@ -79,7 +97,7 @@ export const submitProperty = async (formData, images, token) => {
 // Land Property submission (Host a Land Property -> Buy & SELL/lease Property)
 export const submitLandProperty = async (formData, images, token) => {
   try {
-    const data = createFormData(formData, images)
+    const data = await createFormData(formData, images)
     
     const response = await fetch(`${API_BASE_URL}/land-properties`, {
       method: 'POST',
@@ -100,7 +118,7 @@ export const submitLandProperty = async (formData, images, token) => {
 // Event submission
 export const submitEvent = async (formData, images, token) => {
   try {
-    const data = createFormData(formData, images)
+    const data = await createFormData(formData, images)
     
     const response = await fetch(`${API_BASE_URL}/events`, {
       method: 'POST',
@@ -121,7 +139,7 @@ export const submitEvent = async (formData, images, token) => {
 // Product submission
 export const submitProduct = async (formData, images, token) => {
   try {
-    const data = createFormData(formData, images)
+    const data = await createFormData(formData, images)
     
     const response = await fetch(`${API_BASE_URL}/products`, {
       method: 'POST',
@@ -142,7 +160,7 @@ export const submitProduct = async (formData, images, token) => {
 // Package submission
 export const submitPackage = async (formData, images, token) => {
   try {
-    const data = createFormData(formData, images)
+    const data = await createFormData(formData, images)
     
     const response = await fetch(`${API_BASE_URL}/packages`, {
       method: 'POST',
@@ -163,7 +181,7 @@ export const submitPackage = async (formData, images, token) => {
 // Car submission
 export const submitCar = async (formData, images, token) => {
   try {
-    const data = createFormData(formData, images)
+    const data = await createFormData(formData, images)
     
     const response = await fetch(`${API_BASE_URL}/cars`, {
       method: 'POST',

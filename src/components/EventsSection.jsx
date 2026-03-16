@@ -55,49 +55,38 @@ const EventsSection = () => {
   // Fetch events from API
   const fetchEvents = async () => {
     try {
-      console.log('Fetching events from API...')
       const response = await axios.get(`${API_BASE_URL}/events`)
-      console.log('Events API response:', response.data)
       
-      if (response.data && response.data.length > 0) {
-        console.log('Raw API events:', response.data)
-        
-        // Transform API events to match the expected format
+      if (response.data && Array.isArray(response.data) && response.data.length > 0) {
+        const baseUrl = (typeof API_BASE_URL === 'string') ? API_BASE_URL.replace(/\/api\/?$/, '') : ''
         const apiEvents = response.data.map(event => {
-          console.log('Processing event:', event)
-          console.log('Event image field:', event.images)
-          console.log('Event image type:', typeof event.images)
-          console.log('Event image value:', event.images)
-          
-          const transformedEvent = {
+          const loc = event.location
+          const locationStr = (typeof loc === 'string') ? loc : (loc?.venue || loc?.address || loc?.city || 'Location TBD')
+          const dateVal = event.dateTime?.start || event.dateTime?.date || event.date
+          const dateObj = dateVal ? new Date(dateVal) : new Date()
+          const dateStr = isNaN(dateObj.getTime()) ? 'TBD' : dateObj.toLocaleDateString()
+          const timeStr = event.time || (isNaN(dateObj.getTime()) ? 'TBD' : dateObj.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }))
+          const imgPath = event.images?.[0]
+          const imageUrl = imgPath ? (imgPath.startsWith('http') ? imgPath : `${baseUrl}/${imgPath}`) : "https://img.freepik.com/free-vector/music-event-poster-template-with-abstract-shapes_1361-1316.jpg?semt=ais_hybrid&w=740"
+          return {
             id: event._id || event.id,
-            title: event.title,
-            location: event.location?.venue || event.location || 'Location TBD',
-            date: new Date(event.dateTime?.start || event.date).toLocaleDateString(),
-            time: event.time || new Date(event.dateTime?.start || event.date).toLocaleTimeString(),
-            image: event.images?.[0] ? `http://localhost:5000/${event.images[0]}` : "https://img.freepik.com/free-vector/music-event-poster-template-with-abstract-shapes_1361-1316.jpg?semt=ais_hybrid&w=740",
-            description: event.description,
-            price: event.price,
-            category: event.category || event.eventType
+            title: event.title || 'Event',
+            location: locationStr,
+            date: dateStr,
+            time: timeStr,
+            image: imageUrl,
+            description: event.description || '',
+            price: event.price ?? 0,
+            category: event.category || event.eventType || ''
           }
-          console.log('Transformed event:', transformedEvent)
-          console.log('Final image URL:', transformedEvent.image)
-          return transformedEvent
         })
         
-        console.log('All transformed API events:', apiEvents)
-        
-        // Combine API events with default events and limit to first 10
-        const combinedEvents = [...apiEvents, ...defaultEvents]
-        console.log('Combined events (API + default):', combinedEvents)
-        setEvents(combinedEvents.slice(0, 10))
+        const combinedEvents = [...apiEvents, ...defaultEvents].slice(0, 10)
+        setEvents(combinedEvents)
       } else {
-        console.log('No events in API response, using default events')
         setEvents(defaultEvents.slice(0, 10))
       }
     } catch (error) {
-      console.error('Error fetching events:', error)
-      console.log('Using fallback events data')
       setEvents(defaultEvents.slice(0, 10))
     } finally {
       setLoading(false)
@@ -109,7 +98,6 @@ const EventsSection = () => {
     
     // Listen for event creation
     const handleEventCreated = () => {
-      console.log('Event created, refreshing events...')
       setLoading(true)
       fetchEvents()
     }
@@ -143,21 +131,16 @@ const EventsSection = () => {
 
   return (
     <div className="events-section">
-      <div className="events-header">
-        <div className="events-tabs">
-          <span className="events-tab active">EVENTS</span>
-        </div>
-        <div style={{ display: 'flex', gap: '1rem', alignItems: 'center' }}>
+      <div className="events-header" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1rem' }}>
+        <h2 className="events-title" style={{ margin: 0, fontSize: '1.5rem', fontWeight: 'bold', color: '#1e293b' }}>Events</h2>
         <a href="#" className="view-all-link" onClick={(e) => {
           e.preventDefault()
           navigate('/events')
-        }}>View all →</a>
-        </div>
+        }}>View All →</a>
       </div>
       
       <div className="events-container">
         <div className="events-scroll" id="events-scroll">
-          {console.log('Rendering events:', events)}
           {events.map((event) => (
             <div key={event.id} className="event-card" style={{ backgroundColor: 'white', padding: '8px', borderRadius: '8px', background: 'white' }}>
               <div className="event-image">
@@ -174,7 +157,13 @@ const EventsSection = () => {
                 <span className="event-date">{event.date}</span>
                 <span className="event-time">{event.time}</span>
                 <div className="event-location">{event.location}</div>
-                <button className="event-view-details-btn">View Details</button>
+                <button
+                  type="button"
+                  className="event-view-details-btn"
+                  onClick={() => navigate(`/event/${event.id}`, { state: { eventCard: event } })}
+                >
+                  View Details
+                </button>
               </div>
             </div>
           ))}

@@ -3,6 +3,7 @@ const multer = require('multer')
 const path = require('path')
 const mongoose = require('mongoose')
 const Event = require('../models/Event')
+const { compressUploadedImages } = require('../utils/compressImages')
 const router = express.Router()
 
 // Configure multer for file uploads
@@ -29,57 +30,87 @@ const upload = multer({
   }
 })
 
-// Create new event
-router.post('/', upload.array('images', 10), async (req, res) => {
+// Create new event (accepts frontend format: category, location/dateTime/contactInfo as JSON strings)
+router.post('/', upload.array('images', 10), compressUploadedImages, async (req, res) => {
   try {
-    console.log('=== EVENT CREATION REQUEST ===')
-    console.log('Request body:', req.body)
-    console.log('Request files:', req.files)
-    
     const {
       title,
       description,
       price,
-      location,
+      location: locationRaw,
       eventType,
+      category: categoryRaw,
       date,
       time,
       duration,
       capacity,
-      organizer,
-      contactInfo
+      contactInfo: contactInfoRaw
     } = req.body
 
-    console.log('Extracted data:')
-    console.log('- title:', title)
-    console.log('- eventType:', eventType)
-    console.log('- date:', date)
-    console.log('- time:', time)
+    const category = (categoryRaw || eventType || 'Other').trim() || 'Other'
 
-    // Map eventType to category for the model
-    const category = eventType
-    console.log('- category (mapped):', category)
+    let location = {
+      venue: 'Venue TBD',
+      address: 'Address TBD',
+      city: 'City TBD',
+      state: 'State TBD'
+    }
+    if (locationRaw) {
+      try {
+        const parsed = typeof locationRaw === 'string' ? JSON.parse(locationRaw) : locationRaw
+        if (parsed && typeof parsed === 'object') {
+          location = {
+            venue: parsed.venue || location.venue,
+            address: parsed.address || parsed.venue || location.address,
+            city: parsed.city || location.city,
+            state: parsed.state || location.state
+          }
+        } else {
+          location = { venue: locationRaw, address: locationRaw, city: locationRaw, state: locationRaw }
+        }
+      } catch (_) {
+        location = { venue: locationRaw, address: locationRaw, city: locationRaw, state: locationRaw }
+      }
+    }
+
+    let dateTime = { start: new Date(), end: new Date(Date.now() + 2 * 60 * 60 * 1000) }
+    const dateTimeRaw = req.body.dateTime
+    if (dateTimeRaw) {
+      try {
+        const parsed = typeof dateTimeRaw === 'string' ? JSON.parse(dateTimeRaw) : dateTimeRaw
+        if (parsed?.start) dateTime.start = new Date(parsed.start)
+        if (parsed?.end) dateTime.end = new Date(parsed.end)
+      } catch (_) {}
+    } else if (date && time) {
+      const start = new Date(date + ' ' + time)
+      if (!isNaN(start.getTime())) {
+        dateTime.start = start
+        dateTime.end = new Date(start.getTime() + (parseInt(duration, 10) || 2) * 60 * 60 * 1000)
+      }
+    }
+
+    let contactInfo = {}
+    if (contactInfoRaw) {
+      try {
+        contactInfo = typeof contactInfoRaw === 'string' ? JSON.parse(contactInfoRaw) : contactInfoRaw
+        if (typeof contactInfo !== 'object' || contactInfo === null) contactInfo = {}
+      } catch (_) {
+        contactInfo = { phone: contactInfoRaw, email: '' }
+      }
+    }
 
     const imagePaths = req.files ? req.files.map(file => file.path.replace(/\\/g, '/')) : []
 
     const event = new Event({
-      title,
-      description,
+      title: (title || 'Untitled Event').trim(),
+      description: (description || 'No description').trim(),
       price: parseFloat(price) || 0,
       category,
-      location: {
-        venue: location,
-        address: location,
-        city: location,
-        state: location
-      },
-      dateTime: {
-        start: new Date(date + ' ' + time),
-        end: new Date(new Date(date + ' ' + time).getTime() + (parseInt(duration) * 60 * 60 * 1000))
-      },
-      capacity: parseInt(capacity) || 100,
-      organizer: new mongoose.Types.ObjectId('507f1f77bcf86cd799439011'), // Use a default ObjectId for now
-      contactInfo: contactInfo ? JSON.parse(contactInfo) : {},
+      location,
+      dateTime,
+      capacity: parseInt(capacity, 10) || 100,
+      organizer: new mongoose.Types.ObjectId('507f1f77bcf86cd799439011'),
+      contactInfo,
       images: imagePaths
     })
 
@@ -87,14 +118,9 @@ router.post('/', upload.array('images', 10), async (req, res) => {
     res.status(201).json({ message: 'Event created successfully', event })
   } catch (error) {
     console.error('Error creating event:', error)
-    console.error('Error details:', {
-      message: error.message,
-      stack: error.stack,
-      name: error.name
-    })
-    res.status(500).json({ 
+    res.status(500).json({
       error: 'Error creating event',
-      details: error.message 
+      details: error.message
     })
   }
 })
@@ -125,7 +151,7 @@ router.get('/:id', async (req, res) => {
 })
 
 // Update event
-router.put('/:id', upload.array('images', 10), async (req, res) => {
+router.put('/:id', upload.array('images', 10), compressUploadedImages, async (req, res) => {
   try {
     const event = await Event.findById(req.params.id)
     if (!event) {

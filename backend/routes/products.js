@@ -2,6 +2,7 @@ const express = require('express')
 const multer = require('multer')
 const path = require('path')
 const Product = require('../models/Product')
+const { compressUploadedImages } = require('../utils/compressImages')
 const router = express.Router()
 
 // Configure multer for file uploads
@@ -28,8 +29,8 @@ const upload = multer({
   }
 })
 
-// Create new product
-router.post('/', upload.array('images', 10), async (req, res) => {
+// Create new product (default seller if missing)
+router.post('/', upload.array('images', 10), compressUploadedImages, async (req, res) => {
   try {
     const {
       name,
@@ -46,15 +47,15 @@ router.post('/', upload.array('images', 10), async (req, res) => {
     const imagePaths = req.files ? req.files.map(file => file.path) : []
 
     const product = new Product({
-      name,
-      description,
-      price: parseInt(price),
-      category,
-      brand,
-      condition,
-      quantity: parseInt(quantity),
-      seller,
-      contactInfo,
+      name: (name || 'Product').trim(),
+      description: (description || 'No description').trim(),
+      price: parseInt(price, 10) || 0,
+      category: (category || 'other').toLowerCase(),
+      brand: (brand || '').trim(),
+      condition: (condition || 'good').toLowerCase(),
+      quantity: parseInt(quantity, 10) || 1,
+      seller: (seller || 'Seller').trim(),
+      contactInfo: (contactInfo || 'Contact not provided').trim(),
       images: imagePaths,
       createdAt: new Date()
     })
@@ -63,7 +64,7 @@ router.post('/', upload.array('images', 10), async (req, res) => {
     res.status(201).json({ message: 'Product created successfully', product })
   } catch (error) {
     console.error('Error creating product:', error)
-    res.status(500).json({ error: 'Error creating product' })
+    res.status(500).json({ error: 'Error creating product', details: error.message })
   }
 })
 
@@ -93,7 +94,7 @@ router.get('/:id', async (req, res) => {
 })
 
 // Update product
-router.put('/:id', upload.array('images', 10), async (req, res) => {
+router.put('/:id', upload.array('images', 10), compressUploadedImages, async (req, res) => {
   try {
     const product = await Product.findById(req.params.id)
     if (!product) {

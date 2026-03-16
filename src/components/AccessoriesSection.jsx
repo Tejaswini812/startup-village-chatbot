@@ -15,35 +15,39 @@ const AccessoriesSection = () => {
 
   const fetchAccessories = async () => {
     try {
+      const baseUrl = API_BASE_URL.replace(/\/api\/?$/, '')
       // Try both accessories and products APIs
       const [accessoriesResponse, productsResponse] = await Promise.all([
         axios.get(`${API_BASE_URL}/accessories`, { timeout: 5000 }).catch(() => ({ data: { data: [] } })),
         axios.get(`${API_BASE_URL}/products`, { timeout: 5000 }).catch(() => ({ data: [] }))
       ])
       
-      console.log('Accessories API response:', accessoriesResponse.data)
-      console.log('Products API response:', productsResponse.data)
-      
       // Handle both array and object response formats
-      const accessoriesData = accessoriesResponse.data.data || accessoriesResponse.data
+      const accessoriesData = accessoriesResponse?.data?.data ?? accessoriesResponse?.data
       
-      // Transform accessories data
+      // Transform accessories data (id and source for detail page)
       const transformedAccessories = (accessoriesData && Array.isArray(accessoriesData)) ? accessoriesData.map(accessory => ({
         id: accessory._id,
-        name: accessory.name,
-        price: `₹${accessory.price}`,
+        source: 'accessories',
+        name: accessory.name || 'Product',
+        price: `₹${accessory.price ?? 0}`,
         description: accessory.description || 'High quality product',
-        image: accessory.image || 'https://images.unsplash.com/photo-1594736797933-d0501ba2fe65?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80'
+        image: accessory.image ? (accessory.image.startsWith('http') ? accessory.image : `${baseUrl}/${accessory.image}`) : 'https://images.unsplash.com/photo-1594736797933-d0501ba2fe65?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80',
+        images: accessory.images || (accessory.image ? [accessory.image] : []),
+        contactInfo: accessory.contactInfo || ''
       })) : []
       
-      // Transform products data
-      const transformedProducts = productsResponse.data?.map(product => ({
-        id: `product_${product._id}`,
-        name: product.name,
-        price: `₹${product.price}`,
+      // Transform products data (id and source for detail page)
+      const transformedProducts = Array.isArray(productsResponse?.data) ? productsResponse.data.map(product => ({
+        id: product._id,
+        source: 'products',
+        name: product.name || 'Product',
+        price: `₹${product.price ?? 0}`,
         description: product.description || 'High quality product',
-        image: product.images?.[0] || 'https://images.unsplash.com/photo-1594736797933-d0501ba2fe65?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80'
-      })) || []
+        image: product.images?.[0] ? (product.images[0].startsWith('http') ? product.images[0] : `${baseUrl}/${product.images[0]}`) : 'https://images.unsplash.com/photo-1594736797933-d0501ba2fe65?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80',
+        images: product.images || [],
+        contactInfo: product.contactInfo || ''
+      })) : []
       
       // Combine both types and limit to first 10
       const allAccessories = [...transformedAccessories, ...transformedProducts]
@@ -54,11 +58,11 @@ const AccessoriesSection = () => {
         throw new Error('No data from API')
       }
     } catch (error) {
-      console.log('API not available, using fallback data:', error.message)
       // Fallback to static data
       setAccessories([
         {
           id: 1,
+          source: 'products',
           name: "Shakti Technology High Pressure Washer",
           price: "₹199",
           description: "Best seller - High pressure car washer with accessories",
@@ -66,6 +70,7 @@ const AccessoriesSection = () => {
         },
         {
           id: 2,
+          source: 'products',
           name: "Shrida Naturals Lemon & Orange Air Freshener",
           price: "₹199",
           description: "Fresh scent lasting up to 45 days, 60g net content",
@@ -73,6 +78,7 @@ const AccessoriesSection = () => {
         },
         {
           id: 3,
+          source: 'products',
           name: "Premium Car Phone Mount",
           price: "₹450",
           description: "Universal dashboard phone holder with suction cup",
@@ -80,6 +86,7 @@ const AccessoriesSection = () => {
         },
         {
           id: 4,
+          source: 'products',
           name: "LED Headlight Bulbs Set",
           price: "₹1,200",
           description: "Bright white LED bulbs for better night visibility",
@@ -87,6 +94,7 @@ const AccessoriesSection = () => {
         },
         {
           id: 5,
+          source: 'products',
           name: "Leather Steering Wheel Cover",
           price: "₹650",
           description: "Comfortable leather grip cover with anti-slip design",
@@ -94,6 +102,7 @@ const AccessoriesSection = () => {
         },
         {
           id: 6,
+          source: 'products',
           name: "Premium Car Floor Mats",
           price: "₹1,500",
           description: "Heavy-duty rubber floor protection with anti-slip",
@@ -101,6 +110,7 @@ const AccessoriesSection = () => {
         },
         {
           id: 7,
+          source: 'products',
           name: "Portable Bluetooth Speaker",
           price: "₹2,200",
           description: "Waterproof wireless speaker with 20W output",
@@ -108,6 +118,7 @@ const AccessoriesSection = () => {
         },
         {
           id: 8,
+          source: 'products',
           name: "Cordless Car Vacuum Cleaner",
           price: "₹1,800",
           description: "Powerful 12V car vacuum with HEPA filter",
@@ -115,6 +126,7 @@ const AccessoriesSection = () => {
         },
         {
           id: 9,
+          source: 'products',
           name: "Digital Tire Pressure Gauge",
           price: "₹350",
           description: "Precision digital tire pressure monitor",
@@ -122,6 +134,7 @@ const AccessoriesSection = () => {
         },
         {
           id: 10,
+          source: 'products',
           name: "Multi-Compartment Car Organizer",
           price: "₹950",
           description: "Expandable storage organizer for trunk and backseat",
@@ -138,7 +151,10 @@ const AccessoriesSection = () => {
   }
 
   const buyAccessory = (accessory) => {
-    alert(`Added to cart: ${accessory.name}\nPrice: ${accessory.price}`)
+    const raw = accessory.source || 'products'
+    const source = (raw === 'accessories' || raw === 'products') ? raw : 'products'
+    const id = accessory.id
+    navigate(`/product-detail/${source}/${id}`, { state: { productCard: accessory } })
   }
 
   const totalPages = Math.ceil(accessories.length / 3)

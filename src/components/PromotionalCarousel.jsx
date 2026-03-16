@@ -63,11 +63,7 @@ const PromotionalCarousel = () => {
                 src={image.src} 
                 alt={image.alt}
                 className="promo-image"
-                onLoad={() => {
-                  console.log(`Successfully loaded image: ${image.src}`)
-                }}
                 onError={(e) => {
-                  console.log(`Failed to load image: ${image.src}`)
                   e.target.style.display = 'none'
                 }}
               />

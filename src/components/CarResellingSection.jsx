@@ -50,41 +50,31 @@ const CarResellingSection = () => {
 
   const fetchCars = async () => {
     try {
-      console.log('Fetching cars from API...')
       const response = await axios.get(`${API_BASE_URL}/cars`)
-      console.log('Cars API response:', response.data)
       
-      if (response.data && response.data.length > 0) {
-        console.log('Raw API cars:', response.data)
-        
-        // Transform API cars to match the expected format
+      if (response.data && Array.isArray(response.data) && response.data.length > 0) {
+        const baseUrl = API_BASE_URL.replace(/\/api\/?$/, '')
         const apiCars = response.data.map(car => {
-          console.log('Processing car:', car)
+          const priceNum = Number(car.price) || 0
           return {
             id: car._id || car.id,
-            name: `${car.make} ${car.model}`,
-            year: car.year.toString(),
-            price: `₹${(car.price / 100000).toFixed(2)} ${car.price >= 10000000 ? 'Crores' : 'Lakhs'}`,
-            image: car.images?.[0] ? `http://localhost:5000/${car.images[0]}` : "https://images.unsplash.com/photo-1552519507-da3b142c6e3d?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80",
+            name: `${car.make || ''} ${car.model || ''}`.trim() || 'Car',
+            year: car.year?.toString() || '',
+            price: `₹${(priceNum / 100000).toFixed(2)} ${priceNum >= 10000000 ? 'Crores' : 'Lakhs'}`,
+            image: car.images?.[0] ? (car.images[0].startsWith('http') ? car.images[0] : `${baseUrl}/${String(car.images[0]).replace(/\\/g, '/')}`) : "https://images.unsplash.com/photo-1552519507-da3b142c6e3d?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80",
+            images: Array.isArray(car.images) ? car.images : [],
             description: car.description || '',
-            mileage: car.mileage || '',
-            fuelType: car.fuelType || ''
+            mileage: car.mileage ?? '',
+            fuelType: car.fuelType || '',
+            location: car.location || '',
+            contactInfo: car.contactInfo || ''
           }
         })
-        
-        console.log('All transformed API cars:', apiCars)
-        
-        // Combine API cars with default cars and limit to first 10
-        const combinedCars = [...apiCars, ...defaultCars]
-        console.log('Combined cars (API + default):', combinedCars)
-        setCars(combinedCars.slice(0, 10))
+        setCars([...apiCars, ...defaultCars].slice(0, 10))
       } else {
-        console.log('No cars in API response, using default cars')
         setCars(defaultCars.slice(0, 10))
       }
     } catch (error) {
-      console.error('Error fetching cars:', error)
-      console.log('Using fallback cars data')
       setCars(defaultCars.slice(0, 10))
     } finally {
       setLoading(false)
@@ -108,16 +98,13 @@ const CarResellingSection = () => {
     }
   }, [])
 
-  useEffect(() => {
-    console.log('CarResellingSection: Cars loaded with', cars.length, 'items')
-  }, [])
 
   const goToPage = (pageIndex) => {
     setCurrentIndex(pageIndex)
   }
 
   const viewCarDetails = (car) => {
-    alert(`Car: ${car.name}\nYear: ${car.year}\nPrice: ${car.price}`)
+    navigate(`/car/${car.id}`, { state: { carCard: car } })
   }
 
   const totalPages = Math.ceil(cars.length / 2)

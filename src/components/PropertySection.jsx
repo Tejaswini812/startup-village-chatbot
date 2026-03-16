@@ -31,85 +31,72 @@ const PropertySection = () => {
 
   const fetchProperties = async () => {
     try {
-      // Fetch both properties and land properties
-      const [propertiesResponse, landPropertiesResponse] = await Promise.all([
+      // Fetch both so one failure doesn't hide the other (hosted properties + land both show)
+      const [propertiesResult, landResult] = await Promise.allSettled([
         axios.get(`${API_BASE_URL}/properties`),
         axios.get(`${API_BASE_URL}/land-properties`)
       ])
+      const propertiesResponse = propertiesResult.status === 'fulfilled' ? propertiesResult.value : null
+      const landPropertiesResponse = landResult.status === 'fulfilled' ? landResult.value : null
       
-      console.log('Properties API response:', propertiesResponse.data)
-      console.log('Land Properties API response:', landPropertiesResponse.data)
-      
-      // Transform properties data
-      const transformedProperties = propertiesResponse.data?.map(property => {
-        console.log('Property data:', property)
-        console.log('Property images:', property.images)
-        
-        // Better image URL handling
-        let imageUrl = 'https://images.pexels.com/photos/1396122/pexels-photo-1396122.jpeg?auto=compress&cs=tinysrgb&w=1000&h=600&fit=crop' // Default fallback
-        
+      // Transform properties data (safe price/area to avoid NaN or division by zero)
+      const transformedProperties = (Array.isArray(propertiesResponse?.data) ? propertiesResponse.data : []).map(property => {
+        let imageUrl = 'https://images.pexels.com/photos/1396122/pexels-photo-1396122.jpeg?auto=compress&cs=tinysrgb&w=1000&h=600&fit=crop'
         if (property.images?.[0]) {
           const imagePath = property.images[0]
-          // Check if it's already a full URL (external image)
-          if (imagePath.startsWith('http')) {
-            imageUrl = imagePath
-          } else {
-            // It's a local file path, add localhost prefix and fix path separators
-            imageUrl = `http://localhost:5000/${imagePath.replace(/\\/g, '/')}`
+          if (typeof imagePath === 'string') {
+            imageUrl = imagePath.startsWith('http') ? imagePath : `http://localhost:5000/${imagePath.replace(/\\/g, '/')}`
           }
         }
-        
-        console.log('Final image URL:', imageUrl)
-        
+        const priceNum = Number(property.price) || 0
+        const areaNum = Number(property.area) || 1
+        const pricePerSqft = areaNum > 0 ? Math.round(priceNum / areaNum) : 0
         return {
           id: property._id,
-          name: property.title,
-          price: `₹${(property.price / 100000).toFixed(2)} ${property.price >= 10000000 ? 'Crores' : 'Lakhs'}`,
-          area: `${property.area} sqft`,
-          pricePerSqft: `₹${Math.round(property.price / property.area).toLocaleString()}`,
+          source: 'properties',
+          name: property.title || 'Property',
+          price: `₹${(priceNum / 100000).toFixed(2)} ${priceNum >= 10000000 ? 'Crores' : 'Lakhs'}`,
+          area: `${areaNum} sqft`,
+          pricePerSqft: `₹${pricePerSqft.toLocaleString()}`,
           image: imageUrl,
           location: property.location || 'Location',
-          type: property.propertyType
+          type: property.propertyType || ''
         }
-      }) || []
+      })
       
-      // Transform land properties data
-      const transformedLandProperties = landPropertiesResponse.data?.map(landProperty => {
-        // Better image URL handling for land properties
-        let imageUrl = 'https://images.pexels.com/photos/1396122/pexels-photo-1396122.jpeg?auto=compress&cs=tinysrgb&w=1000&h=600&fit=crop' // Default fallback
-        
+      // Transform land properties data (safe price/area)
+      const transformedLandProperties = (Array.isArray(landPropertiesResponse?.data) ? landPropertiesResponse.data : []).map(landProperty => {
+        let imageUrl = 'https://images.pexels.com/photos/1396122/pexels-photo-1396122.jpeg?auto=compress&cs=tinysrgb&w=1000&h=600&fit=crop'
         if (landProperty.images?.[0]) {
           const imagePath = landProperty.images[0]
-          // Check if it's already a full URL (external image)
-          if (imagePath.startsWith('http')) {
-            imageUrl = imagePath
-          } else {
-            // It's a local file path, add localhost prefix and fix path separators
-            imageUrl = `http://localhost:5000/${imagePath.replace(/\\/g, '/')}`
+          if (typeof imagePath === 'string') {
+            imageUrl = imagePath.startsWith('http') ? imagePath : `http://localhost:5000/${imagePath.replace(/\\/g, '/')}`
           }
         }
-        
+        const priceNum = Number(landProperty.price) || 0
+        const areaNum = Number(landProperty.area) || 1
+        const pricePerSqft = areaNum > 0 ? Math.round(priceNum / areaNum) : 0
         return {
-          id: `land_${landProperty._id}`,
-          name: landProperty.title,
-          price: `₹${(landProperty.price / 100000).toFixed(2)} ${landProperty.price >= 10000000 ? 'Crores' : 'Lakhs'}`,
-          area: `${landProperty.area} ${landProperty.unit}`,
-          pricePerSqft: `₹${Math.round(landProperty.price / landProperty.area).toLocaleString()}`,
+          id: landProperty._id,
+          source: 'land-properties',
+          name: landProperty.title || 'Land',
+          price: `₹${(priceNum / 100000).toFixed(2)} ${priceNum >= 10000000 ? 'Crores' : 'Lakhs'}`,
+          area: `${areaNum} ${landProperty.unit || 'sqft'}`,
+          pricePerSqft: `₹${pricePerSqft.toLocaleString()}`,
           image: imageUrl,
           location: landProperty.location || 'Location',
-          type: landProperty.landType
+          type: landProperty.landType || ''
         }
-      }) || []
+      })
       
       // Combine both types of properties and limit to first 10
       const allProperties = [...transformedProperties, ...transformedLandProperties].slice(0, 10)
       
-      // Check if API returned empty array, use fallback data
       if (allProperties.length === 0) {
-        console.log('API returned empty array, using fallback data')
         const fallbackProperties = [
           {
             id: 1,
+            source: 'properties',
             name: "Luxury Villa",
             price: "₹1.15 Crores",
             area: "1,500 sqft",
@@ -118,6 +105,7 @@ const PropertySection = () => {
           },
           {
             id: 2,
+            source: 'properties',
             name: "Modern Apartment",
             price: "₹1.15 Crores",
             area: "1,500 sqft",
@@ -126,6 +114,7 @@ const PropertySection = () => {
           },
           {
             id: 3,
+            source: 'properties',
             name: "Premium House",
             price: "₹1.8 Crores",
             area: "2,000 sqft",
@@ -134,6 +123,7 @@ const PropertySection = () => {
           },
           {
             id: 4,
+            source: 'properties',
             name: "Executive Villa",
             price: "₹2.5 Crores",
             area: "2,200 sqft",
@@ -142,6 +132,7 @@ const PropertySection = () => {
           },
           {
             id: 5,
+            source: 'properties',
             name: "Cozy Home",
             price: "₹85 Lakhs",
             area: "1,800 sqft",
@@ -154,11 +145,11 @@ const PropertySection = () => {
         setProperties(allProperties)
       }
     } catch (error) {
-      console.log('API not available, using fallback data')
       // Fallback to static data if API fails
       setProperties([
         {
           id: 1,
+          source: 'properties',
           name: "Luxury Villa",
           price: "₹1.15 Crores",
           area: "1,500 sqft",
@@ -167,6 +158,7 @@ const PropertySection = () => {
         },
         {
           id: 2,
+          source: 'properties',
           name: "Modern Apartment",
           price: "₹1.15 Crores",
           area: "1,500 sqft",
@@ -175,6 +167,7 @@ const PropertySection = () => {
         },
         {
           id: 3,
+          source: 'properties',
           name: "Premium House",
           price: "₹1.8 Crores",
           area: "2,000 sqft",
@@ -183,6 +176,7 @@ const PropertySection = () => {
         },
         {
           id: 4,
+          source: 'properties',
           name: "Executive Villa",
           price: "₹2.5 Crores",
           area: "2,200 sqft",
@@ -191,6 +185,7 @@ const PropertySection = () => {
         },
         {
           id: 5,
+          source: 'properties',
           name: "Cozy Home",
           price: "₹85 Lakhs",
           area: "1,800 sqft",
@@ -217,7 +212,8 @@ const PropertySection = () => {
   }
 
   const buyProperty = (property) => {
-    alert(`Interested in: ${property.name}\nPrice: ${property.price}\nArea: ${property.area}`)
+    const source = property.source || 'properties'
+    navigate(`/buy-property/${source}/${property.id}`, { state: { propertyCard: property } })
   }
 
   const totalPages = Math.ceil(properties.length / 2)
@@ -237,8 +233,6 @@ const PropertySection = () => {
     )
   }
 
-  console.log('PropertySection: Rendering with', properties.length, 'properties, loading:', loading)
-  
   return (
     <div className="property-section" style={{ display: 'block', visibility: 'visible', margin: '0', padding: '0' }}>
       <div className="property-header">

@@ -352,7 +352,15 @@ const EventsListingPage = () => {
                     <span className="price-unit">per ticket</span>
                   </div>
                 </div>
-                <div className="action-buttons">
+                <div className="action-buttons" style={{ display: 'flex', gap: '0.5rem', flexWrap: 'wrap' }}>
+                  <button
+                    type="button"
+                    className="action-btn primary-btn"
+                    onClick={() => navigate(`/event/${event.id}`, { state: { eventCard: event } })}
+                  >
+                    <i className="fas fa-info-circle"></i>
+                    View Details
+                  </button>
                   <button className="action-btn primary-btn">
                     <i className="fas fa-ticket-alt"></i>
                     Book Tickets

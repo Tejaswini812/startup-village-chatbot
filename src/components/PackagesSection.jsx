@@ -38,42 +38,28 @@ const PackagesSection = () => {
 
   const fetchPackages = async () => {
     try {
-      console.log('Fetching packages from API...')
       const response = await axios.get(`${API_BASE_URL}/packages`)
-      console.log('Packages API response:', response.data)
-      
-      if (response.data && response.data.length > 0) {
-        console.log('Raw API packages:', response.data)
-        
-        // Transform API packages to match the expected format
-        const apiPackages = response.data.map(pkg => {
-          console.log('Processing package:', pkg)
-          return {
-            id: pkg._id || pkg.id,
-            title: pkg.title,
-            destination: pkg.destination,
-            duration: pkg.duration,
-            price: `₹${pkg.price}`,
-            image: pkg.images?.[0] ? `http://localhost:5000/${pkg.images[0]}` : "https://images.unsplash.com/photo-1544551763-46a013bb70d5?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80",
-            description: pkg.description || '',
-            includes: pkg.includes || '',
-            packageType: pkg.packageType || ''
-          }
-        })
-        
-        console.log('All transformed API packages:', apiPackages)
-        
-        // Combine API packages with default packages and limit to first 10
-        const combinedPackages = [...apiPackages, ...defaultPackages]
-        console.log('Combined packages (API + default):', combinedPackages)
-        setPackages(combinedPackages.slice(0, 10))
+      const data = Array.isArray(response?.data) ? response.data : (response?.data?.data && Array.isArray(response.data.data) ? response.data.data : [])
+      if (data.length > 0) {
+        const baseUrl = API_BASE_URL.replace(/\/api\/?$/, '')
+        const apiPackages = data.map(pkg => ({
+          id: pkg._id || pkg.id,
+          title: pkg.title || 'Package',
+          destination: pkg.destination || '',
+          duration: pkg.duration || '',
+          price: `₹${pkg.price ?? 0}`,
+          image: pkg.images?.[0] ? (pkg.images[0].startsWith('http') ? pkg.images[0] : `${baseUrl}/${String(pkg.images[0]).replace(/\\/g, '/')}`) : "https://images.unsplash.com/photo-1544551763-46a013bb70d5?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80",
+          images: Array.isArray(pkg.images) ? pkg.images : [],
+          description: pkg.description || '',
+          includes: pkg.includes || '',
+          packageType: pkg.packageType || '',
+          contactInfo: pkg.contactInfo || ''
+        }))
+        setPackages([...apiPackages, ...defaultPackages].slice(0, 10))
       } else {
-        console.log('No packages in API response, using default packages')
         setPackages(defaultPackages.slice(0, 10))
       }
     } catch (error) {
-      console.error('Error fetching packages:', error)
-      console.log('Using fallback packages data')
       setPackages(defaultPackages.slice(0, 10))
     } finally {
       setLoading(false)
@@ -85,7 +71,6 @@ const PackagesSection = () => {
     
     // Listen for package creation
     const handlePackageCreated = () => {
-      console.log('Package created, refreshing packages...')
       setLoading(true)
       fetchPackages()
     }
@@ -98,7 +83,7 @@ const PackagesSection = () => {
   }, [])
 
   const viewPackageDetails = (pkg) => {
-    alert(`Package: ${pkg.title}\nDestination: ${pkg.destination}\nDuration: ${pkg.duration}\nPrice: ${pkg.price}`)
+    navigate(`/package/${pkg.id}`, { state: { packageCard: pkg } })
   }
 
   if (loading) {
@@ -106,6 +91,7 @@ const PackagesSection = () => {
       <div className="packages-section">
         <div className="packages-header">
           <h3 className="packages-title">Travel Packages</h3>
+          <p className="packages-subtitle">Source From our online stores</p>
         </div>
         <div className="packages-container">
           <div className="flex justify-center items-center h-64">
@@ -122,7 +108,7 @@ const PackagesSection = () => {
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
           <div>
             <h3 className="packages-title">Travel Packages</h3>
-            <p className="packages-subtitle">Discover amazing destinations</p>
+            <p className="packages-subtitle">Source From our online stores</p>
           </div>
           <a href="#" className="view-all-link" onClick={(e) => {
             e.preventDefault()

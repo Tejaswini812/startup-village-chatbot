@@ -6,6 +6,7 @@ const nodemailer = require('nodemailer');
 const multer = require('multer');
 const path = require('path');
 const fs = require('fs');
+const { compressUploadedImages } = require('../utils/compressImages');
 
 const router = express.Router();
 
@@ -59,7 +60,7 @@ router.post('/register', (req, res, next) => {
     }
     next();
   });
-}, async (req, res) => {
+}, compressUploadedImages, async (req, res) => {
   try {
     console.log('=== REGISTRATION REQUEST ===');
     console.log('Received registration data:', req.body);
@@ -298,26 +299,40 @@ router.post('/register', (req, res, next) => {
   }
 });
 
+// Only this email can log in as Admin and access the admin panel
+const ADMIN_EMAIL = process.env.ADMIN_EMAIL || 'villagecounty2025@gmail.com';
+
 // Login user
 router.post('/login', async (req, res) => {
   try {
-    const { email, password } = req.body;
+    const { email, password, role } = req.body;
+    const normalizedEmail = (email || '').trim().toLowerCase();
 
-    // Find user
-    const user = await User.findOne({ email });
+    // If logging in as Admin, only the admin account is allowed
+    if (role === 'admin') {
+      const adminEmail = (ADMIN_EMAIL || '').trim().toLowerCase();
+      if (normalizedEmail !== adminEmail) {
+        return res.status(401).json({ message: 'Wrong credentials' });
+      }
+    }
+
+    // Find user (email normalized to lowercase so login works regardless of casing)
+    const user = await User.findOne({ email: normalizedEmail });
     if (!user) {
-      return res.status(401).json({ message: 'Invalid credentials' });
+      return res.status(401).json({ message: role === 'admin' ? 'Wrong credentials' : 'Invalid credentials' });
     }
 
     // Check if user is approved
     if (!user.isApproved) {
-      return res.status(401).json({ message: 'Account pending approval. Please wait for admin approval.' });
+      return res.status(401).json({
+        message: role === 'admin' ? 'Wrong credentials' : 'Account pending approval. Please wait for admin approval.'
+      });
     }
 
     // Check password
     const isPasswordValid = await bcrypt.compare(password, user.password);
     if (!isPasswordValid) {
-      return res.status(401).json({ message: 'Invalid credentials' });
+      return res.status(401).json({ message: 'Wrong credentials' });
     }
 
     // Generate JWT token
@@ -433,3 +448,4 @@ router.get('/verify', async (req, res) => {
 });
 
 module.exports = router;
+module.exports.authenticateToken = authenticateToken;

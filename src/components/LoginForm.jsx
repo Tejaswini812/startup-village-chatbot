@@ -1,7 +1,16 @@
 import React, { useState } from 'react'
+import { useNavigate } from 'react-router-dom'
 import apiClient from '../config/axios'
 
-const LoginForm = ({ onClose, onSuccess }) => {
+const ROLES = [
+  { id: 'user', label: 'User', desc: 'Book hotels, stays & events', icon: 'fa-calendar-check' },
+  { id: 'host', label: 'Host', desc: 'List your property', icon: 'fa-home' },
+  { id: 'admin', label: 'Admin', desc: 'Approve & edit (website owner)', icon: 'fa-user-shield' }
+]
+
+const LoginForm = ({ onClose, onSuccess, onShowSignup, onForgotPassword }) => {
+  const navigate = useNavigate()
+  const [selectedRole, setSelectedRole] = useState(null)
   const [formData, setFormData] = useState({
     email: '',
     password: ''
@@ -42,19 +51,40 @@ const LoginForm = ({ onClose, onSuccess }) => {
 
     setLoading(true)
     try {
-      const response = await apiClient.post('/auth/login', formData)
+      const payload = { ...formData }
+      if (selectedRole === 'admin') payload.role = 'admin'
+      const response = await apiClient.post('/auth/login', payload)
       
+      // If logging in as Admin, only the admin account is allowed (backend also checks)
+      const adminEmail = 'villagecounty2025@gmail.com'
+      if (selectedRole === 'admin' && (response.data.user?.email || '').toLowerCase() !== adminEmail.toLowerCase()) {
+        setErrors({ submit: 'Wrong credentials' })
+        setLoading(false)
+        return
+      }
+
       // Store token and user data in localStorage
       localStorage.setItem('token', response.data.token)
       localStorage.setItem('user', JSON.stringify(response.data.user))
       
       onSuccess(response.data.user, response.data.token)
-      onClose()
+      if (selectedRole === 'admin') {
+        onClose()
+        navigate('/admin-properties')
+      } else {
+        onClose()
+      }
     } catch (error) {
       console.error('Login error:', error)
-      setErrors({
-        submit: error.response?.data?.message || 'Login failed. Please try again.'
-      })
+      let message
+      if (!error.response) {
+        message = 'Unable to connect. Check that the backend is running on port 5000 and CORS allows this origin.'
+      } else if (selectedRole === 'admin' && error.response.status === 401) {
+        message = 'Wrong credentials'
+      } else {
+        message = error.response?.data?.message || 'Wrong credentials'
+      }
+      setErrors({ submit: message })
     } finally {
       setLoading(false)
     }
@@ -80,8 +110,18 @@ const LoginForm = ({ onClose, onSuccess }) => {
         maxWidth: '400px',
         width: '90%'
       }}>
-        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1.5rem' }}>
-          <h2 style={{ margin: 0, color: '#1e293b' }}>Welcome Back</h2>
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '1rem' }}>
+          <div>
+            <h2 style={{ margin: 0, color: '#1e293b' }}>Welcome Back</h2>
+            {selectedRole ? (
+              <p style={{ margin: '0.35rem 0 0', fontSize: '0.8rem', color: '#16a34a', fontWeight: 500 }}>
+                Logging in as: {ROLES.find(r => r.id === selectedRole)?.label}
+                <button type="button" onClick={() => setSelectedRole(null)} style={{ marginLeft: 8, background: 'none', border: 'none', fontSize: '0.75rem', color: '#64748b', cursor: 'pointer', textDecoration: 'underline' }}>Change</button>
+              </p>
+            ) : (
+              <p style={{ margin: '0.35rem 0 0', fontSize: '0.8rem', color: '#64748b' }}>Choose who you are:</p>
+            )}
+          </div>
           <button 
             onClick={onClose}
             style={{ 
@@ -96,7 +136,37 @@ const LoginForm = ({ onClose, onSuccess }) => {
           </button>
         </div>
 
-        <form onSubmit={handleSubmit}>
+        {!selectedRole ? (
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem', marginBottom: '1rem' }}>
+            {ROLES.map((role) => (
+              <button
+                key={role.id}
+                type="button"
+                onClick={() => setSelectedRole(role.id)}
+                style={{
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: '0.75rem',
+                  padding: '0.875rem 1rem',
+                  border: '2px solid #e2e8f0',
+                  borderRadius: '8px',
+                  background: '#fff',
+                  cursor: 'pointer',
+                  textAlign: 'left',
+                  fontSize: '0.9375rem'
+                }}
+              >
+                <i className={`fas ${role.icon}`} style={{ color: '#16a34a', width: 20 }} />
+                <div>
+                  <div style={{ fontWeight: 600, color: '#1e293b' }}>{role.label}</div>
+                  <div style={{ fontSize: '0.8rem', color: '#64748b' }}>{role.desc}</div>
+                </div>
+              </button>
+            ))}
+          </div>
+        ) : null}
+
+        <form onSubmit={handleSubmit} style={{ display: selectedRole ? 'block' : 'none' }}>
           <div style={{ marginBottom: '1rem' }}>
             <label style={{ display: 'block', marginBottom: '0.5rem', fontSize: '0.875rem', fontWeight: '500' }}>
               Email Address
@@ -118,7 +188,7 @@ const LoginForm = ({ onClose, onSuccess }) => {
             {errors.email && <span style={{ color: '#ef4444', fontSize: '0.75rem' }}>{errors.email}</span>}
           </div>
 
-          <div style={{ marginBottom: '1.5rem' }}>
+          <div style={{ marginBottom: '0.5rem' }}>
             <label style={{ display: 'block', marginBottom: '0.5rem', fontSize: '0.875rem', fontWeight: '500' }}>
               Password
             </label>
@@ -137,6 +207,23 @@ const LoginForm = ({ onClose, onSuccess }) => {
               placeholder="Enter your password"
             />
             {errors.password && <span style={{ color: '#ef4444', fontSize: '0.75rem' }}>{errors.password}</span>}
+          </div>
+          <div style={{ textAlign: 'right', marginBottom: '1rem' }}>
+            <button
+              type="button"
+              onClick={() => onForgotPassword ? onForgotPassword() : alert('Please contact support for password reset.')}
+              style={{
+                background: 'none',
+                border: 'none',
+                padding: 0,
+                fontSize: '0.875rem',
+                color: '#22c55e',
+                cursor: 'pointer',
+                textDecoration: 'underline'
+              }}
+            >
+              Forgot password?
+            </button>
           </div>
 
           {errors.submit && (
@@ -173,10 +260,30 @@ const LoginForm = ({ onClose, onSuccess }) => {
           </button>
 
           <div style={{ textAlign: 'center', fontSize: '0.875rem', color: '#6b7280' }}>
-            Don't have an account? 
-            <span style={{ color: '#22c55e', cursor: 'pointer', marginLeft: '0.25rem' }}>
+            Don't have an account?{' '}
+            <button
+              type="button"
+              onClick={() => {
+                if (onShowSignup) {
+                  onShowSignup()
+                  onClose()
+                } else {
+                  window.location.href = '/signup'
+                }
+              }}
+              style={{
+                background: 'none',
+                border: 'none',
+                padding: 0,
+                fontSize: '0.875rem',
+                color: '#22c55e',
+                cursor: 'pointer',
+                textDecoration: 'underline',
+                font: 'inherit'
+              }}
+            >
               Sign up
-            </span>
+            </button>
           </div>
         </form>
       </div>

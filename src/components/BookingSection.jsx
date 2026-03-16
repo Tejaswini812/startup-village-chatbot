@@ -15,23 +15,69 @@ const BookingSection = () => {
 
   const fetchHotels = async () => {
     try {
-      console.log('Fetching stays from API...')
-      // Fetch from stays endpoint (homestays)
-      const staysResponse = await axios.get(`${API_BASE_URL}/stays`)
-      console.log('Stays API response:', staysResponse.data)
-      
-      // Also fetch hotels for backward compatibility
-      let hotelsResponse = null
-      try {
-        hotelsResponse = await axios.get(`${API_BASE_URL}/hotels`)
-      } catch (err) {
-        console.log('Hotels endpoint not available, using only stays')
+      // Fetch stays, hotels and properties in parallel so one failure doesn't hide the others so one failure doesn't hide the others (e.g. approved properties still show on Find Your Stay)
+      const [staysResult, hotelsResult, propertiesResult] = await Promise.allSettled([
+        axios.get(`${API_BASE_URL}/stays`),
+        axios.get(`${API_BASE_URL}/hotels`).catch(() => null),
+        axios.get(`${API_BASE_URL}/properties`)
+      ])
+      const staysResponse = staysResult.status === 'fulfilled' ? staysResult.value : null
+      const hotelsResponse = hotelsResult.status === 'fulfilled' ? hotelsResult.value : null
+      let propertiesResponse = propertiesResult.status === 'fulfilled' ? propertiesResult.value : null
+
+      // Ensure we always have arrays (APIs may return different shapes)
+      const staysData = Array.isArray(staysResponse?.data?.stays) ? staysResponse.data.stays
+        : Array.isArray(staysResponse?.data?.data) ? staysResponse.data.data
+        : Array.isArray(staysResponse?.data) ? staysResponse.data
+        : []
+      const hotelsData = Array.isArray(hotelsResponse?.data?.data) ? hotelsResponse.data.data
+        : Array.isArray(hotelsResponse?.data) ? hotelsResponse.data
+        : []
+      let propertiesRaw = Array.isArray(propertiesResponse?.data) ? propertiesResponse.data : []
+
+      // If properties failed or empty, try fetching properties alone so hosted listings still show
+      if (propertiesRaw.length === 0) {
+        try {
+          const res = await axios.get(`${API_BASE_URL}/properties`)
+          propertiesRaw = Array.isArray(res?.data) ? res.data : []
+        } catch (_) {}
       }
       
-      // Combine stays and hotels data
-      const staysData = staysResponse.data.stays || staysResponse.data.data || staysResponse.data || []
-      const hotelsData = hotelsResponse?.data?.data || hotelsResponse?.data || []
-      const allAccommodations = [...staysData, ...hotelsData]
+      // Map hosted properties to stay-style objects so they show in "Find Your Stay"
+      const propertiesAsStays = Array.isArray(propertiesRaw)
+        ? propertiesRaw.map(property => {
+            // Derive image URL similar to PropertySection, but using API_BASE_URL domain
+            let imageUrl = "https://images.unsplash.com/photo-1571896349842-33c89424de2d?w=500&h=300&fit=crop"
+            if (property.images?.[0]) {
+              const imagePath = property.images[0]
+              if (typeof imagePath === 'string') {
+                if (imagePath.startsWith('http://') || imagePath.startsWith('https://')) {
+                  imageUrl = imagePath
+                } else {
+                  const baseUrl = API_BASE_URL.replace(/\/api$/, '')
+                  imageUrl = `${baseUrl}/${imagePath.replace(/\\/g, '/')}`
+                }
+              }
+            }
+            
+            return {
+              _id: property._id,
+              name: property.title,
+              location: property.location,
+              type: property.propertyType || 'Homestay',
+              pricePerNight: property.price,
+              image: imageUrl,
+              description: property.description || '',
+              amenities: property.amenities || '',
+              contactInfo: property.contactInfo || {}
+            }
+          })
+        : []
+      
+      const staysWithSource = (staysData || []).map(s => ({ ...s, _source: 'stays' }))
+      const hotelsWithSource = (hotelsData || []).map(h => ({ ...h, _source: 'hotels' }))
+      const propertiesWithSource = (propertiesAsStays || []).map(p => ({ ...p, _source: 'properties' }))
+      const allAccommodations = [...staysWithSource, ...hotelsWithSource, ...propertiesWithSource]
       
       if (allAccommodations && Array.isArray(allAccommodations) && allAccommodations.length > 0) {
         // Transform API accommodations to match the expected format
@@ -75,9 +121,6 @@ const BookingSection = () => {
             return parts[parts.length - 1] || 'Location TBD'
           }
 
-          // Debug price handling
-          console.log('Hotel price from API:', hotel.price, 'pricePerNight:', hotel.pricePerNight, 'Type:', typeof hotel.price)
-          
           // Handle price extraction - prioritize pricePerNight (numeric), then parse price string, then default
           let price = 1000 // Default price
           
@@ -111,6 +154,7 @@ const BookingSection = () => {
           
           return {
             id: hotel._id || hotel.id,
+            source: hotel._source || 'stays',
             name: name,
             location: location,
             type: type,
@@ -133,19 +177,60 @@ const BookingSection = () => {
             contactInfo: hotel.contactInfo || {}
           }
         })
-        
-        console.log('Transformed API hotels:', apiHotels)
         setHotels(apiHotels)
       } else {
+        // Try properties only as last resort so hosted listings always show when API is up
+        try {
+          const res = await axios.get(`${API_BASE_URL}/properties`)
+          const raw = Array.isArray(res?.data) ? res.data : []
+          if (raw.length > 0) {
+            const propertiesAsStaysOnly = raw.map(property => {
+              let imageUrl = 'https://images.unsplash.com/photo-1571896349842-33c89424de2d?w=500&h=300&fit=crop'
+              if (property.images?.[0]) {
+                const imagePath = property.images[0]
+                if (typeof imagePath === 'string') {
+                  imageUrl = (imagePath.startsWith('http') ? imagePath : `${API_BASE_URL.replace(/\/api$/, '')}/${imagePath.replace(/\\/g, '/')}`)
+                }
+              }
+              return {
+                _id: property._id,
+                name: property.title,
+                location: property.location || 'Location not specified',
+                type: property.propertyType || 'Homestay',
+                pricePerNight: property.price,
+                image: imageUrl,
+                _source: 'properties'
+              }
+            })
+            const withSource = propertiesAsStaysOnly.map(p => ({ ...p, _source: 'properties' }))
+            const apiHotels = withSource.map((h, i) => ({
+              id: h._id || h.id,
+              source: 'properties',
+              name: h.name || h.title,
+              location: typeof h.location === 'string' ? h.location : 'Location not specified',
+              type: h.type || 'Homestay',
+              price: !isNaN(Number(h.pricePerNight)) ? Number(h.pricePerNight) : 1000,
+              rating: parseFloat((4.5 + Math.random() * 0.5).toFixed(1)),
+              image: h.image || 'https://images.unsplash.com/photo-1571896349842-33c89424de2d?w=500&h=300&fit=crop',
+              description: h.description || '',
+              amenities: Array.isArray(h.amenities) ? h.amenities.join(', ') : h.amenities || '',
+              contactInfo: h.contactInfo || {}
+            }))
+            setHotels(apiHotels)
+            setLoading(false)
+            return
+          }
+        } catch (_) {}
         throw new Error('No hotels in API response')
       }
     } catch (error) {
       console.error('Error fetching hotels:', error)
-    console.log('Using fallback hotel data')
+      console.log('Using fallback hotel data')
       // Fallback to static data
     const fallbackHotels = [
       {
         id: 1,
+        source: 'stays',
         name: "Sunset Retreat",
         location: "Goa",
         type: "Cottage",
@@ -154,6 +239,7 @@ const BookingSection = () => {
       },
       {
         id: 2,
+        source: 'stays',
         name: "Ocean Breeze",
         location: "Goa",
         type: "Tent",
@@ -162,6 +248,7 @@ const BookingSection = () => {
       },
       {
         id: 3,
+        source: 'stays',
         name: "Mountain Escape",
         location: "Coorg",
         type: "Luxury Room",
@@ -170,6 +257,7 @@ const BookingSection = () => {
       },
       {
         id: 4,
+        source: 'stays',
         name: "Green Valley Stay",
         location: "Coorg",
         type: "Hostel Bed",
@@ -178,6 +266,7 @@ const BookingSection = () => {
       },
       {
         id: 5,
+        source: 'stays',
         name: "City Comfort Inn",
         location: "Bangalore",
         type: "Normal Room",
@@ -186,6 +275,7 @@ const BookingSection = () => {
       },
       {
         id: 6,
+        source: 'stays',
         name: "Riverside Resort",
         location: "Mysore",
         type: "Villa",
@@ -193,7 +283,6 @@ const BookingSection = () => {
         image: "https://images.unsplash.com/photo-1578662996442-48f60103fc96?w=500&h=300&fit=crop"
       }
     ]
-      console.log('Setting fallback hotels:', fallbackHotels)
     setHotels(fallbackHotels)
     } finally {
     setLoading(false)
@@ -205,12 +294,12 @@ const BookingSection = () => {
   }
 
   const viewHotelDetails = (hotel) => {
-    alert(`Hotel: ${hotel.name}\nLocation: ${hotel.location}\nType: ${hotel.type}\nPrice: ₹${hotel.price}/night`)
+    const rawSource = hotel.source || hotel._source || 'stays'
+    const source = ['stays', 'hotels', 'properties'].includes(rawSource) ? rawSource : 'stays'
+    navigate(`/stay/${source}/${hotel.id}`, { state: { stayCard: hotel } })
   }
 
   const totalPages = Math.ceil(hotels.length / 2)
-
-  console.log('BookingSection render - hotels:', hotels, 'loading:', loading, 'totalPages:', totalPages)
 
   if (loading) {
     return (

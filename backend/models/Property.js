@@ -50,6 +50,11 @@ const propertySchema = new mongoose.Schema({
     required: true,
     trim: true
   },
+  status: {
+    type: String,
+    enum: ['pending', 'approved', 'rejected'],
+    default: 'pending'
+  },
   images: [{
     type: String
   }],

@@ -834,3 +834,51 @@
     grid-template-columns: 1fr;
   }
 }
+
+/* Stay detail page: laptop = 2 columns (gallery left, details right), mobile = single column */
+.stay-detail-page .stay-detail-back {
+  position: relative;
+  margin-bottom: 1rem;
+  width: fit-content;
+  max-width: 100%;
+}
+
+.stay-detail-layout {
+  max-width: 100%;
+  padding: 1rem 1.5rem;
+}
+
+@media (min-width: 1024px) {
+  .stay-detail-page .listing-container.stay-detail-layout {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: auto 1fr;
+    gap: 1.5rem 2rem;
+    max-width: 100%;
+    width: 100%;
+    padding: 1rem 1.5rem;
+    align-items: start;
+  }
+
+  .stay-detail-page .stay-detail-back {
+    grid-column: 1 / -1;
+    margin-bottom: 0;
+  }
+
+  .stay-detail-gallery {
+    grid-column: 1;
+    grid-row: 2;
+    position: sticky;
+    top: 1rem;
+  }
+
+  .stay-detail-gallery > div {
+    margin-bottom: 0;
+  }
+
+  .stay-detail-content {
+    grid-column: 2;
+    grid-row: 2;
+    min-width: 0;
+  }
+}

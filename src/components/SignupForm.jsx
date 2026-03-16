@@ -1,7 +1,14 @@
 import React, { useState } from 'react'
 import apiClient from '../config/axios'
+import { compressImageIfNeeded } from '../services/formSubmissionService'
+
+const SIGNUP_ROLES = [
+  { id: 'user', label: 'User', desc: 'Book hotels, stays & events', icon: 'fa-calendar-check' },
+  { id: 'host', label: 'Host', desc: 'List your property', icon: 'fa-home' }
+]
 
 const SignupForm = ({ onClose, onSuccess }) => {
+  const [signupAs, setSignupAs] = useState(null)
   const [formData, setFormData] = useState({
     name: '',
     email: '',
@@ -216,8 +223,9 @@ const SignupForm = ({ onClose, onSuccess }) => {
       submitData.append('document', document)
       console.log('Profile picture file for submission:', profilePictureFile)
       if (profilePictureFile) {
-        console.log('Appending profile picture file:', profilePictureFile.name, profilePictureFile.size)
-        submitData.append('profilePicture', profilePictureFile)
+        const compressedProfile = await compressImageIfNeeded(profilePictureFile)
+        console.log('Appending profile picture file:', compressedProfile.name, compressedProfile.size)
+        submitData.append('profilePicture', compressedProfile)
       } else {
         console.log('No profile picture provided, skipping...')
       }
@@ -246,7 +254,12 @@ const SignupForm = ({ onClose, onSuccess }) => {
     }
   }
 
-  return (
+  const handleClose = () => {
+    console.log('Signup close button clicked')
+    onClose && onClose()
+  }
+
+          return (
     <div>
       <style>{`
         @keyframes slideInScale {
@@ -324,9 +337,13 @@ const SignupForm = ({ onClose, onSuccess }) => {
             }}>
               Join our community and start your journey
             </p>
+            <p style={{ fontSize: '0.8rem', margin: '0.35rem 0 0', opacity: 0.85 }}>
+              Sign up as User (book stays & events) or Host (list your property). Admin: website owner — use /admin-properties
+            </p>
           </div>
           <button
-            onClick={onClose}
+            type="button"
+            onClick={handleClose}
             style={{
               position: 'absolute',
               top: '1.5rem',
@@ -343,7 +360,8 @@ const SignupForm = ({ onClose, onSuccess }) => {
               alignItems: 'center',
               justifyContent: 'center',
               transition: 'all 0.2s ease',
-              backdropFilter: 'blur(10px)'
+              backdropFilter: 'blur(10px)',
+              zIndex: 2
             }}
             onMouseOver={(e) => {
               e.target.style.background = 'rgba(255, 255, 255, 0.3)'
@@ -358,7 +376,7 @@ const SignupForm = ({ onClose, onSuccess }) => {
           </button>
         </div>
 
-        {/* Form Content */}
+        {/* Role selection or Form Content */}
         <div style={{
           padding: '2rem',
           flex: 1,
@@ -366,7 +384,36 @@ const SignupForm = ({ onClose, onSuccess }) => {
           display: 'flex',
           flexDirection: 'column'
         }}>
-
+        {!signupAs ? (
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
+            <p style={{ margin: '0 0 0.5rem', color: '#64748b', fontSize: '0.9375rem' }}>I want to sign up as:</p>
+            {SIGNUP_ROLES.map((role) => (
+              <button
+                key={role.id}
+                type="button"
+                onClick={() => setSignupAs(role.id)}
+                style={{
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: '1rem',
+                  padding: '1rem 1.25rem',
+                  border: '2px solid #22c55e',
+                  borderRadius: '10px',
+                  background: '#f0fdf4',
+                  cursor: 'pointer',
+                  textAlign: 'left',
+                  fontSize: '1rem'
+                }}
+              >
+                <i className={`fas ${role.icon}`} style={{ color: '#16a34a', fontSize: '1.25rem' }} />
+                <div>
+                  <div style={{ fontWeight: 600, color: '#1e293b' }}>{role.label}</div>
+                  <div style={{ fontSize: '0.875rem', color: '#64748b' }}>{role.desc}</div>
+                </div>
+              </button>
+            ))}
+          </div>
+        ) : (
         <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '2rem' }}>
           {/* Profile Picture Section */}
           <div style={{
@@ -929,6 +976,7 @@ const SignupForm = ({ onClose, onSuccess }) => {
             </button>
           </div>
         </form>
+        )}
         </div>
       </div>
     </div>

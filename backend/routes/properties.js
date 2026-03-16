@@ -2,6 +2,7 @@ const express = require('express')
 const multer = require('multer')
 const path = require('path')
 const Property = require('../models/Property')
+const { compressUploadedImages } = require('../utils/compressImages')
 const router = express.Router()
 
 // Configure multer for file uploads
@@ -60,7 +61,7 @@ router.post('/test', async (req, res) => {
 })
 
 // Create new property
-router.post('/', upload.array('images', 10), async (req, res) => {
+router.post('/', upload.array('images', 10), compressUploadedImages, async (req, res) => {
   try {
     console.log('=== PROPERTY SUBMISSION REQUEST ===')
     console.log('Request body:', req.body)
@@ -101,13 +102,12 @@ router.post('/', upload.array('images', 10), async (req, res) => {
       amenities: amenities || '',
       contactInfo: contactInfo || '',
       images: imagePaths,
+      status: 'approved',
       createdAt: new Date()
     })
 
-    console.log('Property object to save:', property)
     await property.save()
-    console.log('Property saved successfully:', property._id)
-    res.status(201).json({ message: 'Property created successfully', property })
+    res.status(201).json({ message: 'Property listed successfully', property })
   } catch (error) {
     console.error('Error creating property:', error)
     console.error('Error details:', error.message)
@@ -120,7 +120,7 @@ router.post('/', upload.array('images', 10), async (req, res) => {
   }
 })
 
-// Get all properties
+// Get all properties (all listed live – no approval filter)
 router.get('/', async (req, res) => {
   try {
     const properties = await Property.find().sort({ createdAt: -1 })
@@ -146,7 +146,7 @@ router.get('/:id', async (req, res) => {
 })
 
 // Update property
-router.put('/:id', upload.array('images', 10), async (req, res) => {
+router.put('/:id', upload.array('images', 10), compressUploadedImages, async (req, res) => {
   try {
     const property = await Property.findById(req.params.id)
     if (!property) {

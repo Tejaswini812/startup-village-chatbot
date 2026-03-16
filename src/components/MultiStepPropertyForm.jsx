@@ -228,15 +228,10 @@ const MultiStepPropertyForm = ({ onClose, onAuthRequired }) => {
         amenities: formData['other-rules']?.amenities || formData.amenities || '',
         contactInfo: formData['contact-details']?.phone || formData['contact-details']?.email || formData.contactInfo || 'Contact information not provided'
       }
-      
-      console.log('Transformed property data:', propertyData)
-      console.log('API Base URL:', process.env.REACT_APP_API_URL || 'http://localhost:5000/api')
 
       // Submit to backend
       const result = await submitProperty(propertyData, uploadedImages, token)
-      
-      console.log('Property submitted to MongoDB:', result)
-      alert('Property listed successfully and saved to database!')
+      alert('Property listed successfully! It is now live on "Find Your Stay".')
       
       // Reset form and close
       resetForm()
@@ -972,6 +967,42 @@ const MultiStepPropertyForm = ({ onClose, onAuthRequired }) => {
                 <label>Additional Rules</label>
                 <textarea placeholder="Any additional rules or restrictions..."></textarea>
               </div>
+            </div>
+            {/* Desktop action buttons placed directly below Additional Rules */}
+            <div className="form-action-buttons">
+              <button
+                type="button"
+                className="action-btn add-new-btn"
+                onClick={() => {
+                  const newFormData = { ...formData }
+                  const newUploadedImages = [...uploadedImages]
+                  setFormData(newFormData)
+                  setUploadedImages(newUploadedImages)
+                }}
+              >
+                <i className="fas fa-plus"></i>
+                Add New Property
+              </button>
+
+              <button
+                type="button"
+                className="action-btn verify-btn"
+                onClick={() => {
+                  console.log('Get verify clicked for property')
+                }}
+              >
+                <i className="fas fa-check-circle"></i>
+                Get Verify
+              </button>
+
+              <button
+                type="button"
+                className="action-btn submit-main-btn"
+                onClick={handleSubmit}
+              >
+                <i className="fas fa-paper-plane"></i>
+                Submit
+              </button>
             </div>
           </div>
         )}

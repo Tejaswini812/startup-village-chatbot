@@ -184,6 +184,7 @@ const UserDashboard = ({ user, onLogout }) => {
               setShowLoginModal(false)
               window.location.reload() // Refresh to show authenticated state
             }}
+            onShowSignup={() => { setShowLoginModal(false); setShowSignupModal(true) }}
           />
         )}
 
