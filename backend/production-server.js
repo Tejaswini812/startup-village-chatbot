@@ -20,9 +20,16 @@ const carsRoutes = require('./routes/cars')
 const packagesRoutes = require('./routes/packages')
 const staysRoutes = require('./routes/stays')
 const userRoutes = require('./routes/users')
+const bookingExcelAuthRoutes = require('./routes/bookingExcelAuth')
 const notificationRoutes = require('./routes/notifications')
+const { ensurePortalExcelFilesExist } = require('./utils/portalExcel')
 
 dotenv.config()
+try {
+  ensurePortalExcelFilesExist()
+} catch (e) {
+  console.error('⚠️ Portal Excel init:', e.message)
+}
 
 const app = express()
 // Hostinger provides PORT via environment variable - use it!
@@ -177,6 +184,7 @@ app.use('/api/cars', carsRoutes)
 app.use('/api/packages', packagesRoutes)
 app.use('/api/stays', staysRoutes)
 app.use('/api/user', userRoutes)
+app.use('/api/booking-excel-auth', bookingExcelAuthRoutes)
 app.use('/api', notificationRoutes)
 
 // Health check endpoint
