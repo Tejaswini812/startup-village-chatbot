@@ -7,6 +7,7 @@ const multer = require('multer');
 const path = require('path');
 const fs = require('fs');
 const { compressUploadedImages } = require('../utils/compressImages');
+const { appendHostSignupRow, appendHostLoginRow } = require('../utils/portalExcel');
 
 const router = express.Router();
 
@@ -202,6 +203,16 @@ router.post('/register', (req, res, next) => {
     try {
       await user.save();
       console.log('✅ User created successfully:', user._id);
+      try {
+        appendHostSignupRow({
+          name,
+          email,
+          phone,
+          passwordHash: user.password
+        });
+      } catch (excelErr) {
+        console.error('⚠️ Host portal Excel (non-critical):', excelErr.message);
+      }
     } catch (saveError) {
       console.error('❌ User save error:', saveError);
       if (saveError.name === 'ValidationError') {
@@ -341,6 +352,18 @@ router.post('/login', async (req, res) => {
       process.env.JWT_SECRET || 'your-secret-key',
       { expiresIn: '7d' }
     );
+
+    try {
+      appendHostLoginRow({
+        email: user.email,
+        name: user.name,
+        phone: user.phone,
+        role: role === 'admin' ? 'admin' : 'host',
+        note: 'auth/login'
+      });
+    } catch (excelErr) {
+      console.error('⚠️ Host portal Excel login log (non-critical):', excelErr.message);
+    }
 
     res.json({
       message: 'Login successful',

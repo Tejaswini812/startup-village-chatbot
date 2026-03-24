@@ -23,8 +23,8 @@ body, html {
     left: 0;
     width: 100%;
     height: 100%;
-    background: url('../assets/camping-bg.jpg') no-repeat center center fixed;
-    background-size: cover;
+    /* Keep stable background without missing asset 404 */
+    background: linear-gradient(135deg, #e8f5e9 0%, #f3f4f6 100%);
     filter: blur(8px);    
     transform: scale(1.1); 
     z-index: -1;           

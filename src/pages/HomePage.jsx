@@ -22,12 +22,12 @@ const HomePage = () => {
         <Chatbot />
         <PromotionalCarousel />
         <LocationButtons />
+        <PackagesSection />
         <BookingSection />
         <EventsSection />
         <PropertySection />
         <CarResellingSection />
         <AccessoriesSection />
-        <PackagesSection />
       </main>
       
       <Footer />

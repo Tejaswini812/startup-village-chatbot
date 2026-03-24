@@ -98,7 +98,7 @@ fi
 
 # Step 6: Start backend with PM2
 echo -e "${YELLOW}Step 6: Starting backend with PM2...${NC}"
-pm2 start ecosystem.config.js --env production --name villagecounty-backend
+pm2 start ecosystem.config.cjs --env production
 pm2 save
 
 echo -e "${GREEN}✅ Backend started with PM2${NC}"

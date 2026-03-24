@@ -1,7 +1,8 @@
 module.exports = {
   apps: [{
-    name: 'villagecounty-backend',  // Unique name to avoid conflicts with other projects
+    name: 'village-county-backend',
     script: 'backend/production-server.js',
+    cwd: __dirname,
     instances: 1,
     autorestart: true,
     watch: false,
@@ -18,7 +19,7 @@ module.exports = {
     },
     env_production: {
       NODE_ENV: 'production',
-      PORT: process.env.PORT || 5000  // Hostinger sets this automatically
+      PORT: process.env.PORT || 5000
     },
     error_file: './logs/err.log',
     out_file: './logs/out.log',
@@ -28,4 +29,4 @@ module.exports = {
     merge_logs: true,
     combine_logs: true
   }]
-}
+};

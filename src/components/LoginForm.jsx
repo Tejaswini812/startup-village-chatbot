@@ -2,13 +2,20 @@ import React, { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import apiClient from '../config/axios'
 
-const ROLES = [
+export const LOGIN_ROLES_ALL = [
   { id: 'user', label: 'User', desc: 'Book hotels, stays & events', icon: 'fa-calendar-check' },
   { id: 'host', label: 'Host', desc: 'List your property', icon: 'fa-home' },
   { id: 'admin', label: 'Admin', desc: 'Approve & edit (website owner)', icon: 'fa-user-shield' }
 ]
 
-const LoginForm = ({ onClose, onSuccess, onShowSignup, onForgotPassword }) => {
+/** Host + Admin only (e.g. Become a host /dashboard login modal) */
+export const LOGIN_ROLES_HOST_PAGE = [
+  { id: 'host', label: 'Host', desc: 'List your property', icon: 'fa-home' },
+  { id: 'admin', label: 'Admin', desc: 'Approve & edit (website owner)', icon: 'fa-user-shield' }
+]
+
+const LoginForm = ({ onClose, onSuccess, onShowSignup, onForgotPassword, roles: rolesProp }) => {
+  const ROLES = rolesProp ?? LOGIN_ROLES_ALL
   const navigate = useNavigate()
   const [selectedRole, setSelectedRole] = useState(null)
   const [formData, setFormData] = useState({

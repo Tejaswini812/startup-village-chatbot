@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import { useAuth } from '../contexts/AuthContext'
-import LoginForm from '../components/LoginForm'
+import LoginForm, { LOGIN_ROLES_HOST_PAGE } from '../components/LoginForm'
 import SignupForm from '../components/SignupForm'
 import HostProperty from '../components/HostProperty'
 import LaunchEvents from '../components/LaunchEvents'
@@ -166,7 +166,7 @@ const Dashboard = () => {
         }}>
           <div>
             <i className="fas fa-spinner fa-spin" style={{ marginRight: '10px' }}></i>
-            Loading Dashboard...
+            Loading...
           </div>
         </div>
       </div>
@@ -179,7 +179,7 @@ const Dashboard = () => {
       <header className="top-header">
         <div className="header-content">
           <img src="/image.jpg.jpg" alt="Startup Village County Logo" className="header-logo" />
-          <h1 className="header-title">Dashboard</h1>
+          <h1 className="header-title">Become a host</h1>
         </div>
         <div className="header-actions">
           {isAuthenticated ? (
@@ -206,50 +206,6 @@ const Dashboard = () => {
       </header>
 
       <div className="dashboard-container">
-        <div className="dashboard-sidebar">
-          <div className="user-profile-card">
-            <div className="profile-picture">
-              {isAuthenticated && user?.profilePicture ? (
-                <img 
-                  src={user.profilePicture} 
-                  alt="Profile Picture" 
-                  className="profile-image"
-                />
-              ) : (
-                <div className="profile-logo">STARTUP VILLAGE COUNTY</div>
-              )}
-            </div>
-            
-            <div className="user-details">
-              <h3>{isAuthenticated ? (user?.name || 'User') : 'John Doe'}</h3>
-              <p>{isAuthenticated ? (user?.email || 'user@example.com') : 'john.doe@example.com'}</p>
-              <p>{isAuthenticated ? (user?.phone || '+91 00000 00000') : '+91 98765 43210'}</p>
-            </div>
-            
-            <div className="status-indicators">
-              <div className="status-item">
-                <i className="fas fa-map-marker-alt"></i>
-                <span>{isAuthenticated ? (user?.location || 'Location not set') : 'Bangalore, Karnataka'}</span>
-              </div>
-              <div className="status-item">
-                <i className="fas fa-calendar"></i>
-                <span>{isAuthenticated ? `Member since ${user?.joinDate || 'Recently'}` : 'Member since Jan 2024'}</span>
-              </div>
-              <div className="status-item">
-                <i className="fas fa-star"></i>
-                <span>{isAuthenticated ? (user?.rating || 'New User') : '4.8 Rating'}</span>
-              </div>
-            </div>
-            
-            <div className="profile-actions">
-              <button className="edit-profile-btn" onClick={() => setShowEditProfileModal(true)}>
-                <i className="fas fa-pencil-alt"></i>
-                Edit Profile
-              </button>
-            </div>
-          </div>
-        </div>
-
         <div className="dashboard-main-layout">
           {/* Full Width Content */}
           <div className="right-column" style={{ width: '100%' }}>
@@ -379,6 +335,7 @@ const Dashboard = () => {
       {/* Login Modal */}
       {showLoginModal && (
         <LoginForm
+          roles={LOGIN_ROLES_HOST_PAGE}
           onClose={() => setShowLoginModal(false)}
           onSuccess={handleLoginSuccess}
           onShowSignup={() => { setShowLoginModal(false); setShowSignupModal(true) }}
@@ -388,6 +345,7 @@ const Dashboard = () => {
       {/* Signup Modal */}
       {showSignupModal && (
         <SignupForm
+          hostSignupDirect
           onClose={() => setShowSignupModal(false)}
           onSuccess={handleSignupSuccess}
         />

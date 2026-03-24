@@ -31,14 +31,25 @@ const ModernHeader = () => {
           County
         </h1>
         
-        {/* Dashboard Button - Positioned at edge */}
-        <button 
-          className="absolute top-4 right-2 bg-gradient-to-r from-red-500 to-orange-500 text-white px-4 py-2 rounded-full text-sm font-semibold shadow-lg hover:shadow-xl hover:-translate-y-1 transition-all duration-300 flex items-center gap-2"
-          onClick={() => navigate('/dashboard')}
-        >
-          <i className="fas fa-tachometer-alt"></i>
-          <span className="hidden sm:inline">Dashboard</span>
-        </button>
+        {/* Top-right: Become a host (unchanged) + Signup/Login below */}
+        <div className="absolute top-4 right-2 z-10 flex flex-col items-end gap-2">
+          <button
+            type="button"
+            className="bg-gradient-to-r from-red-500 to-orange-500 text-white px-4 py-2 rounded-full text-sm font-semibold shadow-lg hover:shadow-xl hover:-translate-y-1 transition-all duration-300 flex items-center gap-2"
+            onClick={() => navigate('/dashboard')}
+          >
+            <i className="fas fa-tachometer-alt"></i>
+            <span className="hidden sm:inline">Become a host</span>
+          </button>
+          <button
+            type="button"
+            className="bg-gradient-to-r from-green-500 to-green-600 text-white px-4 py-2 rounded-full text-sm font-semibold shadow-lg hover:shadow-xl hover:-translate-y-1 transition-all duration-300 flex items-center gap-2"
+            onClick={() => navigate('/book-signup')}
+          >
+            <i className="fas fa-user"></i>
+            <span className="hidden sm:inline">Signup/Login</span>
+          </button>
+        </div>
       </div>
 
       {/* Tagline */}

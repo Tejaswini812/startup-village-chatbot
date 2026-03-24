@@ -335,10 +335,6 @@ const HotelsListingPage = () => {
     })
   }
 
-  const handleBookNow = (hotel) => {
-    navigate('/booking', { state: { hotel } })
-  }
-
   if (loading) {
     return (
       <div className="loading-container">
@@ -454,18 +450,6 @@ const HotelsListingPage = () => {
                   <i className="fas fa-map-marker-alt"></i>
                   {hotel.location}
                 </p>
-                <p className="card-info">
-                  <i className="fas fa-home"></i>
-                  {hotel.type}
-                </p>
-                <div className="rating-section">
-                  <div className="stars">
-                    {[...Array(5)].map((_, i) => (
-                      <i key={i} className={`fas fa-star ${i < Math.floor(hotel.rating) ? '' : 'fa-star-o'}`}></i>
-                    ))}
-                  </div>
-                  <span className="rating-text">{hotel.rating.toFixed(1)} rating</span>
-                </div>
                 <div className="price-section">
                   <div>
                     <span className="price">₹{hotel.price.toLocaleString()}</span>
@@ -484,13 +468,6 @@ const HotelsListingPage = () => {
                   >
                     <i className="fas fa-info-circle"></i>
                     View Details
-                  </button>
-                  <button
-                    className="action-btn primary-btn"
-                    onClick={() => handleBookNow(hotel)}
-                  >
-                    <i className="fas fa-calendar-check"></i>
-                    Book Now
                   </button>
                 </div>
               </div>

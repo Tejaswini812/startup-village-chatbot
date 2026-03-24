@@ -13,7 +13,7 @@
     "install:all": "npm install && cd backend && npm install",
     "start": "concurrently \"npm run server\" \"npm run dev\"",
     "start:prod": "npm run build && npm run server:prod",
-    "deploy": "npm run install:all && npm run build && pm2 start ecosystem.config.js --env production",
+    "deploy": "npm run install:all && npm run build && pm2 start ecosystem.config.cjs --env production",
     "build:prod": "node build-production.js",
     "restart": "pm2 restart startup-village-backend",
     "stop": "pm2 stop startup-village-backend",

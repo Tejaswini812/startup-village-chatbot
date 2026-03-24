@@ -108,7 +108,7 @@ npm run build
 # 11. Fix PM2 process
 print_status "Managing PM2 process..."
 pm2 delete startup-village-backend 2>/dev/null || true
-pm2 start ecosystem.config.js --env production
+pm2 start ecosystem.config.cjs --env production
 pm2 save
 pm2 startup
 

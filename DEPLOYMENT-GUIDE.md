@@ -56,19 +56,19 @@ ufw --force enable
 
 ## Step 4: Clone the project
 
-**Important:** Use your **startup-village-county** repo URL (not the chatbot repo).
+Your code is in: `https://github.com/Tejaswini812/startup-village-chatbot.git`
 
 ```bash
 cd /var/www
 
-# Create directory and clone (replace with your actual GitHub repo URL)
+# Create directory and clone (project is in startup-village-chatbot repo)
 mkdir -p villagecounty
 cd villagecounty
-git clone https://github.com/YOUR_USERNAME/startup-village-county.git
+git clone https://github.com/Tejaswini812/startup-village-chatbot.git startup-village-county
 cd startup-village-county
 ```
 
-If you haven’t pushed this project to GitHub yet, do that first from your PC (see “Push to GitHub” at the end).
+This clones the repo into a folder named `startup-village-county` so paths match the rest of the guide.
 
 ---
 
@@ -231,21 +231,18 @@ Then build frontend and configure Nginx as in Steps 7–8.
 
 ---
 
-## Push this project to GitHub (from your PC)
+## Push updates to GitHub (from your PC)
 
-If the repo doesn’t exist yet:
+When you make changes and want to redeploy:
 
 ```bash
 cd C:\Users\hp\OneDrive\Desktop\Chatbotnode\startup-village-county
-
-git status
 git add .
-git commit -m "Production setup: backend, frontend, env, deployment"
-git remote add origin https://github.com/YOUR_USERNAME/startup-village-county.git
-git push -u origin main
+git commit -m "Your commit message"
+git push origin master
 ```
 
-Use your real GitHub username and repo name. Then use that clone URL in Step 4 on the server.
+Then on the server: `cd /var/www/villagecounty/startup-village-county && git pull` and restart: `pm2 restart villagecounty-backend`.
 
 ---
 

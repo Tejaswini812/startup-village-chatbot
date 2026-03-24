@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react'
 import { useAuth } from '../contexts/AuthContext'
 import AuthModal from './AuthModal'
+import FormProfileCard from './FormProfileCard'
+import CommonListingDetailsSection from './CommonListingDetailsSection'
 import { submitProperty } from '../services/formSubmissionService'
 
 // Error display component
@@ -66,6 +68,14 @@ const MultiStepPropertyForm = ({ onClose, onAuthRequired }) => {
       ...prev,
       [step]: data
     }))
+  }
+
+  const commonDetails = formData['common-details'] || {}
+  const handleCommonDetailsChange = (key, value) => {
+    handleFormDataChange('common-details', {
+      ...commonDetails,
+      [key]: value
+    })
   }
 
   const resetForm = () => {
@@ -288,6 +298,7 @@ const MultiStepPropertyForm = ({ onClose, onAuthRequired }) => {
             <span>{step.label}</span>
           </div>
         ))}
+        <FormProfileCard user={user} />
       </div>
       {/* Removed sidebar buttons as per requirement */}
       
@@ -518,6 +529,10 @@ const MultiStepPropertyForm = ({ onClose, onAuthRequired }) => {
             </div>
 
             {/* Submit Button */}
+            <CommonListingDetailsSection
+              values={commonDetails}
+              onChange={handleCommonDetailsChange}
+            />
             <div className="form-actions">
               <button 
                 type="button" 
@@ -1007,6 +1022,13 @@ const MultiStepPropertyForm = ({ onClose, onAuthRequired }) => {
           </div>
         )}
       </React.Fragment>
+        )}
+
+        {!isMobile && (
+          <CommonListingDetailsSection
+            values={commonDetails}
+            onChange={handleCommonDetailsChange}
+          />
         )}
       </div>
       

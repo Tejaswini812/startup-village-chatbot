@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react'
 import { useAuth } from '../contexts/AuthContext'
 import AuthModal from './AuthModal'
+import FormProfileCard from './FormProfileCard'
+import CommonListingDetailsSection from './CommonListingDetailsSection'
 import { submitPackage } from '../services/formSubmissionService'
 
 const MultiStepPackageForm = ({ onClose, onAuthRequired }) => {
@@ -471,6 +473,7 @@ const MultiStepPackageForm = ({ onClose, onAuthRequired }) => {
             <span>{step.title}</span>
           </div>
         ))}
+        <FormProfileCard user={user} />
       </div>
       
       <div className="step-content">
@@ -688,6 +691,10 @@ const MultiStepPackageForm = ({ onClose, onAuthRequired }) => {
             </div>
 
             {/* Submit Button */}
+            <CommonListingDetailsSection
+              values={formData}
+              onChange={handleInputChange}
+            />
             <div className="form-actions">
               <button type="button" className="btn btn-secondary" onClick={onClose}>
                 Cancel
@@ -701,6 +708,11 @@ const MultiStepPackageForm = ({ onClose, onAuthRequired }) => {
           // Desktop: Show current step only
           <React.Fragment>
             {renderStepContent()}
+
+            <CommonListingDetailsSection
+              values={formData}
+              onChange={handleInputChange}
+            />
             
             <div className="form-navigation">
               <div className="nav-buttons">

@@ -20,6 +20,7 @@ import PackagesListingPage from './pages/PackagesListingPage'
 import PackageDetailPage from './pages/PackageDetailPage'
 import AdminPropertiesPage from './pages/AdminPropertiesPage'
 import LoginPage from './pages/LoginPage'
+import BookUserAuthPage from './pages/BookUserAuthPage'
 
 function App() {
   return (
@@ -30,6 +31,7 @@ function App() {
             <Routes>
               <Route path="/" element={<HomePage />} />
               <Route path="/login" element={<LoginPage />} />
+              <Route path="/book-signup" element={<BookUserAuthPage />} />
               <Route path="/dashboard" element={<Dashboard />} />
               <Route path="/signup" element={<Signup />} />
               <Route path="/hotels" element={<HotelsListingPage />} />

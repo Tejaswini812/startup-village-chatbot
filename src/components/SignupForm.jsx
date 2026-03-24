@@ -7,8 +7,9 @@ const SIGNUP_ROLES = [
   { id: 'host', label: 'Host', desc: 'List your property', icon: 'fa-home' }
 ]
 
-const SignupForm = ({ onClose, onSuccess }) => {
-  const [signupAs, setSignupAs] = useState(null)
+const SignupForm = ({ onClose, onSuccess, hostSignupDirect = false }) => {
+  /** When true (Become a host /dashboard), skip User vs Host choice — show host signup form immediately */
+  const [signupAs, setSignupAs] = useState(hostSignupDirect ? 'host' : null)
   const [formData, setFormData] = useState({
     name: '',
     email: '',
@@ -338,7 +339,9 @@ const SignupForm = ({ onClose, onSuccess }) => {
               Join our community and start your journey
             </p>
             <p style={{ fontSize: '0.8rem', margin: '0.35rem 0 0', opacity: 0.85 }}>
-              Sign up as User (book stays & events) or Host (list your property). Admin: website owner — use /admin-properties
+              {hostSignupDirect
+                ? 'Host account — list your property. Admin: website owner — use /admin-properties'
+                : 'Sign up as User (book stays & events) or Host (list your property). Admin: website owner — use /admin-properties'}
             </p>
           </div>
           <button

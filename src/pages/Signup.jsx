@@ -167,7 +167,7 @@ const Signup = () => {
         </form>
 
         <div className="links">
-          <a href="/dashboard">Go to Dashboard</a>
+          <a href="/dashboard">Become a host</a>
         </div>
         
         {/* Status message container */}

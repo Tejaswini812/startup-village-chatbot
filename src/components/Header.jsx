@@ -36,13 +36,24 @@ const Header = () => {
         />
         <h6 className="club-title">Startup Village<br />County</h6>
         
-        <button 
-          className="dashboard-btn" 
-          onClick={() => navigate('/dashboard')}
-        >
-          <i className="fas fa-tachometer-alt"></i>
-          Dashboard
-        </button>
+        <div className="header-top-actions">
+          <button
+            type="button"
+            className="dashboard-btn"
+            onClick={() => navigate('/dashboard')}
+          >
+            <i className="fas fa-tachometer-alt"></i>
+            Become a host
+          </button>
+          <button
+            type="button"
+            className="signup-login-btn"
+            onClick={() => navigate('/book-signup')}
+          >
+            <i className="fas fa-user"></i>
+            Signup/Login
+          </button>
+        </div>
       </div>
       <p className="club-tagline-left">Innovation • Community • Growth</p>
       <div className="nav-buttons">

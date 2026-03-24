@@ -141,6 +141,59 @@
   box-shadow: 0 6px 20px rgba(146, 228, 146, 0.4);
 }
 
+/* Stacked top-right actions: Become a host + Signup/Login */
+.header-top-actions {
+  position: absolute;
+  right: 20px;
+  top: 50%;
+  transform: translateY(-50%);
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 0.5rem;
+  z-index: 10;
+}
+
+.header-top-actions .dashboard-btn,
+.header-top-actions .signup-login-btn {
+  position: relative;
+  right: auto;
+  top: auto;
+  transform: none;
+}
+
+.signup-login-btn {
+  background: linear-gradient(135deg, #56c556, #28a745);
+  color: white;
+  border: none;
+  padding: 0.3rem 0.6rem;
+  border-radius: 15px;
+  font-size: 0.7rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+  gap: 0.2rem;
+  box-shadow: 0 3px 10px rgba(40, 167, 69, 0.35);
+  flex-shrink: 0;
+}
+
+.signup-login-btn:hover {
+  background: linear-gradient(135deg, #56c556, #28a745);
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px rgba(40, 167, 69, 0.45);
+}
+
+@media (min-width: 769px) {
+  .signup-login-btn {
+    padding: 0.5rem 1rem;
+    font-size: 0.9rem;
+    border-radius: 20px;
+    gap: 0.3rem;
+  }
+}
+
 .dashboard-btn {
   position: absolute;
   right: 20px;
@@ -219,10 +272,8 @@
     max-width: 90px !important;
   }
   
-  .dashboard-btn {
+  .header-top-actions {
     right: 5px !important;
-    top: 50% !important;
-    transform: translateY(-50%) !important;
   }
 }
 
