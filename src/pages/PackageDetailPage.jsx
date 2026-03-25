@@ -4,6 +4,7 @@ import axios from 'axios'
 import { API_BASE_URL } from '../config/api'
 import Footer from '../components/Footer'
 import '../styles/listing-pages.css'
+import '../styles/detail-enhancements.css'
 
 const FALLBACK_IMAGE = 'https://images.unsplash.com/photo-1544551763-46a013bb70d5?w=800&h=600&fit=crop'
 
@@ -14,13 +15,24 @@ function toFullImageUrl(path) {
   return `${base}/${path.replace(/\\/g, '/')}`
 }
 
+/** Only 24-char hex IDs are valid MongoDB ObjectIds for /api/packages/:id */
+function isMongoObjectIdString(id) {
+  return typeof id === 'string' && /^[a-fA-F0-9]{24}$/.test(id)
+}
+
+const FALLBACK_PACKAGES = [
+  { id: 1, title: 'Goa Beach Package', location: 'Goa, India', price: 15000, duration: '3 Days / 2 Nights', image: 'https://images.unsplash.com/photo-1544551763-46a013bb70d5?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80', description: 'Amazing beach package with water sports', includes: 'Hotel, Meals, Activities', packageType: 'Beach' },
+  { id: 2, title: 'Kerala Backwaters', location: 'Kerala, India', price: 18500, duration: '4 Days / 3 Nights', image: 'https://images.unsplash.com/photo-1578662996442-48f60103fc96?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80', description: 'Peaceful backwater cruise experience', includes: 'Houseboat, Meals, Sightseeing', packageType: 'Backwater' },
+  { id: 3, title: 'Himachal Adventure', location: 'Manali, India', price: 22000, duration: '5 Days / 4 Nights', image: 'https://images.unsplash.com/photo-1506905925346-21bda4d32df4?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80', description: 'Adventure sports and mountain views', includes: 'Hotel, Meals, Adventure Activities', packageType: 'Adventure' }
+]
+
 function packageCardToDetail(card) {
   if (!card) return null
   const priceNum = typeof card.price === 'string' ? parseInt(card.price.replace(/[^\d]/g, ''), 10) || 0 : (card.price || 0)
   return {
     _id: card.id,
     title: card.title,
-    destination: card.destination,
+    destination: card.destination || card.location || '',
     duration: card.duration,
     price: priceNum,
     description: card.description || '',
@@ -48,7 +60,27 @@ export default function PackageDetailPage() {
 
   useEffect(() => {
     if (!id) { setError('Invalid package'); setLoading(false); return }
-    if (packageCard) setLoading(false)
+
+    if (packageCard) {
+      setData(packageCardToDetail(packageCard))
+      setError(null)
+    }
+
+    if (!isMongoObjectIdString(id)) {
+      if (!packageCard) {
+        const fb = FALLBACK_PACKAGES.find((p) => String(p.id) === String(id))
+        if (fb) {
+          setData(packageCardToDetail({ ...fb, destination: fb.location }))
+          setError(null)
+        } else {
+          setError('Package not found')
+          setData(null)
+        }
+      }
+      setLoading(false)
+      return
+    }
+
     let cancelled = false
     const fetchDetail = async () => {
       try {
@@ -56,7 +88,10 @@ export default function PackageDetailPage() {
         if (cancelled) return
         if (res.data) setData(res.data)
       } catch (err) {
-        if (!cancelled && !packageCard) { setError('Failed to load package'); setData(null) }
+        if (!cancelled && !packageCard) {
+          setError('Failed to load package')
+          setData(null)
+        }
       } finally {
         if (!cancelled) setLoading(false)
       }
@@ -87,7 +122,7 @@ export default function PackageDetailPage() {
   if (images.length === 0) images = [FALLBACK_IMAGE]
 
   return (
-    <div className="listing-page stay-detail-page">
+    <div className="listing-page stay-detail-page enhanced-detail-root">
       <div className="listing-container stay-detail-layout">
         <button type="button" className="back-button stay-detail-back" onClick={() => navigate(-1)}><i className="fas fa-arrow-left" /> Back</button>
         <div className="stay-detail-gallery">

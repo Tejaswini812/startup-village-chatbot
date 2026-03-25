@@ -82,10 +82,18 @@ router.get('/', async (req, res) => {
   }
 })
 
+function isValidObjectId(id) {
+  return typeof id === 'string' && /^[a-fA-F0-9]{24}$/.test(id)
+}
+
 // Get package by ID
 router.get('/:id', async (req, res) => {
   try {
-    const packageData = await Package.findById(req.params.id)
+    const { id } = req.params
+    if (!isValidObjectId(id)) {
+      return res.status(404).json({ error: 'Package not found' })
+    }
+    const packageData = await Package.findById(id)
     if (!packageData) {
       return res.status(404).json({ error: 'Package not found' })
     }

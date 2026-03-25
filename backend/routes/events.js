@@ -136,10 +136,18 @@ router.get('/', async (req, res) => {
   }
 })
 
+function isValidObjectId(id) {
+  return typeof id === 'string' && /^[a-fA-F0-9]{24}$/.test(id)
+}
+
 // Get event by ID
 router.get('/:id', async (req, res) => {
   try {
-    const event = await Event.findById(req.params.id)
+    const { id } = req.params
+    if (!isValidObjectId(id)) {
+      return res.status(404).json({ error: 'Event not found' })
+    }
+    const event = await Event.findById(id)
     if (!event) {
       return res.status(404).json({ error: 'Event not found' })
     }

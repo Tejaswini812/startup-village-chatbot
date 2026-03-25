@@ -4,6 +4,7 @@ import axios from 'axios'
 import { API_BASE_URL } from '../config/api'
 import Footer from '../components/Footer'
 import '../styles/listing-pages.css'
+import '../styles/detail-enhancements.css'
 
 const FALLBACK_IMAGE = 'https://images.unsplash.com/photo-1552519507-da3b142c6e3d?w=800&h=600&fit=crop'
 
@@ -93,7 +94,7 @@ export default function CarDetailPage() {
   if (images.length === 0) images = [FALLBACK_IMAGE]
 
   return (
-    <div className="listing-page stay-detail-page">
+    <div className="listing-page stay-detail-page enhanced-detail-root">
       <div className="listing-container stay-detail-layout">
         <button type="button" className="back-button stay-detail-back" onClick={() => navigate(-1)}><i className="fas fa-arrow-left" /> Back</button>
         <div className="stay-detail-gallery">

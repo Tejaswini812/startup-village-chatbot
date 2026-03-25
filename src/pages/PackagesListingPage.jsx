@@ -306,7 +306,13 @@ const PackagesListingPage = () => {
                   </div>
                 </div>
                 <div className="action-buttons">
-                  <button className="action-btn primary-btn">
+                  <button
+                    type="button"
+                    className="action-btn primary-btn"
+                    onClick={() => navigate(`/package/${pkg.id}`, {
+                      state: { packageCard: { ...pkg, destination: pkg.destination || pkg.location } }
+                    })}
+                  >
                     <i className="fas fa-calendar-check"></i>
                     Book Now
                   </button>
